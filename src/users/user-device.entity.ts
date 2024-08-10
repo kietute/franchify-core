@@ -7,7 +7,7 @@ export class UserDevice {
   id: number;
 
   @Column()
-  device_token: string;
+  deviceToken: string;
 
   @ManyToOne(() => User, (user) => user?.devices)
   user: User;

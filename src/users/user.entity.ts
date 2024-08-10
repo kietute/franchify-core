@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
+import { Address } from '../addresses/address.entity';
 
 export enum UserRole {
   USER = 'user',
@@ -25,13 +26,13 @@ export class User {
   username: string;
 
   @Column({ unique: true })
-  phone_number: string;
+  phoneNumber: string;
 
   @Column()
-  first_name: string;
+  firstName: string;
 
   @Column()
-  last_name: string;
+  lastName: string;
 
   @Column()
   email: string;
@@ -40,10 +41,10 @@ export class User {
   password: string;
 
   @Column({ default: true })
-  is_active: boolean;
+  isActive: boolean;
 
   @Column({ default: false })
-  is_admin: boolean;
+  isAdmin: boolean;
 
   @Column({
     type: 'enum',
@@ -53,13 +54,16 @@ export class User {
   role: UserRole;
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 
   @OneToMany(() => UserDevice, (device) => device.user)
   devices: UserDevice[];
+
+  @OneToMany(() => Address, (address) => address.user)
+  addresses: Address[];
 
   @AfterInsert()
   logInsert() {
