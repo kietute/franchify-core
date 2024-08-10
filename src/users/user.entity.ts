@@ -14,6 +14,7 @@ import { Address } from '../addresses/address.entity';
 
 export enum UserRole {
   USER = 'user',
+  SELLER = 'seller',
   ADMIN = 'admin',
 }
 
@@ -42,9 +43,6 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
-
-  @Column({ default: false })
-  isAdmin: boolean;
 
   @Column({
     type: 'enum',
