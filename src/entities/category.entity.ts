@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from './product.entity';
 
 enum CategoryPropertyType {
   number = 'number',
@@ -28,6 +30,9 @@ export class Category {
 
   @Column({ type: 'jsonb' })
   property: ICategoryProperty[];
+
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 
   @CreateDateColumn()
   createdAt: Date;

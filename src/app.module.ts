@@ -2,16 +2,18 @@ import { Module, MiddlewareConsumer, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
+import { User } from './entities/user.entity';
 
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { UserDevice } from './users/user-device.entity';
+import { UserDevice } from './entities/user-device.entity';
 import { AddressesModule } from './addresses/addresses.module';
-import { Address } from './addresses/address.entity';
+import { Address } from './entities/address.entity';
 import { ProductsModule } from './products/products.module';
+import { Product } from './entities/product.entity';
+import { Category } from './entities/category.entity';
 
 const cookieSession = require('cookie-session');
 
@@ -31,7 +33,7 @@ const cookieSession = require('cookie-session');
           password: 'password',
           host: 'localhost',
           port: 5432,
-          entities: [User, UserDevice, Address],
+          entities: [User, UserDevice, Address, Product, Category],
           synchronize: true,
           namingStrategy: new SnakeNamingStrategy(),
         };

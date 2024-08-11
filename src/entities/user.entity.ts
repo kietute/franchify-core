@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
-import { Address } from '../addresses/address.entity';
+import { Address } from './address.entity';
 
 export enum UserRole {
   USER = 'user',

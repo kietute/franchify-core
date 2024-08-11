@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from './category.entity';
 
 @Entity()
 export class Product {
@@ -14,12 +17,15 @@ export class Product {
   @Column()
   name: string;
 
-  @Column({ type: 'json' })
-  properties: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  description: string;
+
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
 }
