@@ -24,7 +24,7 @@ export class CreateUserDto {
   role: string;
 
   @IsNotEmpty({ message: 'Mật khẩu không được để trống' })
-  @IsString()
+  @IsString({ message: 'Mật khẩu phải là một chuỗi' })
   password: string;
 }
 

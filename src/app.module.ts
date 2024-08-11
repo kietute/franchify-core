@@ -26,8 +26,8 @@ const cookieSession = require('cookie-session');
         return {
           type: 'postgres',
           database: 'sneakery-db-dev',
-          username: config.get<string>('DB_USER'),
-          password: config.get<string>('DB_PASS'),
+          username: 'huynhngoctuankiet',
+          password: 'password',
           host: 'localhost',
           port: 5432,
           entities: [User, UserDevice, Address],
@@ -55,7 +55,7 @@ export class AppModule {
     consumer
       .apply(
         cookieSession({
-          keys: [this.configService.get('COOKIE_KEY')],
+          keys: [`cookie-key`],
         }),
       )
       .forRoutes('*');
