@@ -8,5 +8,17 @@ export class UserDto {
   email: string;
 
   @Expose()
-  admin: boolean;
+  phoneNumber: string;
+
+  @Expose()
+  username: string;
+
+  @Expose()
+  firstName: string;
+
+  @Expose()
+  lastName: string;
+
+  @Expose()
+  addresses: Array<any>;
 }

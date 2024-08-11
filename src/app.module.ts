@@ -11,6 +11,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UserDevice } from './users/user-device.entity';
 import { AddressesModule } from './addresses/addresses.module';
 import { Address } from './addresses/address.entity';
+import { ProductsModule } from './products/products.module';
 
 const cookieSession = require('cookie-session');
 
@@ -38,6 +39,7 @@ const cookieSession = require('cookie-session');
     }),
     UsersModule,
     AddressesModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [

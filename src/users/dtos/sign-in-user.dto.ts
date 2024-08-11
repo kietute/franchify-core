@@ -5,7 +5,7 @@ export class SignInUserDto {
   @IsPhoneNumber('VN', { message: 'Số điện thoại không đúng định dạng' })
   phoneNumber: string;
 
-  @IsString()
+  @IsString({ message: 'Mật khẩu phải là một chuỗi' })
   @IsNotEmpty({ message: 'Mật khẩu không được để trống' })
   password: string;
 }
