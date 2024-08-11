@@ -1,14 +1,21 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'products' })
+@Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  name: string;
+
+  @Column({ type: 'json' })
+  properties: string;
 
   @CreateDateColumn()
   createdAt: Date;
