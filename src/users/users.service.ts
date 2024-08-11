@@ -9,8 +9,7 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   create(payload: ICreateUserPayload) {
-    const { email, password } = payload;
-    const user = this.repo.create({ email, password });
+    const user = this.repo.create(payload as User);
     return this.repo.save(user);
   }
 
@@ -21,8 +20,8 @@ export class UsersService {
     return this.repo.findOneBy({ id: id });
   }
 
-  find(email: string) {
-    return this.repo.findBy({ email: email });
+  find(phoneNumber: string) {
+    return this.repo.findBy({ phoneNumber: phoneNumber });
   }
 
   async update(id: number, attrs: Partial<User>) {

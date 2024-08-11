@@ -26,6 +26,8 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     const result = salt + '.' + hash.toString('hex');
 
+    console.log('payload is', payload);
+
     const user = await this.userUservice.create({
       ...payload,
       password: result,
@@ -36,6 +38,9 @@ export class AuthService {
 
   async signin(payload: ISignInUserPayload) {
     const { phoneNumber, password } = payload;
+
+    
+
     const [user] = await this.userUservice.find(phoneNumber);
 
     if (!user) {
