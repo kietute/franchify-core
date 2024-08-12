@@ -8,12 +8,17 @@ import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
 import { ICreateUserPayload } from './dtos/create-user.dto';
 import { ISignInUserPayload } from './dtos/sign-in-user.dto';
+import { IForgotPasswordPayload } from './dtos/forgot-password.dto';
 
 const scrypt = promisify(_script);
 
 @Injectable()
 export class AuthService {
   constructor(private userUservice: UsersService) {}
+
+  private genetateOTP(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
 
   async signup(payload: ICreateUserPayload) {
     const { email, password } = payload;
@@ -50,5 +55,15 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async forgotPassword(payload: IForgotPasswordPayload) {
+    const { phoneNumber } = payload;
+    const [user] = await this.userUservice.find(phoneNumber);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const otpPassword = this.genetateOTP();
   }
 }

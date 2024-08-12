@@ -1,7 +1,7 @@
 import { Module, MiddlewareConsumer, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import { User } from './entities/user.entity';
 
 import { APP_PIPE } from '@nestjs/core';
@@ -39,9 +39,10 @@ const cookieSession = require('cookie-session');
         };
       },
     }),
-    UsersModule,
+    AuthModule,
     AddressesModule,
     ProductsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

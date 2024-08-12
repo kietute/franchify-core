@@ -18,11 +18,8 @@ import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('auth')
 @Serialize(UserDto)
-export class UsersController {
-  constructor(
-    private usersSerice: UsersService,
-    private authService: AuthService,
-  ) {}
+export class AuthController {
+  constructor(private authService: AuthService) {}
 
   @Get('/profile')
   @UseGuards(AuthGuard)
@@ -40,16 +37,17 @@ export class UsersController {
   @Post('/signin')
   async signin(@Body() body: SignInUserDto, @Session() session: any) {
     const user = await this.authService.signin(body);
-
-    console.log('USER ID IS', user?.id);
     session.userId = user?.id;
-
-    console.log('SESSION IS', session);
     return user;
   }
 
   @Post('/signout')
   signout(@Session() session: any) {
     session.userId = null;
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: { phoneNumber: string }) {
+    await this.authService.forgotPassword({ phoneNumber: body.phoneNumber });
   }
 }

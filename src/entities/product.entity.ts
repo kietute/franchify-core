@@ -26,6 +26,18 @@ export class Product {
   @Column()
   description: string;
 
+  @Column()
+  priceStart: number;
+
+  @Column()
+  stepBid: number;
+
+  @Column()
+  priceWin: number;
+
+  @Column()
+  reservePrice: number;
+
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 }
