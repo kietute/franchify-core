@@ -14,6 +14,8 @@ import { Address } from './entities/address.entity';
 import { ProductsModule } from './products/products.module';
 import { Product } from './entities/product.entity';
 import { Category } from './entities/category.entity';
+import { Bid } from './entities/bid.entity';
+import { ProductImage } from './entities/product-image';
 
 const cookieSession = require('cookie-session');
 
@@ -33,7 +35,15 @@ const cookieSession = require('cookie-session');
           password: 'password',
           host: 'localhost',
           port: 5432,
-          entities: [User, UserDevice, Address, Product, Category],
+          entities: [
+            User,
+            UserDevice,
+            Address,
+            Product,
+            Category,
+            Bid,
+            ProductImage,
+          ],
           synchronize: true,
           namingStrategy: new SnakeNamingStrategy(),
         };
