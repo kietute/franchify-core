@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script, verify } from 'crypto';
@@ -86,6 +87,16 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    if (user.isActive == false) {
+      await this.otpService.sendOtpCode({ phoneNumber: user.phoneNumber });
+      throw new UnauthorizedException({
+        // Need verify phone number
+        errorCode: 1337,
+        message:
+          'We have sent an otp to your phone number, please verify to login to your account',
+      });
     }
 
     const [salt, storedHash] = user.password.split('.');

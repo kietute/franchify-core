@@ -42,7 +42,7 @@ export class AuthController {
     return user;
   }
 
-  @Post('/verfiy-otp')
+  @Post('/verify-otp')
   async verifyOtp(@Body() body: VerifyOtpDto, @Session() session: any) {
     const verifiedUser = await this.authService.verifyOtp({
       phoneNumber: body.phoneNumber,

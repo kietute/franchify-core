@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsPhoneNumber, IsString, Max } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
 export class VerifyOtpDto {
   @IsNotEmpty({ message: 'Số điện thoại không được để trống' })
@@ -6,7 +11,7 @@ export class VerifyOtpDto {
   phoneNumber: string;
 
   @IsString({ message: 'OTP không đúng định dạng' })
-  @Max(6, { message: 'OTP phải có độ dại là 6' })
+  @MaxLength(6, { message: 'OTP phải có độ dài là 6' })
   otpCode: string;
 }
 
