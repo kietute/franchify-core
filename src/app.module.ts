@@ -27,13 +27,15 @@ const cookieSession = require('cookie-session');
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.development`,
+      // ignoreEnvFile: true,
+      // ignoreEnvVars: true,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
           type: 'postgres',
-          database: config.get<string>('PROJECT_DB_NAME'),
+          database: 'sneakery-db-dev',
           username: config.get<string>('PROJECT_DB_USER'),
           password: config.get<string>('PROJECT_DB_PASSWORD'),
           host: 'localhost',

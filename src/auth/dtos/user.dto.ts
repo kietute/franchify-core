@@ -21,4 +21,10 @@ export class UserDto {
 
   @Expose()
   addresses: Array<any>;
+
+  @Expose()
+  accessToken: string;
+
+  @Expose()
+  refreshToken: string;
 }

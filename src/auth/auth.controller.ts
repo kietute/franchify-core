@@ -29,27 +29,23 @@ export class AuthController {
   }
 
   @Post('/signup')
-  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+  async createUser(@Body() body: CreateUserDto) {
     const user = await this.authService.signup(body);
-    session.userId = user?.id;
     return user;
   }
 
   @Post('/signin')
-  async signin(@Body() body: SignInUserDto, @Session() session: any) {
-    console.log('BODY IS', body);
+  async signin(@Body() body: SignInUserDto) {
     const user = await this.authService.signin(body);
-    session.userId = user?.id;
     return user;
   }
 
   @Post('/verify-otp')
-  async verifyOtp(@Body() body: VerifyOtpDto, @Session() session: any) {
+  async verifyOtp(@Body() body: VerifyOtpDto) {
     const verifiedUser = await this.authService.verifyOtp({
       phoneNumber: body.phoneNumber,
       otpCode: body.otpCode,
     });
-    session.userId = verifiedUser?.id;
 
     return verifiedUser;
   }

@@ -13,6 +13,7 @@ import { ISignInUserPayload } from './dtos/sign-in-user.dto';
 import { IForgotPasswordPayload } from './dtos/forgot-password.dto';
 import { OtpService } from '../notification/otp.service';
 import { IVerifyOtpPayload } from './dtos/verify-otp.dto';
+import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_script);
 
@@ -21,11 +22,8 @@ export class AuthService {
   constructor(
     private userUservice: UsersService,
     private otpService: OtpService,
+    private jwtService: JwtService,
   ) {}
-
-  private genetateOTP(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
 
   async signup(payload: ICreateUserPayload) {
     const { password, phoneNumber } = payload;
@@ -58,29 +56,6 @@ export class AuthService {
     }
   }
 
-  async verifyOtp(payload: IVerifyOtpPayload) {
-    const { otpCode, phoneNumber } = payload;
-
-    const [user] = await this.userUservice.find(phoneNumber);
-
-    if (!user) {
-      throw new BadRequestException('Email is in use, try another');
-    }
-
-    const isVerify = await this.otpService.verifyOtpCode(payload);
-
-    if (isVerify) {
-      const verifyUser = await this.userUservice.create({
-        ...user,
-        isVerified: true,
-      });
-
-      return user;
-    } else {
-      throw new BadRequestException('OTP is not correct');
-    }
-  }
-
   async signin(payload: ISignInUserPayload) {
     const { phoneNumber, password } = payload;
     const [user] = await this.userUservice.find(phoneNumber);
@@ -89,7 +64,7 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.isActive == false) {
+    if (user.isVerified == false) {
       await this.otpService.sendOtpCode({ phoneNumber: user.phoneNumber });
       throw new UnauthorizedException({
         // Need verify phone number
@@ -107,8 +82,42 @@ export class AuthService {
         'Phone number or password is not corrected',
       );
     }
+    const jwtPayload = {
+      id: user.id,
+      username: user.username,
+      phoneNumber: user.phoneNumber,
+    };
 
-    return user;
+    return {
+      ...user,
+      accessToken: this.jwtService.sign(jwtPayload, { expiresIn: '1d' }),
+      refreshToken: this.jwtService.sign(jwtPayload, {
+        expiresIn: '7d',
+      }),
+    };
+  }
+
+  async verifyOtp(payload: IVerifyOtpPayload) {
+    const { otpCode, phoneNumber } = payload;
+
+    const [user] = await this.userUservice.find(phoneNumber);
+
+    if (!user) {
+      throw new BadRequestException('Email is in use, try another');
+    }
+
+    const isVerify = await this.otpService.verifyOtpCode(payload);
+
+    if (isVerify) {
+      const verifyUser = await this.userUservice.create({
+        ...user,
+        isVerified: true,
+      });
+
+      return verifyUser;
+    } else {
+      throw new BadRequestException('OTP is not correct');
+    }
   }
 
   async forgotPassword(payload: IForgotPasswordPayload) {
@@ -118,6 +127,11 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const otpPassword = this.genetateOTP();
+
+    const notifyResponse = await this.otpService.sendOtpCode({
+      phoneNumber: payload.phoneNumber,
+    });
+
+    return notifyResponse;
   }
 }

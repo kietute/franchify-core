@@ -17,7 +17,7 @@ export class OtpService {
   async sendOtpCode(payload: ISendOtpPayload): Promise<boolean> {
     const { phoneNumber } = payload;
     const [findedOtp] = await this.notificationService.find(phoneNumber);
-    if (!findedOtp) {
+    if (!!findedOtp) {
       //User already have an otp passcode
       return true;
     }
