@@ -8,11 +8,9 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
 import { Address } from './address.entity';
-import { OtpCode } from './otp-code.dto';
 
 export enum UserRole {
   USER = 'user',

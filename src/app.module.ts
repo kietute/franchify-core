@@ -20,22 +20,18 @@ import { ProductImage } from './entities/product-image';
 import { NotificationModule } from './notification/notification.module';
 import { OtpCode } from './entities/otp-code.dto';
 
-const cookieSession = require('cookie-session');
-
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.development`,
-      // ignoreEnvFile: true,
-      // ignoreEnvVars: true,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
           type: 'postgres',
-          database: 'sneakery-db-dev',
+          database: config.get<string>('PROJECT_DB_NAME'),
           username: config.get<string>('PROJECT_DB_USER'),
           password: config.get<string>('PROJECT_DB_PASSWORD'),
           host: 'localhost',
@@ -73,13 +69,5 @@ const cookieSession = require('cookie-session');
 export class AppModule {
   constructor(private configService: ConfigService) {}
 
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(
-        cookieSession({
-          keys: [`cookie-key`],
-        }),
-      )
-      .forRoutes('*');
-  }
+  configure(consumer: MiddlewareConsumer) {}
 }

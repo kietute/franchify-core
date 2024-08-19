@@ -27,8 +27,6 @@ export class CurrentUserMiddleware implements NestMiddleware {
     const parsedToken = this.jwtService.decode(token);
     req.currentUser = parsedToken;
 
-    console.log('req.currentUser', req.currentUser);
-
     next();
   }
 }
