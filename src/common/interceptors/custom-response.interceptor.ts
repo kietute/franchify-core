@@ -19,6 +19,7 @@ export class CustomResponseInterceptor implements NestInterceptor {
       map((data) => ({
         statusCode,
         message: statusCode >= 400 ? 'Error' : 'Success',
+        success: statusCode < 400,
         error: statusCode >= 400 ? response.message : null,
         timestamp: Date.now(),
         version: 'v2',
@@ -29,6 +30,7 @@ export class CustomResponseInterceptor implements NestInterceptor {
         const statusCode = err instanceof HttpException ? err.getStatus() : 500;
         const errorResponse = {
           statusCode,
+          success: statusCode < 400,
           message: err.message || 'Internal server error',
           error: err.name || 'Error',
           timestamp: Date.now(),
