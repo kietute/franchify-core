@@ -4,12 +4,12 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { ProductImage } from './product-image';
+import { TenantProduct } from './tenant-product.entity';
 
 interface IProductPrice {
   price: number;
@@ -29,6 +29,7 @@ export class Product {
   @Column()
   name: string;
 
+  //price
   @Column({ type: 'jsonb' })
   price: IProductPrice;
 
@@ -45,13 +46,22 @@ export class Product {
   isOnSale: boolean;
 
   @Column()
-  description: string;
+  fullDescription: string;
+
+  @Column()
+  shortDescription: string;
+
+  @Column()
+  nutritionInformations: string;
 
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 
   @OneToMany(() => ProductImage, (image) => image.product)
   images: ProductImage[];
+
+  @OneToMany(() => TenantProduct, (storeProduct) => storeProduct.product)
+  tenantProducts: TenantProduct[];
 
   @CreateDateColumn()
   createdAt: Date;

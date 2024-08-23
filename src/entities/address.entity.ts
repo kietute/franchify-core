@@ -1,6 +1,12 @@
-import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Store } from './store.entity';
 
 @Entity()
 export class Address {
@@ -24,4 +30,7 @@ export class Address {
 
   @ManyToOne(() => User, (user) => user?.addresses)
   user: User;
+
+  @OneToOne(() => Store, (store) => store?.address)
+  store: Store;
 }

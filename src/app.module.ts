@@ -19,6 +19,10 @@ import { ProductImage } from './entities/product-image';
 
 import { NotificationModule } from './notification/notification.module';
 import { OtpCode } from './entities/otp-code.dto';
+import { Tenant } from './entities/tenant.entity';
+import { Store } from './entities/store.entity';
+import { TenantProduct } from './entities/tenant-product.entity';
+import { TenantModule } from './tenant/tenant.module';
 
 @Module({
   imports: [
@@ -45,6 +49,9 @@ import { OtpCode } from './entities/otp-code.dto';
             Bid,
             ProductImage,
             OtpCode,
+            Tenant,
+            Store,
+            TenantProduct,
           ],
           synchronize: true,
           namingStrategy: new SnakeNamingStrategy(),
@@ -56,6 +63,7 @@ import { OtpCode } from './entities/otp-code.dto';
     ProductsModule,
     AuthModule,
     NotificationModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [
