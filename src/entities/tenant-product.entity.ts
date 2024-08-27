@@ -6,7 +6,6 @@ import {
   Unique,
 } from 'typeorm';
 import { Product } from './product.entity';
-import { Store } from './store.entity';
 import { Tenant } from './tenant.entity';
 
 @Entity()
@@ -19,5 +18,5 @@ export class TenantProduct {
   product: Product;
 
   @ManyToOne(() => Tenant, (tenant) => tenant.tenantProducts)
-  store: Tenant;
+  tenant: Tenant;
 }

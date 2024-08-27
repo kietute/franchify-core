@@ -27,11 +27,15 @@ export class CustomResponseInterceptor implements NestInterceptor {
         data,
       })),
       catchError((err) => {
+        console.log('err', err);
         const statusCode = err instanceof HttpException ? err.getStatus() : 500;
+        const errorMessage = Array.isArray(err?.response?.message)
+          ? err.response.message[0]
+          : err?.response?.message || err.message || 'Internal server error';
         const errorResponse = {
           statusCode,
           success: statusCode < 400,
-          message: err.message || 'Internal server error',
+          message: errorMessage,
           error: err.name || 'Error',
           timestamp: Date.now(),
           version: 'v2',

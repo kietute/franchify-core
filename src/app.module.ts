@@ -20,9 +20,9 @@ import { ProductImage } from './entities/product-image';
 import { NotificationModule } from './notification/notification.module';
 import { OtpCode } from './entities/otp-code.dto';
 import { Tenant } from './entities/tenant.entity';
-import { Store } from './entities/store.entity';
 import { TenantProduct } from './entities/tenant-product.entity';
 import { TenantModule } from './tenant/tenant.module';
+import { Store } from './entities/store.entity';
 
 @Module({
   imports: [
@@ -50,8 +50,8 @@ import { TenantModule } from './tenant/tenant.module';
             ProductImage,
             OtpCode,
             Tenant,
-            Store,
             TenantProduct,
+            Store,
           ],
           synchronize: true,
           namingStrategy: new SnakeNamingStrategy(),

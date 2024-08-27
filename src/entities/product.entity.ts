@@ -60,7 +60,7 @@ export class Product {
   @OneToMany(() => ProductImage, (image) => image.product)
   images: ProductImage[];
 
-  @OneToMany(() => TenantProduct, (storeProduct) => storeProduct.product)
+  @OneToMany(() => TenantProduct, (tenantProduct) => tenantProduct.product)
   tenantProducts: TenantProduct[];
 
   @CreateDateColumn()

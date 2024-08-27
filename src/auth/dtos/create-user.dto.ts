@@ -1,16 +1,16 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNotEmpty({ message: 'Tên người dùng không được để trống' })
+  @IsNotEmpty({ message: 'Username cannot be empty' })
   @IsString()
   username: string;
 
-  @IsNotEmpty({ message: 'Email không được để trống' })
-  @IsEmail({}, { message: 'Email không đúng định dạng' })
+  @IsNotEmpty({ message: 'Email cannot be empty' })
+  @IsEmail({}, { message: 'Email not in the correct format' })
   email: string;
 
-  @IsPhoneNumber('VN', { message: 'Số điện thoại không đúng định dạng' })
-  @IsNotEmpty({ message: 'Số điện thoại không đuợc để trống' })
+  @IsPhoneNumber('VN', { message: 'Wrong format for phone number' })
+  @IsNotEmpty({ message: 'Phone number cannot be empty' })
   phoneNumber: string;
 
   @IsString()
@@ -20,11 +20,11 @@ export class CreateUserDto {
   lastName: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Vai trò không được để trống' })
+  @IsNotEmpty({ message: 'Role cannot be empty' })
   role: string;
 
-  @IsNotEmpty({ message: 'Mật khẩu không được để trống' })
-  @IsString({ message: 'Mật khẩu phải là một chuỗi' })
+  @IsNotEmpty({ message: 'Password cannot be empty' })
+  @IsString({ message: 'Password must be a string' })
   password: string;
 }
 
