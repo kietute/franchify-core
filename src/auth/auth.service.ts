@@ -68,7 +68,7 @@ export class AuthService {
       await this.otpService.sendOtpCode({ phoneNumber: user.phoneNumber });
       throw new UnauthorizedException({
         // Need verify phone number
-        errorCode: 1337,
+        errorCode: 410,
         message:
           'We have sent an otp to your phone number, please verify to login to your account',
       });
