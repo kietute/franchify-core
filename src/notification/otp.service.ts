@@ -17,12 +17,14 @@ export class OtpService {
   async sendOtpCode(payload: ISendOtpPayload): Promise<boolean> {
     const { phoneNumber } = payload;
 
-    console.log('phoneNumber', phoneNumber);
-
     const [findedOtp] = await this.notificationService.find(phoneNumber);
     if (!!findedOtp) {
-      //User already have an otp passcode
-      return true;
+      let createdDate = new Date(findedOtp.created_at);
+      const distance = Date.now() - createdDate.getTime();
+      console.log('distance is', distance);
+      if (distance < 600000) {
+        return true;
+      }
     }
     try {
       const response = await axios.post(
@@ -39,7 +41,6 @@ export class OtpService {
         },
       );
       if (response) {
-        console.log('response', response?.data);
         await this.notificationService.create({
           phoneNumber: phoneNumber,
           url: response?.data?.url,

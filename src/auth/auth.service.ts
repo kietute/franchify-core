@@ -65,13 +65,21 @@ export class AuthService {
     }
 
     if (user.isVerified == false) {
-      await this.otpService.sendOtpCode({ phoneNumber: user.phoneNumber });
-      throw new UnauthorizedException({
-        // Need verify phone number
-        errorCode: 410,
-        message:
-          'We have sent an otp to your phone number, please verify to login to your account',
+      const response = await this.otpService.sendOtpCode({
+        phoneNumber: user.phoneNumber,
       });
+
+      if (response) {
+        throw new UnauthorizedException({
+          errorCode: 410,
+          message:
+            'We have sent an otp to your phone number, please verify to login to your account',
+        });
+      } else {
+        throw new ServiceUnavailableException(
+          'Cannot login right now, please try later',
+        );
+      }
     }
 
     const [salt, storedHash] = user.password.split('.');
