@@ -94,6 +94,7 @@ export class AuthService {
       id: user.id,
       username: user.username,
       phoneNumber: user.phoneNumber,
+      role: user.role,
     };
 
     return {

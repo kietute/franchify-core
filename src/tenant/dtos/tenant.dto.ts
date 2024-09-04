@@ -1,6 +1,6 @@
 import { Expose, Exclude } from 'class-transformer';
 
-export class StaffDto {
+export class AdminDto {
   @Expose()
   id: number;
 

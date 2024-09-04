@@ -33,15 +33,6 @@ export class Product {
   @Column({ type: 'jsonb' })
   price: IProductPrice;
 
-  @Column()
-  displayPrice: string;
-
-  @Column({ nullable: true })
-  salePrice: number;
-
-  @Column({ nullable: true })
-  displaySalePrice: number;
-
   @Column({ default: false })
   isOnSale: boolean;
 

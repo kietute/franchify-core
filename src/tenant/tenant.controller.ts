@@ -1,24 +1,20 @@
-import { Body, Controller, Post, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Session } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { StaffDto } from './dtos/tenant.dto';
-import { AuthService } from 'src/auth/auth.service';
+import { AdminDto } from './dtos/tenant.dto';
 import { SignInStaffDto } from './dtos/signin-staff.dto';
-import { UsersService } from 'src/auth/users.service';
-import { AdminGuard } from 'src/common/guards/admin.guard';
 import { UserRole } from 'src/entities/user.entity';
 import { CreateStaffDto } from './dtos/create-staff.dto';
+import { TenantService } from './tenant.service';
 
 @Controller('tenant')
 export class TenantController {
-  constructor(
-    private authService: AuthService,
-    userService: UsersService,
-  ) {}
+  constructor(private tenantService: TenantService) {}
 
-  @UseGuards(AdminGuard)
+  // @UseGuards(AdminGuard)
+  @Serialize(AdminDto)
   @Post('/create-staff')
   async createUser(@Body() body: CreateStaffDto) {
-    const user = await this.authService.signup({
+    const user = await this.tenantService.createStaff({
       ...body,
       role: UserRole.STAFF,
     });
@@ -26,9 +22,9 @@ export class TenantController {
   }
 
   @Post('/signin')
-  @Serialize(StaffDto)
+  @Serialize(AdminDto)
   async signin(@Body() body: SignInStaffDto) {
-    const user = await this.authService.signin(body);
+    const user = await this.tenantService.signInStaff(body);
     return user;
   }
 

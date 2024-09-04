@@ -10,7 +10,7 @@ export class SignInStaffDto {
   password: string;
 }
 
-export interface ISignInUserPayload {
+export interface ISignInStaffPayload {
   phoneNumber: string;
   password: string;
 }
