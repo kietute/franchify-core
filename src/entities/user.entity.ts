@@ -8,13 +8,15 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
 import { Address } from './address.entity';
+import { Store } from './store.entity';
 
 export enum UserRole {
   USER = 'user',
-  SELLER = 'seller',
+  STAFF = 'staff',
   ADMIN = 'admin',
 }
 
@@ -65,6 +67,9 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
+
+  @ManyToOne(() => Store, (store) => store.staffs)
+  store: Store;
 
   @AfterInsert()
   logInsert() {

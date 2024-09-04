@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Category } from './category.entity';
 import { ProductImage } from './product-image';
-import { TenantProduct } from './tenant-product.entity';
+import { StoreProduct } from './store-product.entity';
 
 interface IProductPrice {
   price: number;
@@ -60,8 +60,8 @@ export class Product {
   @OneToMany(() => ProductImage, (image) => image.product)
   images: ProductImage[];
 
-  @OneToMany(() => TenantProduct, (tenantProduct) => tenantProduct.product)
-  tenantProducts: TenantProduct[];
+  @OneToMany(() => StoreProduct, (storeProduct) => storeProduct.product)
+  storeProducts: StoreProduct[];
 
   @CreateDateColumn()
   createdAt: Date;

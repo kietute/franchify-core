@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateStaffDto {
   @IsNotEmpty({ message: 'Username cannot be empty' })
   @IsString()
   username: string;
@@ -24,7 +24,7 @@ export class CreateUserDto {
   password: string;
 }
 
-export interface ICreateUserPayload {
+export interface ICreateStaffPayload {
   username: string;
   email: string;
   phoneNumber: string;

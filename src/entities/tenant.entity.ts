@@ -1,17 +1,19 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { TenantProduct } from './tenant-product.entity';
 
 @Entity()
 export class Tenant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @Column()
-  companyLegalName: string;
+  @Column({ unique: true })
+  email: string;
 
-  @OneToMany(() => TenantProduct, (tenantProduct) => tenantProduct.product)
-  tenantProducts: TenantProduct[];
+  @Column({ unique: true })
+  companyPhoneNumber: string;
+
+  @Column({ unique: true })
+  companyLegalName: string;
 }
