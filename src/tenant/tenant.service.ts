@@ -61,7 +61,7 @@ export class TenantService {
       id: user.id,
       username: user.username,
       phoneNumber: user.phoneNumber,
-      role: 'staff',
+      role: user.role,
     };
 
     return {

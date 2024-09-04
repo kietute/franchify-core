@@ -1,16 +1,17 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
+import { Body, Controller, Post, Session, UseGuards } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { AdminDto } from './dtos/tenant.dto';
 import { SignInStaffDto } from './dtos/signin-staff.dto';
 import { UserRole } from 'src/entities/user.entity';
 import { CreateStaffDto } from './dtos/create-staff.dto';
 import { TenantService } from './tenant.service';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('tenant')
 export class TenantController {
   constructor(private tenantService: TenantService) {}
 
-  // @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @Serialize(AdminDto)
   @Post('/create-staff')
   async createUser(@Body() body: CreateStaffDto) {

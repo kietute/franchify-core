@@ -26,7 +26,7 @@ export class AuthService {
   ) {}
 
   async signup(payload: ICreateUserPayload) {
-    const { password, phoneNumber } = payload;
+    const { password, phoneNumber, username } = payload;
     const users = await this.userUservice.find(phoneNumber);
 
     if (users?.length) {
