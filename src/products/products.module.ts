@@ -5,9 +5,10 @@ import { ProductsContoller } from './products.controller';
 import { ProductService } from './products.service';
 import { ProductRepo } from './products.repo';
 import { StoreProductRepo } from './store-product.repo';
+import { StoreProduct } from 'src/entities/store-product.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product])],
+  imports: [TypeOrmModule.forFeature([Product, StoreProduct])],
   controllers: [ProductsContoller],
   providers: [ProductService, ProductRepo, StoreProductRepo],
 })

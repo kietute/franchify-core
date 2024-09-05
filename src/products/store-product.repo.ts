@@ -14,4 +14,8 @@ export class StoreProductRepo {
     const product = this.repo.create(payload as any);
     return this.repo.save(product);
   }
+
+  saveMany(storeProducts: Omit<StoreProduct, 'id'>[]) {
+    return this.repo.save(storeProducts);
+  }
 }
