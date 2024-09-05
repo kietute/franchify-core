@@ -1,9 +1,15 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ProductRepo } from './products.repo';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { LinkProductDto } from './dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
 import { StoreRepo } from 'src/store/store.repo';
+import { GetStoreProductsParam } from './dtos/get-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -32,7 +38,6 @@ export class ProductService {
 
   async linkProductsToStore(payload: LinkProductDto) {
     const { productIds, storeId } = payload;
-    console.log('product ids is', productIds);
 
     let listProducts = await this.productRepo.findByIds(productIds);
     let store = await this.storeRepo.findById(storeId);
@@ -68,6 +73,25 @@ export class ProductService {
     } catch (error) {
       console.log('error linking products to store', error);
       throw new ServiceUnavailableException('Error linking products to store');
+    }
+  }
+
+  async getStoreProducts(storeId: number) {
+    const params: GetStoreProductsParam = {
+      page: 1,
+      pageSize: 10,
+      storeId: 2,
+    };
+
+    try {
+      const storeProducts = await this.storeProductRepo.getAll(params);
+      if (!storeProducts) {
+        throw new NotFoundException('Cannot find products');
+      }
+      return storeProducts;
+    } catch (error) {
+      console.log('error getting store products', error);
+      throw new ServiceUnavailableException('Error getting store products');
     }
   }
 }

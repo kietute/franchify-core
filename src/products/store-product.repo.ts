@@ -1,22 +1,54 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProductDto } from './dtos/create-product.dto';
 import { StoreProduct } from 'src/entities/store-product.entity';
+import { GetStoreProductsParam } from './dtos/get-product.dto';
 
 @Injectable()
 export class StoreProductRepo {
   constructor(
-    @InjectRepository(StoreProduct) private repo: Repository<StoreProduct>,
+    @InjectRepository(StoreProduct)
+    private readonly repo: Repository<StoreProduct>,
   ) {}
 
-  create(payload: any) {
-    console.log('payload', payload);
-    const product = this.repo.create(payload as any);
+  private applyFilters(
+    queryBuilder: SelectQueryBuilder<StoreProduct>,
+    params: GetStoreProductsParam,
+  ): void {
+    queryBuilder.andWhere('store_id = :storeId', {
+      storeId: params.storeId,
+    });
+
+    if (params.name) {
+      queryBuilder.andWhere('name LIKE :name', {
+        name: `%${params.name}%`,
+      });
+    }
+  }
+
+  async create(payload: any) {
+    const product = this.repo.create(payload);
     return this.repo.save(product);
   }
 
-  findById(id: number) {
-    return this.repo.findOneBy({ id: id });
+  async findById(id: number): Promise<StoreProduct | undefined> {
+    return this.repo.findOne({ where: { id } });
+  }
+
+  async getAll(params: GetStoreProductsParam) {
+    const queryBuilder = this.repo.createQueryBuilder('store_product');
+
+    this.applyFilters(queryBuilder, params);
+
+    const page = params.page ?? 1;
+    const pageSize = params.pageSize ?? 10;
+    const skip = (page - 1) * pageSize;
+
+    const [results, total] = await queryBuilder
+      .skip(skip)
+      .take(pageSize)
+      .getManyAndCount();
+
+    return { results, total };
   }
 }

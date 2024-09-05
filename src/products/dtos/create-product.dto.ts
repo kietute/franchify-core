@@ -45,6 +45,9 @@ export class CreateProductDto {
   @IsString()
   nutritionInformations: string;
 
+  @IsNumber()
+  cateogryId: number;
+
   @IsOptional()
   @IsArray()
   @IsString({ each: true })

@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseGuards, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Put,
+  Get,
+  Param,
+} from '@nestjs/common';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { ProductService } from './products.service';
 import { StaffGuard } from 'src/common/guards/staff.guard';
@@ -21,5 +29,12 @@ export class ProductsContoller {
   async linkProductToStore(@Body() body: LinkProductDto) {
     const storeProduct = await this.productService.linkProductsToStore(body);
     return storeProduct;
+  }
+
+  @Get('/by-store/:storeId')
+  async getProductsByStore(@Param('storeId') storeId: number) {
+    console.log('store id', storeId);
+    const products = await this.productService.getStoreProducts(storeId);
+    return products;
   }
 }

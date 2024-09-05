@@ -17,6 +17,21 @@ export class Store {
   @Column()
   name: string;
 
+  @Column({ unique: true, nullable: true })
+  storeCode: number;
+
+  @Column({ nullable: true })
+  supportDelivery: boolean;
+
+  @Column({ nullable: true })
+  supportPickup: boolean;
+
+  @Column({ nullable: true })
+  openTime: number;
+
+  @Column({ nullable: true })
+  closeTime: number;
+
   @OneToOne(() => Address, (address) => address.store)
   address: Address;
 

@@ -17,7 +17,7 @@ enum CategoryPropertyType {
 interface ICategoryProperty {
   name: string;
   type: CategoryPropertyType;
-  options?: Array<CategoryPropertyType>;
+  options?: Array<string>;
 }
 
 @Entity()
