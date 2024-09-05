@@ -6,6 +6,8 @@ export class StaffGuard implements CanActivate {
     if (!request.currentUser) {
       return false;
     }
-    return request.currentUser.role == 'staff';
+    return (
+      request.currentUser.role == 'staff' || request.currentUser.role == 'admin'
+    );
   }
 }

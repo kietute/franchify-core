@@ -10,7 +10,8 @@ export class StoreProductRepo {
     @InjectRepository(StoreProduct) private repo: Repository<StoreProduct>,
   ) {}
 
-  create(payload: CreateProductDto) {
+  create(payload: any) {
+    console.log('payload', payload);
     const product = this.repo.create(payload as any);
     return this.repo.save(product);
   }

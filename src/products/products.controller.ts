@@ -17,7 +17,7 @@ export class ProductsContoller {
   }
 
   @UseGuards(StaffGuard)
-  @Post('/link')
+  @Post('/link-to-store')
   async linkProductToStore(@Body() body: LinkProductDto) {
     const storeProduct = await this.productService.linkProductsToStore(body);
     return storeProduct;

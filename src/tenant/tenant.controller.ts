@@ -25,7 +25,7 @@ export class TenantController {
   @Post('/signin')
   @Serialize(AdminDto)
   async signin(@Body() body: SignInStaffDto) {
-    const user = await this.tenantService.signInStaff(body);
+    const user = await this.tenantService.signIn(body);
     return user;
   }
 

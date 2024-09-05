@@ -1,8 +1,11 @@
 import { IsArray, IsNumber } from 'class-validator';
 
 export class LinkProductDto {
-  @IsNumber()
-  @IsArray({ each: true })
+  @IsArray()
+  @IsNumber(
+    {},
+    { each: true, message: 'productIds must be an array of numbers' },
+  )
   productIds: number[];
 
   @IsNumber()

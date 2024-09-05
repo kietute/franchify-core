@@ -11,7 +11,7 @@ import { Category } from './category.entity';
 import { ProductImage } from './product-image';
 import { StoreProduct } from './store-product.entity';
 
-interface IProductPrice {
+export interface IProductPrice {
   price: number;
   displayPrice: string;
   salePrice: number;

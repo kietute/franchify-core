@@ -41,7 +41,7 @@ export class TenantService {
     return user;
   }
 
-  async signInStaff(payload: ISignInStaffPayload) {
+  async signIn(payload: ISignInStaffPayload) {
     const { phoneNumber, password } = payload;
     const [user] = await this.userUservice.find(phoneNumber);
 
