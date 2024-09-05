@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/entities/product.entity';
 import { CreateProductDto } from './dtos/create-product.dto';
+import { In } from 'typeorm';
 
 @Injectable()
 export class ProductRepo {
@@ -22,6 +23,10 @@ export class ProductRepo {
 
   find(name: string) {
     return this.repo.findBy({ name: name });
+  }
+
+  findByIds(ids: number[]) {
+    return this.repo.find({ where: { id: In(ids) } });
   }
 
   async update(id: number, attrs: Partial<Product>) {

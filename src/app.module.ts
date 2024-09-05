@@ -23,6 +23,7 @@ import { Tenant } from './entities/tenant.entity';
 import { TenantModule } from './tenant/tenant.module';
 import { Store } from './entities/store.entity';
 import { StoreProduct } from './entities/store-product.entity';
+import { StoreModule } from './store/store.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { StoreProduct } from './entities/store-product.entity';
     AuthModule,
     NotificationModule,
     TenantModule,
+    StoreModule,
   ],
   controllers: [AppController],
   providers: [

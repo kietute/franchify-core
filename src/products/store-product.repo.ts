@@ -15,7 +15,7 @@ export class StoreProductRepo {
     return this.repo.save(product);
   }
 
-  saveMany(storeProducts: Omit<StoreProduct, 'id'>[]) {
-    return this.repo.save(storeProducts);
+  findById(id: number) {
+    return this.repo.findOneBy({ id: id });
   }
 }
