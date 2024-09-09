@@ -28,8 +28,17 @@ export class Category {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  slug: string;
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  image: string;
+
   @Column({ type: 'jsonb' })
-  property: ICategoryProperty[];
+  properties: ICategoryProperty[];
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];

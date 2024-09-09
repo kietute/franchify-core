@@ -9,7 +9,7 @@ import { CreateProductDto } from './dtos/create-product.dto';
 import { LinkProductDto } from './dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
 import { StoreRepo } from 'src/store/store.repo';
-import { GetStoreProductsParam } from './dtos/get-product.dto';
+import { GetProductDto } from './dtos/get-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -76,13 +76,8 @@ export class ProductService {
     }
   }
 
-  async getStoreProducts(storeId: number) {
-    const params: GetStoreProductsParam = {
-      page: 1,
-      pageSize: 10,
-      storeId: 2,
-    };
-
+  async getStoreProducts(params: GetProductDto) {
+    console.log('params is', params);
     try {
       const storeProducts = await this.storeProductRepo.getAll(params);
       if (!storeProducts) {

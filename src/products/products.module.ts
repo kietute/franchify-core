@@ -11,9 +11,13 @@ import { Category } from 'src/entities/category.entity';
 import { CategoryRepo } from './category.repo';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [
+    ElasticsearchModule.register({
+      node: 'http://localhost:9200',
+    }),
     TypeOrmModule.forFeature([Product, StoreProduct, Category]),
     StoreModule,
   ],

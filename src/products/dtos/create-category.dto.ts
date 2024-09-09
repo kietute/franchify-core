@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 enum CategoryPropertyType {
   number = 'number',
   boolean = 'boolean',
-  text = 'string',
+  string = 'string',
 }
 
 class CategoryPropertyDto {
@@ -33,5 +33,5 @@ export class CreateCategoryDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CategoryPropertyDto)
-  property: CategoryPropertyDto[];
+  properties: CategoryPropertyDto[];
 }

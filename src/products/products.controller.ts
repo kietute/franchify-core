@@ -6,12 +6,14 @@ import {
   Put,
   Get,
   Param,
+  Query,
 } from '@nestjs/common';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { ProductService } from './products.service';
 import { StaffGuard } from 'src/common/guards/staff.guard';
 import { LinkProductDto } from './dtos/link-product.dto';
 import { AdminGuard } from 'src/common/guards/admin.guard';
+import { GetProductDto } from './dtos/get-product.dto';
 
 @Controller('/products')
 export class ProductsContoller {
@@ -31,10 +33,9 @@ export class ProductsContoller {
     return storeProduct;
   }
 
-  @Get('/by-store/:storeId')
-  async getProductsByStore(@Param('storeId') storeId: number) {
-    console.log('store id', storeId);
-    const products = await this.productService.getStoreProducts(storeId);
+  @Get('/by-store')
+  async getProductsByStore(@Query() query: GetProductDto) {
+    const products = await this.productService.getStoreProducts(query);
     return products;
   }
 }
