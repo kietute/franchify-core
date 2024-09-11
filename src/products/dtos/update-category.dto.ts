@@ -15,8 +15,10 @@ enum CategoryPropertyType {
 
 class CategoryPropertyDto {
   @IsString()
+  @IsOptional()
   name: string;
 
+  @IsOptional()
   @IsEnum(CategoryPropertyType)
   type: CategoryPropertyType;
 
@@ -26,13 +28,14 @@ class CategoryPropertyDto {
   options?: Array<string>;
 }
 
-export class CreateCategoryDto {
+export class UpdateCategoryDto {
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CategoryPropertyDto)
-  properties: CategoryPropertyDto[];
+  properties?: CategoryPropertyDto[];
 }
-

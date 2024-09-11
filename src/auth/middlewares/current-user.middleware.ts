@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { UsersService } from '../users.service';
+import { UsersService } from '../../users/users.service';
 import { User } from '../../entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 
