@@ -17,6 +17,10 @@ class CategoryPropertyDto {
   @IsString()
   name: string;
 
+  @IsOptional()
+  @IsString()
+  description: string;
+
   @IsEnum(CategoryPropertyType)
   type: CategoryPropertyType;
 
@@ -35,4 +39,3 @@ export class CreateCategoryDto {
   @Type(() => CategoryPropertyDto)
   properties: CategoryPropertyDto[];
 }
-

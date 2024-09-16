@@ -43,6 +43,11 @@ export class AuthService {
       phoneNumber: payload.phoneNumber,
     });
 
+    const user = await this.userUservice.create({
+      ...payload,
+      password: result,
+    });
+
     if (!!notifyResponse) {
       const user = await this.userUservice.create({
         ...payload,
