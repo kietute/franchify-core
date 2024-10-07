@@ -5,7 +5,7 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script, verify } from 'crypto';
 import { promisify } from 'util';
 import { ICreateUserPayload } from './dtos/create-user.dto';
@@ -41,11 +41,6 @@ export class AuthService {
 
     const notifyResponse = await this.otpService.sendOtpCode({
       phoneNumber: payload.phoneNumber,
-    });
-
-    const user = await this.userUservice.create({
-      ...payload,
-      password: result,
     });
 
     if (!!notifyResponse) {

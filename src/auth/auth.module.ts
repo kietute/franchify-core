@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { UsersService } from '../users/users.service';
+import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { AuthService } from './auth.service';
@@ -8,11 +8,10 @@ import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
 import { NotificationModule } from '../notification/notification.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    UsersModule,
+    TypeOrmModule.forFeature([User]),
     NotificationModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -25,8 +24,8 @@ import { UsersModule } from 'src/users/users.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [UsersService, AuthService],
+  exports: [UsersService, AuthService],
 })
 export class AuthModule {
   configure(consumer) {

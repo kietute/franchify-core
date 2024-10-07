@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ICreateStaffPayload } from './dtos/create-staff.dto';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/auth/users.service';
 import { randomBytes, scrypt as _script, verify } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
