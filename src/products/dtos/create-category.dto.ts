@@ -35,3 +35,13 @@ export class CreateCategoryDto {
   @Type(() => CategoryPropertyDto)
   properties: CategoryPropertyDto[];
 }
+
+export class UpdateCategoryDto {
+  @IsString()
+  name: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CategoryPropertyDto)
+  properties: CategoryPropertyDto[];
+}

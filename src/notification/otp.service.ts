@@ -19,7 +19,7 @@ export class OtpService {
 
     const [findedOtp] = await this.notificationService.find(phoneNumber);
     if (!!findedOtp) {
-      let createdDate = new Date(findedOtp.created_at);
+      const createdDate = new Date(findedOtp.created_at);
       const distance = Date.now() - createdDate.getTime();
       console.log('distance is', distance);
       if (distance < 600000) {

@@ -15,7 +15,6 @@ import { ProductsModule } from './products/products.module';
 import { Product } from './entities/product.entity';
 import { Category } from './entities/category.entity';
 import { Bid } from './entities/bid.entity';
-import { ProductImage } from './entities/product-image';
 
 import { NotificationModule } from './notification/notification.module';
 import { OtpCode } from './entities/otp-code.dto';
@@ -29,17 +28,23 @@ import { StoreModule } from './store/store.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.development`,
+      envFilePath:
+        process.env.NODE_ENV !== 'production' ? `.env.development` : '.env',
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
+          ssl: {
+            rejectUnauthorized: false,
+          },
           type: 'postgres',
-          database: config.get<string>('PROJECT_DB_NAME'),
-          username: config.get<string>('PROJECT_DB_USER'),
-          password: config.get<string>('PROJECT_DB_PASSWORD'),
-          host: 'localhost',
+          database: 'dbbg86lk3u0u2p',
+          username: 'ufvol1ejnm7dki',
+          password:
+            'pa5de166e3c5abdbaa3b65494c4a7a11bdeaa82b027f2cdbe08c0b7da255ab667',
+          host: 'cf980tnnkgv1bp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
+          url: 'postgres://ufvol1ejnm7dki:pa5de166e3c5abdbaa3b65494c4a7a11bdeaa82b027f2cdbe08c0b7da255ab667@cf980tnnkgv1bp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dbbg86lk3u0u2p',
           port: 5432,
           entities: [
             User,
@@ -48,17 +53,17 @@ import { StoreModule } from './store/store.module';
             Product,
             Category,
             Bid,
-            ProductImage,
             OtpCode,
             Tenant,
             Store,
             StoreProduct,
           ],
-          synchronize: true,
+          synchronize: process.env.NODE_ENV !== 'production',
           namingStrategy: new SnakeNamingStrategy(),
         };
       },
     }),
+
     AuthModule,
     AddressesModule,
     ProductsModule,

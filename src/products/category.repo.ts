@@ -13,6 +13,14 @@ export class CategoryRepo {
     return this.repo.save(category);
   }
 
+  update(id: number, category: Category) {
+    return this.repo.update(id, category);
+  }
+
+  delete(id: number) {
+    return this.repo.delete(id);
+  }
+
   findById(id: number) {
     return this.repo.findOneBy({ id: id });
   }

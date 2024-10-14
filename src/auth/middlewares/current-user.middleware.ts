@@ -15,6 +15,7 @@ declare global {
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
+
   async use(req: Request, res: Response, next: NextFunction) {
     const headers = req.headers.authorization;
     if (!headers) {

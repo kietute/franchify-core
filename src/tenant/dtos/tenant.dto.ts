@@ -20,6 +20,9 @@ export class AdminDto {
   lastName: string;
 
   @Expose()
+  role: string;
+
+  @Expose()
   addresses: Array<any>;
 
   @Expose()

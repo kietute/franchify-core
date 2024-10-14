@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class CreateStoreDto {
+export class UpdateStoreDto {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -32,8 +32,8 @@ export class CreateStoreDto {
   @IsNotEmpty()
   @IsNumber()
   storeCode: number;
-  @IsOptional()
   @IsNumber()
+  @IsOptional()
   lng: number;
   @IsOptional()
   @IsNumber()

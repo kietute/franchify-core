@@ -20,11 +20,11 @@ export class UserDto {
   lastName: string;
 
   @Expose()
+  isActive: boolean;
+
+  @Expose()
+  role: string;
+
+  @Expose()
   addresses: Array<any>;
-
-  @Expose()
-  accessToken: string;
-
-  @Expose()
-  refreshToken: string;
 }

@@ -31,7 +31,11 @@ export class Store {
 
   @Column({ nullable: true })
   closeTime: number;
+  @Column({ nullable: true, type: 'float' })
+  lng: number;
 
+  @Column({ nullable: true, type: 'float' })
+  lat: number;
   @OneToOne(() => Address, (address) => address.store)
   address: Address;
 

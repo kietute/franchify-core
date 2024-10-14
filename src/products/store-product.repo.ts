@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StoreProduct } from 'src/entities/store-product.entity';
-import { GetProductDto } from './dtos/get-product.dto';
+import { GetStoreProductDto } from './dtos/get-product.dto';
 
 @Injectable()
 export class StoreProductRepo {
@@ -15,14 +15,25 @@ export class StoreProductRepo {
     queryBuilder: SelectQueryBuilder<StoreProduct>,
     params: any,
   ): void {
+    const { keyword, storeId, name } = params;
+
     queryBuilder.andWhere('store_id = :storeId', {
-      storeId: params.storeId,
+      storeId: storeId,
     });
 
-    if (params.name) {
+    if (name) {
       queryBuilder.andWhere('name LIKE :name', {
-        name: `%${params.name}%`,
+        name: `%${name}%`,
       });
+    }
+
+    if (keyword) {
+      queryBuilder.andWhere(
+        '(name LIKE :keyword OR description LIKE :keyword OR other_field LIKE :keyword)',
+        {
+          keyword: `%${keyword}%`,
+        },
+      );
     }
   }
 
@@ -35,8 +46,10 @@ export class StoreProductRepo {
     return this.repo.findOne({ where: { id } });
   }
 
-  async getAll(params: GetProductDto) {
-    const queryBuilder = this.repo.createQueryBuilder('store_product');
+  async getAll(params: GetStoreProductDto) {
+    const queryBuilder = this.repo
+      .createQueryBuilder('store_product')
+      .leftJoinAndSelect('store_product.product', 'product');
 
     this.applyFilters(queryBuilder, params);
 

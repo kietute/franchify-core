@@ -5,11 +5,14 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ProductRepo } from './products.repo';
-import { CreateProductDto } from './dtos/create-product.dto';
+import { CreateProductDto, UpdateProductDto } from './dtos/create-product.dto';
 import { LinkProductDto } from './dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
 import { StoreRepo } from 'src/store/store.repo';
-import { GetProductDto } from './dtos/get-product.dto';
+import {
+  GetStoreProductDto,
+  GetTenentProductDto,
+} from './dtos/get-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -33,6 +36,54 @@ export class ProductService {
     } catch (error) {
       console.log(error);
       throw new ServiceUnavailableException('Internal server error');
+    }
+  }
+
+  async updateProduct(id: number, payload: UpdateProductDto) {
+    try {
+      const product = await this.productRepo.findOne(id);
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      }
+
+      const updatedProduct = await this.productRepo.update(id, payload);
+      if (!updatedProduct) {
+        throw new ServiceUnavailableException(
+          'Cannot update product at the moment',
+        );
+      }
+
+      return updatedProduct;
+    } catch (error) {
+      console.log(error);
+      throw new ServiceUnavailableException('Internal server error');
+    }
+  }
+
+  async deleteProduct(id: number) {
+    try {
+      const product = await this.productRepo.findOne(id);
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      } else {
+        return this.productRepo.delete(id);
+      }
+    } catch (error) {
+      console.log(error);
+      throw new ServiceUnavailableException('Internal server error');
+    }
+  }
+
+  async getTenantProducts(params: GetTenentProductDto) {
+    try {
+      const tenantProducts = await this.productRepo.findAll(params);
+      if (!tenantProducts) {
+        throw new NotFoundException('Cannot find tenant products');
+      }
+      return tenantProducts;
+    } catch (error) {
+      console.log('error getting store products', error);
+      throw new ServiceUnavailableException('Error getting store products');
     }
   }
 
@@ -76,8 +127,7 @@ export class ProductService {
     }
   }
 
-  async getStoreProducts(params: GetProductDto) {
-    console.log('params is', params);
+  async getStoreProducts(params: GetStoreProductDto) {
     try {
       const storeProducts = await this.storeProductRepo.getAll(params);
       if (!storeProducts) {
