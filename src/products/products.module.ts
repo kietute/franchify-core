@@ -11,21 +11,21 @@ import { Category } from 'src/entities/category.entity';
 import { CategoryRepo } from './category.repo';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
-import { OpensearchModule } from 'nestjs-opensearch';
+import { ElasticService } from './elastic.service';
 
 @Module({
   imports: [
-    OpensearchModule.forRoot({
-      node: 'https://yzcn37o1j:i4bnt5gp18@marketfloor-2626016716.us-east-1.bonsaisearch.net:443',
-      maxRetries: 10,
-      requestTimeout: 60000,
-      pingTimeout: 60000,
-      sniffOnStart: true,
-      auth: {
-        username: 'sQLdDWuC43',
-        password: 'vZ6rCRuzKDLmH9cN',
-      },
-    }),
+    // OpensearchModule.forRoot({
+    //   node: 'https://yzcn37o1j:i4bnt5gp18@marketfloor-2626016716.us-east-1.bonsaisearch.net:443',
+    //   maxRetries: 10,
+    //   requestTimeout: 60000,
+    //   pingTimeout: 60000,
+    //   sniffOnStart: true,
+    //   auth: {
+    //     username: 'sQLdDWuC43',
+    //     password: 'vZ6rCRuzKDLmH9cN',
+    //   },
+    // }),
     TypeOrmModule.forFeature([Product, StoreProduct, Category]),
     StoreModule,
   ],
@@ -36,6 +36,7 @@ import { OpensearchModule } from 'nestjs-opensearch';
     StoreProductRepo,
     CategoryRepo,
     CategoryService,
+    ElasticService,
   ],
 })
 export class ProductsModule {}

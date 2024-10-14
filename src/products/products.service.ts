@@ -13,7 +13,7 @@ import {
   GetStoreProductDto,
   GetTenentProductDto,
 } from './dtos/get-product.dto';
-import { OpensearchClient } from 'nestjs-opensearch';
+import { ElasticService } from './elastic.service';
 
 @Injectable()
 export class ProductService {
@@ -21,13 +21,12 @@ export class ProductService {
     private readonly storeProductRepo: StoreProductRepo,
     private readonly productRepo: ProductRepo,
     private readonly storeRepo: StoreRepo,
-    private readonly elasticsearchService: OpensearchClient,
+    private readonly elasticService: ElasticService,
   ) {}
 
   async createProduct(payload: CreateProductDto) {
     try {
       const product = await this.productRepo.create(payload);
-
       if (!product) {
         throw new ServiceUnavailableException(
           'Cannot create product at the moment',
@@ -130,10 +129,9 @@ export class ProductService {
   }
 
   async getStoreProducts(params: GetStoreProductDto) {
-    const health = this.elasticsearchService.cat.health();
-
-    if (health) {
-      console.log('Elasticsearch is healthy', health);
+    const bulkResponse = await this.elasticService.bulk('products');
+    if (bulkResponse) {
+      console.log('bulk response', bulkResponse);
     }
 
     try {
