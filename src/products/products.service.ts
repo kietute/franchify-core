@@ -13,6 +13,7 @@ import {
   GetStoreProductDto,
   GetTenentProductDto,
 } from './dtos/get-product.dto';
+import { OpensearchClient } from 'nestjs-opensearch';
 
 @Injectable()
 export class ProductService {
@@ -20,6 +21,7 @@ export class ProductService {
     private readonly storeProductRepo: StoreProductRepo,
     private readonly productRepo: ProductRepo,
     private readonly storeRepo: StoreRepo,
+    private readonly elasticsearchService: OpensearchClient,
   ) {}
 
   async createProduct(payload: CreateProductDto) {
@@ -128,6 +130,12 @@ export class ProductService {
   }
 
   async getStoreProducts(params: GetStoreProductDto) {
+    const health = this.elasticsearchService.cat.health();
+
+    if (health) {
+      console.log('Elasticsearch is healthy', health);
+    }
+
     try {
       const storeProducts = await this.storeProductRepo.getAll(params);
       if (!storeProducts) {

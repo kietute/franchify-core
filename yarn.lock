@@ -803,6 +803,18 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
+"@opensearch-project/opensearch@^2.12.0":
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/@opensearch-project/opensearch/-/opensearch-2.12.0.tgz#decf1b1d72c00c6b0b436e44b29822bbebacd231"
+  integrity sha512-FNGWbWjvpWIZHVvAbv0FkSgvc1PnWnYEHnOTeIY08vMDp9QpXumGNDjNc1tZthJ3OEeoooqH0miGFORjWnRYsQ==
+  dependencies:
+    aws4 "^1.11.0"
+    debug "^4.3.1"
+    hpagent "^1.2.0"
+    json11 "^1.1.2"
+    ms "^2.1.3"
+    secure-json-parse "^2.4.0"
+
 "@opentelemetry/api@1.x":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/api/-/api-1.9.0.tgz#d03eba68273dc0f7509e2a3d5cba21eae10379fe"
@@ -1525,6 +1537,11 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
+
+aws4@^1.11.0:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.13.2.tgz#0aa167216965ac9474ccfa83892cfb6b3e1e52ef"
+  integrity sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==
 
 axios@^1.7.4:
   version "1.7.4"
@@ -2912,7 +2929,7 @@ highlight.js@^10.7.1:
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.7.3.tgz#697272e3991356e40c3cac566a74eef681756531"
   integrity sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==
 
-hpagent@^1.0.0:
+hpagent@^1.0.0, hpagent@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hpagent/-/hpagent-1.2.0.tgz#0ae417895430eb3770c03443456b8d90ca464903"
   integrity sha512-A91dYTeIB6NoXG+PxTQpCCDDnfHsW9kc06Lvpu1TEe9gnd6ZFeiBoRO9JvzEv6xK7EX97/dUE8g/vBMTqTS3CA==
@@ -3606,6 +3623,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
 
+json11@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/json11/-/json11-1.1.2.tgz#35ffd3ee5073b0cc09ef826b0a0dc005ebef2b5b"
+  integrity sha512-5r1RHT1/Gr/jsI/XZZj/P6F11BKM8xvTaftRuiLkQI9Z2PFDukM82Ysxw8yDszb3NJP/NKnRlSGmhUdG99rlBw==
+
 json5@^2.2.2, json5@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
@@ -3998,6 +4020,11 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+nestjs-opensearch@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/nestjs-opensearch/-/nestjs-opensearch-0.4.0.tgz#42d02893cbac9dd3bb2695a821b949ab0df3897e"
+  integrity sha512-RQ2N12lH9x7ZEFFChyGvmb5kE+ijwTKm8mAxkqFuhNXOmzxPBUJtK9mpw1MrEb5kpd205Yoo6Ly1G/C40VZODQ==
 
 node-abort-controller@^3.0.1:
   version "3.1.1"

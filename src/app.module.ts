@@ -39,12 +39,11 @@ import { StoreModule } from './store/store.module';
             rejectUnauthorized: false,
           },
           type: 'postgres',
-          database: 'dbbg86lk3u0u2p',
-          username: 'ufvol1ejnm7dki',
-          password:
-            'pa5de166e3c5abdbaa3b65494c4a7a11bdeaa82b027f2cdbe08c0b7da255ab667',
-          host: 'cf980tnnkgv1bp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
-          url: 'postgres://ufvol1ejnm7dki:pa5de166e3c5abdbaa3b65494c4a7a11bdeaa82b027f2cdbe08c0b7da255ab667@cf980tnnkgv1bp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dbbg86lk3u0u2p',
+          database: process.env.PROJECT_DB_NAME,
+          username: process.env.PROJECT_DB_USER,
+          password: process.env.PROJECT_DB_PASSWORD,
+          host: `${process.env.PROJECT_DB_HOST}`,
+          url: process.env.PROJECT_DB_URL,
           port: 5432,
           entities: [
             User,

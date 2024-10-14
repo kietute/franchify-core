@@ -11,12 +11,20 @@ import { Category } from 'src/entities/category.entity';
 import { CategoryRepo } from './category.repo';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
-import { ElasticsearchModule } from '@nestjs/elasticsearch';
+import { OpensearchModule } from 'nestjs-opensearch';
 
 @Module({
   imports: [
-    ElasticsearchModule.register({
-      node: 'http://localhost:9200',
+    OpensearchModule.forRoot({
+      node: 'https://yzcn37o1j:i4bnt5gp18@marketfloor-2626016716.us-east-1.bonsaisearch.net:443',
+      maxRetries: 10,
+      requestTimeout: 60000,
+      pingTimeout: 60000,
+      sniffOnStart: true,
+      auth: {
+        username: 'sQLdDWuC43',
+        password: 'vZ6rCRuzKDLmH9cN',
+      },
     }),
     TypeOrmModule.forFeature([Product, StoreProduct, Category]),
     StoreModule,
