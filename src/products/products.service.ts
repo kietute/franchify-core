@@ -59,6 +59,8 @@ export class ProductService {
         throw new ServiceUnavailableException(
           'Cannot update product at the moment',
         );
+      } else {
+        
       }
 
       return updatedProduct;

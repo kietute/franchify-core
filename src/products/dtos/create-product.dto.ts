@@ -36,6 +36,11 @@ export class CreateProductDto {
   price: ProductPriceDto;
 
   @IsOptional()
+  @ValidateNested()
+  @Type(() => Object)
+  properties: { [key: string]: string | number | boolean };
+
+  @IsOptional()
   @IsBoolean()
   isOnSale: boolean;
 
@@ -71,6 +76,9 @@ export class UpdateProductDto {
   @IsString()
   name: string;
 
+  @IsOptional()
+  properties: { [key: string]: string | number | boolean };
+
   @ValidateNested()
   @Type(() => ProductPriceDto)
   price: ProductPriceDto;
@@ -102,4 +110,11 @@ export class UpdateProductDto {
   @IsOptional()
   @IsString()
   thumbnail: string;
+}
+
+export class BulkProductDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateProductDto)
+  products: CreateProductDto[];
 }

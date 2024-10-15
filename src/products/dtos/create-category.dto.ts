@@ -17,6 +17,9 @@ class CategoryPropertyDto {
   @IsString()
   name: string;
 
+  @IsString()
+  displayName: string;
+
   @IsEnum(CategoryPropertyType)
   type: CategoryPropertyType;
 
