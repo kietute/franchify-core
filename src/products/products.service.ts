@@ -32,6 +32,13 @@ export class ProductService {
           'Cannot create product at the moment',
         );
       } else {
+        const bulkResponse = await this.elasticService.bulk('products', [
+          product as any,
+        ]);
+        if (!!bulkResponse?.data?.errors) {
+          console.log('Error indexing product', bulkResponse.data);
+        }
+
         return product;
       }
     } catch (error) {
@@ -129,11 +136,6 @@ export class ProductService {
   }
 
   async getStoreProducts(params: GetStoreProductDto) {
-    const bulkResponse = await this.elasticService.bulk('products');
-    if (bulkResponse) {
-      console.log('bulk response', bulkResponse);
-    }
-
     try {
       const storeProducts = await this.storeProductRepo.getAll(params);
       if (!storeProducts) {
