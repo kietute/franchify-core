@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UserDevice } from './entities/user-device.entity';
-import { AddressesModule } from './addresses/addresses.module';
+import { AddressModule } from './addresses/addresses.module';
 import { Address } from './entities/address.entity';
 import { ProductsModule } from './products/products.module';
 import { Product } from './entities/product.entity';
@@ -62,9 +62,8 @@ import { StoreModule } from './store/store.module';
         };
       },
     }),
-
     AuthModule,
-    AddressesModule,
+    AddressModule,
     ProductsModule,
     AuthModule,
     NotificationModule,
