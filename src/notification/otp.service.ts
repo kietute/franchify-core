@@ -21,7 +21,6 @@ export class OtpService {
     if (!!findedOtp) {
       const createdDate = new Date(findedOtp.created_at);
       const distance = Date.now() - createdDate.getTime();
-      console.log('distance is', distance);
       if (distance < 600000) {
         return true;
       }

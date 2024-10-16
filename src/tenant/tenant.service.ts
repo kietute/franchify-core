@@ -70,8 +70,6 @@ export class TenantService {
       role: user.role,
     };
 
-    console.log('user', user);
-
     return {
       ...user,
       accessToken: this.jwtService.sign(jwtPayload, { expiresIn: '1d' }),

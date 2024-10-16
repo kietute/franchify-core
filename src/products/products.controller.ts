@@ -15,6 +15,7 @@ import { StaffGuard } from 'src/common/guards/staff.guard';
 import { LinkProductDto } from './dtos/link-product.dto';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import {
+  GetProductDetailDto,
   GetStoreProductDto,
   GetTenentProductDto,
   SearchProductDto,
@@ -69,6 +70,14 @@ export class ProductsContoller {
   @Get('/by-store')
   async getProductsByStore(@Query() query: GetStoreProductDto) {
     const products = await this.productService.getStoreProducts(query);
+    return products;
+  }
+
+  @Get('/detail')
+  async getProductsByStoreId(@Query() query: GetProductDetailDto) {
+    console.log('QUERY', query);
+
+    const products = await this.productService.getStoreProductById(query);
     return products;
   }
 }

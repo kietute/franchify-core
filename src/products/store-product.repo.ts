@@ -42,8 +42,20 @@ export class StoreProductRepo {
     return this.repo.save(product);
   }
 
-  async findById(id: number): Promise<StoreProduct | undefined> {
-    return this.repo.findOne({ where: { id } });
+  async findByUpc(payload: {
+    upc: string;
+    storeId: number;
+  }): Promise<StoreProduct | undefined> {
+    const { upc, storeId } = payload;
+    const queryBuilder = this.repo
+      .createQueryBuilder('store_product')
+      .leftJoinAndSelect('store_product.product', 'product')
+      .leftJoinAndSelect('store_product.store', 'store');
+
+    return queryBuilder
+      .andWhere('product.upc = :upc', { upc })
+      .andWhere('store.id = :storeId', { storeId })
+      .getOne();
   }
 
   async getAll(params: GetStoreProductDto) {

@@ -63,3 +63,13 @@ export class SearchProductDto {
   @IsString()
   keyword: string;
 }
+
+export class GetProductDetailDto {
+  @Type(() => Number)
+  @IsNumber()
+  storeId: number;
+
+  @IsString()
+  @Type(() => String)
+  upc?: string;
+}
