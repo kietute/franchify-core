@@ -17,6 +17,7 @@ import { AdminGuard } from 'src/common/guards/admin.guard';
 import {
   GetStoreProductDto,
   GetTenentProductDto,
+  SearchProductDto,
 } from './dtos/get-product.dto';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 
@@ -50,6 +51,12 @@ export class ProductsContoller {
   async getAllProduct(@Query() queryParam: GetTenentProductDto) {
     const product = await this.productService.getTenantProducts(queryParam);
     return product;
+  }
+
+  @Post('/search')
+  async searchProduct(@Body() body: SearchProductDto) {
+    const products = await this.productService.searchProduct(body);
+    return products;
   }
 
   @UseGuards(StaffGuard)

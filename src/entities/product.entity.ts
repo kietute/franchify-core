@@ -48,6 +48,9 @@ export class Product {
   category: Category;
 
   @Column({ type: 'jsonb', nullable: true })
+  properties: { [key: string]: string | number | boolean };
+
+  @Column({ type: 'jsonb', nullable: true })
   images: string[];
 
   @Column({ nullable: true })

@@ -12,6 +12,7 @@ import { StoreRepo } from 'src/store/store.repo';
 import {
   GetStoreProductDto,
   GetTenentProductDto,
+  SearchProductDto,
 } from './dtos/get-product.dto';
 import { ElasticService } from './elastic.service';
 
@@ -60,9 +61,13 @@ export class ProductService {
           'Cannot update product at the moment',
         );
       } else {
-        
+        const bulkResponse = await this.elasticService.bulk('products', [
+          updatedProduct as any,
+        ]);
+        if (!!bulkResponse?.data?.errors) {
+          console.log('Error indexing product', bulkResponse.data);
+        }
       }
-
       return updatedProduct;
     } catch (error) {
       console.log(error);
@@ -94,6 +99,21 @@ export class ProductService {
     } catch (error) {
       console.log('error getting store products', error);
       throw new ServiceUnavailableException('Error getting store products');
+    }
+  }
+
+  async searchProduct(params: SearchProductDto) {
+    try {
+      const searchResults = await this.elasticService.search(params.keyword);
+      if (searchResults?.data) {
+        return searchResults?.data;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        'Cannot perform search at the moment',
+      );
     }
   }
 

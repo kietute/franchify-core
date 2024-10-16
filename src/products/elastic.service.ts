@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { instanceToPlain } from 'class-transformer';
@@ -61,6 +61,38 @@ export class ElasticService {
         error.response ? error.response.data : error,
       );
       throw error;
+    }
+  }
+
+  async search(keyword: string) {
+    try {
+      const elasticSearchResponse = await axios.post(
+        `https://sQLdDWuC43:vZ6rCRuzKDLmH9cN@marketfloor-2626016716.us-east-1.bonsaisearch.net:443/products/_search`,
+        {
+          query: {
+            match: {
+              name: {
+                query: keyword,
+                operator: 'and',
+              },
+            },
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const hits = elasticSearchResponse?.data?.hits?.hits || [];
+      return {
+        ...elasticSearchResponse.data,
+        data: hits.map((item) => item._source),
+      };
+    } catch (error) {
+      console.error('Search error:', error);
+      throw new ServiceUnavailableException('Not able to search at the moment');
     }
   }
 }

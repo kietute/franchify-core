@@ -57,3 +57,9 @@ export class GetTenentProductDto {
   @Min(1)
   pageSize?: number;
 }
+
+export class SearchProductDto {
+  @IsOptional()
+  @IsString()
+  keyword: string;
+}
