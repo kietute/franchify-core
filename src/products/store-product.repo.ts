@@ -15,11 +15,13 @@ export class StoreProductRepo {
     queryBuilder: SelectQueryBuilder<StoreProduct>,
     params: any,
   ): void {
-    const { keyword, storeId, name } = params;
+    const { keyword, storeId, name, categoryId } = params;
 
     queryBuilder.andWhere('store_id = :storeId', {
       storeId: storeId,
     });
+
+    // queryBuilder.leftJoinAndSelect('store_product.product', 'product');
 
     if (name) {
       queryBuilder.andWhere('name LIKE :name', {
@@ -35,6 +37,12 @@ export class StoreProductRepo {
         },
       );
     }
+
+    // if (categoryId) {
+    //   queryBuilder.andWhere('product.categoryId = :categoryId', {
+    //     categoryId: categoryId,
+    //   });
+    // }
   }
 
   async create(payload: any) {
@@ -50,7 +58,8 @@ export class StoreProductRepo {
     const queryBuilder = this.repo
       .createQueryBuilder('store_product')
       .leftJoinAndSelect('store_product.product', 'product')
-      .leftJoinAndSelect('store_product.store', 'store');
+      .leftJoinAndSelect('store_product.store', 'store')
+      .leftJoinAndSelect('product.category', 'category'); // Join the category table
 
     return queryBuilder
       .andWhere('product.upc = :upc', { upc })

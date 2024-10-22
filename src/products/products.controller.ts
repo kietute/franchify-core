@@ -75,8 +75,6 @@ export class ProductsContoller {
 
   @Get('/detail')
   async getProductsByStoreId(@Query() query: GetProductDetailDto) {
-    console.log('QUERY', query);
-
     const products = await this.productService.getStoreProductById(query);
     return products;
   }

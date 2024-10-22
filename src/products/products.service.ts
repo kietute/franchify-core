@@ -178,8 +178,13 @@ export class ProductService {
       );
       if (!storeProduct) {
         throw new NotFoundException('Cannot find store product');
+      } else {
+        let relatedProducts = await this.getStoreProducts({
+          storeId: storeProduct.store.id,
+          category: storeProduct?.product?.category?.id,
+        });
+        return { storeProduct, relatedProducts: relatedProducts?.results };
       }
-      return storeProduct;
     } catch (error) {
       console.log('error getting store product', error);
       throw new ServiceUnavailableException('Error getting store product');
