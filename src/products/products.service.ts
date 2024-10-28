@@ -5,7 +5,11 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ProductRepo } from './products.repo';
-import { CreateProductDto, UpdateProductDto } from './dtos/create-product.dto';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  UpdateStoreProductDto,
+} from './dtos/product.dto';
 import { LinkProductDto } from './dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
 import { StoreRepo } from 'src/store/store.repo';
@@ -51,11 +55,6 @@ export class ProductService {
 
   async updateProduct(id: number, payload: UpdateProductDto) {
     try {
-      const product = await this.productRepo.findOne(id);
-      if (!product) {
-        throw new NotFoundException('Product not found');
-      }
-
       const updatedProduct = await this.productRepo.update(id, payload);
       if (!updatedProduct) {
         throw new ServiceUnavailableException(
@@ -70,6 +69,30 @@ export class ProductService {
         }
       }
       return updatedProduct;
+    } catch (error) {
+      console.log(error);
+      throw new ServiceUnavailableException('Internal server error');
+    }
+  }
+
+  async updateStoreProduct(
+    upc: string,
+    storeId: number,
+    payload: UpdateStoreProductDto,
+  ) {
+    try {
+      const updatedProduct = await this.storeProductRepo.update({
+        storeId: storeId,
+        upc: upc,
+        payload: payload,
+      });
+      if (!updatedProduct) {
+        throw new ServiceUnavailableException(
+          'Cannot update store product at the moment',
+        );
+      } else {
+        return updatedProduct;
+      }
     } catch (error) {
       console.log(error);
       throw new ServiceUnavailableException('Internal server error');

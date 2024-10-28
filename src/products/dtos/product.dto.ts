@@ -112,6 +112,15 @@ export class UpdateProductDto {
   thumbnail: string;
 }
 
+export class UpdateStoreProductDto {
+  @ValidateNested()
+  @Type(() => ProductPriceDto)
+  price: ProductPriceDto;
+
+  @IsOptional()
+  @IsNumber()
+  inventory: number;
+}
 export class BulkProductDto {
   @IsArray()
   @ValidateNested({ each: true })

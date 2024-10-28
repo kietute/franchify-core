@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StoreProduct } from 'src/entities/store-product.entity';
@@ -48,6 +48,22 @@ export class StoreProductRepo {
   async create(payload: any) {
     const product = this.repo.create(payload);
     return this.repo.save(product);
+  }
+
+  async update({ storeId, upc, payload }: any) {
+    const storeProduct = await this.repo.findOneBy({
+      product: {
+        upc: upc,
+      },
+      store: {
+        id: storeId,
+      },
+    });
+    if (!storeProduct) {
+      throw new NotFoundException('Store product not found');
+    }
+    Object.assign(storeProduct, payload);
+    return this.repo.save(storeProduct);
   }
 
   async findByUpc(payload: {

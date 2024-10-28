@@ -9,7 +9,11 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
-import { CreateProductDto, UpdateProductDto } from './dtos/create-product.dto';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  UpdateStoreProductDto,
+} from './dtos/product.dto';
 import { ProductService } from './products.service';
 import { StaffGuard } from 'src/common/guards/staff.guard';
 import { LinkProductDto } from './dtos/link-product.dto';
@@ -52,6 +56,21 @@ export class ProductsContoller {
     return product;
   }
 
+  @UseGuards(StaffGuard)
+  @Put('/:storeId/products/:upc')
+  async updateStoreProduct(
+    @Param('upc') upc: string,
+    @Param('storeId') storeId: number,
+    @Body() body: UpdateStoreProductDto,
+  ) {
+    const product = await this.productService.updateStoreProduct(
+      upc,
+      storeId,
+      body,
+    );
+    return product;
+  }
+
   @UseGuards(AdminGuard)
   @Delete('/:id')
   async deleteProduct(@Param('id') id: string) {
@@ -59,7 +78,7 @@ export class ProductsContoller {
     return product;
   }
 
-  @UseGuards(AdminGuard)
+  @UseGuards(StaffGuard)
   @Get('/')
   async getAllProduct(@Query() queryParam: GetTenentProductDto) {
     const product = await this.productService.getTenantProducts(queryParam);
