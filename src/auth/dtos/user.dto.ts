@@ -26,5 +26,11 @@ export class UserDto {
   role: string;
 
   @Expose()
+  accessToken: string;
+
+  @Expose()
+  refreshToken: string;
+
+  @Expose()
   addresses: Array<any>;
 }

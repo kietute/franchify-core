@@ -15,6 +15,9 @@ import { ProductsModule } from './products/products.module';
 import { Product } from './entities/product.entity';
 import { Category } from './entities/category.entity';
 import { Bid } from './entities/bid.entity';
+import { Cart } from './entities/cart.entity';
+import { CartDetail } from './entities/cart-detail.entity';
+import { CartModule } from './cart/cart.module';
 
 import { NotificationModule } from './notification/notification.module';
 import { OtpCode } from './entities/otp-code.dto';
@@ -56,6 +59,8 @@ import { StoreModule } from './store/store.module';
             Tenant,
             Store,
             StoreProduct,
+            Cart,
+            CartDetail,
           ],
           synchronize: process.env.NODE_ENV !== 'production',
           namingStrategy: new SnakeNamingStrategy(),
@@ -69,6 +74,7 @@ import { StoreModule } from './store/store.module';
     NotificationModule,
     TenantModule,
     StoreModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [

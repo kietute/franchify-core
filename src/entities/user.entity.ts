@@ -9,10 +9,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
 import { Address } from './address.entity';
 import { Store } from './store.entity';
+import { Cart } from './cart.entity';
 
 export enum UserRole {
   USER = 'user',
@@ -46,6 +49,9 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
+  @OneToOne(() => Cart, { cascade: true }) // Thêm giỏ hàng (Cart) nếu cần
+  @JoinColumn()
+  cart: Cart;
   @Column({ default: false })
   isVerified: boolean;
 

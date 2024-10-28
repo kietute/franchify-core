@@ -7,6 +7,9 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    return !!request.session.userId;
+    if (!request.currentUser) {
+      return false;
+    }
+    return request.currentUser;
   }
 }
