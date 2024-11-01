@@ -15,7 +15,7 @@ export class StoreProductRepo {
     queryBuilder: SelectQueryBuilder<StoreProduct>,
     params: any,
   ): void {
-    const { keyword, storeId, name, categoryId } = params;
+    const { keyword, storeId, name, category } = params;
 
     queryBuilder.andWhere('store_id = :storeId', {
       storeId: storeId,
@@ -38,11 +38,11 @@ export class StoreProductRepo {
       );
     }
 
-    // if (categoryId) {
-    //   queryBuilder.andWhere('product.categoryId = :categoryId', {
-    //     categoryId: categoryId,
-    //   });
-    // }
+    if (category) {
+      queryBuilder.andWhere('product.category = :categoryId', {
+        categoryId: category,
+      });
+    }
   }
 
   async create(payload: any) {

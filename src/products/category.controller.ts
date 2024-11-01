@@ -14,7 +14,6 @@ import { CreateCategoryDto } from './dtos/create-category.dto';
 import { CategoryService } from './category.service';
 import { GetCategoryDto } from './dtos/get-category.dto';
 
-@UseGuards(AdminGuard)
 @Controller('/category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
