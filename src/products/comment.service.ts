@@ -17,7 +17,6 @@ export class CommentService {
   async createComment(payload: CreateProductCommentDto, userId: number) {
     try {
       const comment = await this.commentRepo.create(payload, userId);
-
       return comment;
     } catch (error) {
       console.log('error', error);
