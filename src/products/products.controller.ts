@@ -109,4 +109,10 @@ export class ProductsContoller {
     const comments = await this.commentService.createComment(body, user.id);
     return comments;
   }
+
+  @Post('/clear-comments')
+  async clearAllComments() {
+    const comments = await this.commentService.clearAllComments();
+    return comments;
+  }
 }

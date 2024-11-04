@@ -76,6 +76,11 @@ export class CommentSerializer {
   user: UserSerializer;
 }
 
+export class ParentCommmentSerializer {
+  @Expose()
+  id: number;
+}
+
 export class ProductCommentSerializer {
   @Expose()
   content: string;
@@ -91,7 +96,8 @@ export class ProductCommentSerializer {
   replies: CommentSerializer[];
 
   @Expose()
-  parentComment: any;
+  @Type(() => ParentCommmentSerializer)
+  parentComment: ParentCommmentSerializer;
 
   @Expose()
   id: number;

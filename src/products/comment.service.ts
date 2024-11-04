@@ -51,14 +51,17 @@ export class CommentService {
   }
 
   async getByProductId(params: GetProductCommentsDto) {
-    const comments = await this.commentRepo.findByProductId(params?.productId);
-
-    if (comments) {
-      console.log(
-        'comments is',
-        comments?.map((comment) => comment.replies),
+    try {
+      const comments = await this.commentRepo.findByProductId(
+        params?.productId,
       );
+      return comments;
+    } catch (error) {
+      console.log('get comments by product error', error);
     }
-    return comments;
+  }
+
+  async clearAllComments() {
+    return this.commentRepo.clearAll();
   }
 }
