@@ -57,8 +57,6 @@ export class AuthService {
   }
 
   async signin(payload: ISignInUserPayload) {
-    console.log('payload', payload);
-
     const { phoneNumber, password } = payload;
     const [user] = await this.userUservice.find(phoneNumber);
 

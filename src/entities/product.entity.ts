@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Category } from './category.entity';
 import { StoreProduct } from './store-product.entity';
+import { Comment } from './comment.entity';
 
 export interface IProductPrice {
   price: number;
@@ -61,6 +62,9 @@ export class Product {
 
   @OneToMany(() => StoreProduct, (storeProduct) => storeProduct.product)
   storeProducts: StoreProduct[];
+
+  @OneToMany(() => Comment, (comment) => comment.product)
+  comments: Comment[];
 
   @Column({ nullable: true })
   @CreateDateColumn()

@@ -12,6 +12,9 @@ import { CategoryRepo } from './category.repo';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
 import { ElasticService } from './elastic.service';
+import { CommentService } from './comment.service';
+import { Comment } from 'src/entities/comment.entity';
+import { CommentRepo } from './comment.repo';
 
 @Module({
   imports: [
@@ -26,7 +29,7 @@ import { ElasticService } from './elastic.service';
     //     password: 'vZ6rCRuzKDLmH9cN',
     //   },
     // }),
-    TypeOrmModule.forFeature([Product, StoreProduct, Category]),
+    TypeOrmModule.forFeature([Product, StoreProduct, Category, Comment]),
     StoreModule,
   ],
   controllers: [ProductsContoller, CategoryController],
@@ -37,6 +40,8 @@ import { ElasticService } from './elastic.service';
     CategoryRepo,
     CategoryService,
     ElasticService,
+    CommentService,
+    CommentRepo,
   ],
 })
 export class ProductsModule {}

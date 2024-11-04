@@ -21,10 +21,22 @@ import {
   SearchProductDto,
 } from './dtos/get-product.dto';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
+import {
+  CommentSerializer,
+  CreateProductCommentDto,
+  GetProductCommentsDto,
+  ProductCommentSerializer,
+} from './dtos/comment-product-dto';
+import { CommentService } from './comment.service';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('/products')
 export class ProductsContoller {
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private commentService: CommentService,
+  ) {}
 
   @UseGuards(AdminGuard)
   @Post('/')
@@ -77,5 +89,24 @@ export class ProductsContoller {
   async getProductsByStoreId(@Query() query: GetProductDetailDto) {
     const products = await this.productService.getStoreProductById(query);
     return products;
+  }
+
+  @Serialize(ProductCommentSerializer)
+  @Get('/:id/comments')
+  async getProductComments(@Param('id') id: string) {
+    const comments = await this.commentService.getByProductId({
+      productId: Number(id),
+    });
+    return comments;
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('/comments')
+  async commentOnProduct(
+    @Body() body: CreateProductCommentDto,
+    @CurrentUser() user,
+  ) {
+    const comments = await this.commentService.createComment(body, user.id);
+    return comments;
   }
 }

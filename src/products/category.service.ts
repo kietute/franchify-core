@@ -22,9 +22,6 @@ export class CategoryService {
       throw new NotFoundException('Category not found');
     }
     try {
-      // Merge the existing category with the payload
-      console.log('payload', payload);
-
       const updatedCategory = Object.assign(category, payload);
       await this.categoryRepo.update(id, updatedCategory);
       return updatedCategory;

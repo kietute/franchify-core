@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './entities/user.entity';
+import { Comment } from './entities/comment.entity';
 
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -61,8 +62,9 @@ import { StoreModule } from './store/store.module';
             StoreProduct,
             Cart,
             CartDetail,
+            Comment,
           ],
-          synchronize: process.env.NODE_ENV !== 'production',
+          synchronize: true,
           namingStrategy: new SnakeNamingStrategy(),
         };
       },

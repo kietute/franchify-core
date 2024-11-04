@@ -16,6 +16,7 @@ import { UserDevice } from './user-device.entity';
 import { Address } from './address.entity';
 import { Store } from './store.entity';
 import { Cart } from './cart.entity';
+import { Comment } from './comment.entity';
 
 export enum UserRole {
   USER = 'user',
@@ -76,6 +77,9 @@ export class User {
 
   @ManyToOne(() => Store, (store) => store.staffs)
   store: Store;
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
   @AfterInsert()
   logInsert() {
