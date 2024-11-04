@@ -60,6 +60,9 @@ export class Product {
   @Column({ default: true })
   isAvailable: boolean;
 
+  @Column({ default: 0, nullable: true })
+  buyCount: number;
+
   @OneToMany(() => StoreProduct, (storeProduct) => storeProduct.product)
   storeProducts: StoreProduct[];
 
