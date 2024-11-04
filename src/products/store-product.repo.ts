@@ -94,6 +94,9 @@ export class StoreProductRepo {
     const pageSize = params.pageSize ?? 10;
     const skip = (page - 1) * pageSize;
 
+    // Add ordering by product's buyCount field
+    queryBuilder.orderBy('product.buyCount', 'DESC');
+
     const [results, total] = await queryBuilder
       .skip(skip)
       .take(pageSize)

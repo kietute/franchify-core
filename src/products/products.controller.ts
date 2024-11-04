@@ -104,6 +104,12 @@ export class ProductsContoller {
     return products;
   }
 
+  @Get('/by-store/popular')
+  async getProductsPopularByStore(@Query() query: GetStoreProductDto) {
+    const products = await this.productService.getStoreProducts(query);
+    return products;
+  }
+
   @Get('/detail')
   async getProductsByStoreId(@Query() query: GetProductDetailDto) {
     const products = await this.productService.getStoreProductById(query);

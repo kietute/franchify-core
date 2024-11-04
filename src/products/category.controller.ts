@@ -46,7 +46,6 @@ export class CategoryController {
     return category;
   }
 
-  @UseGuards(StaffGuard)
   @Get('/')
   async getCategories(@Query() query: GetCategoryDto) {
     const categories = await this.categoryService.getCategories(query);

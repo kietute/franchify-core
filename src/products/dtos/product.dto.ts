@@ -110,6 +110,10 @@ export class UpdateProductDto {
   @IsOptional()
   @IsString()
   thumbnail: string;
+
+  @IsOptional()
+  @IsNumber()
+  buyCount: number;
 }
 
 export class UpdateStoreProductDto {

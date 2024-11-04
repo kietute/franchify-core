@@ -213,4 +213,21 @@ export class ProductService {
       throw new ServiceUnavailableException('Error getting store product');
     }
   }
+
+  async increaseByCount(payload: { id: number; count: number }) {
+    try {
+      const product = await this.productRepo.findOne(payload.id);
+      if (!product) {
+        throw new NotFoundException('Cannot find product');
+      } else {
+        await this.updateProduct(product?.id, {
+          ...product,
+          buyCount: product?.buyCount + payload.count,
+        } as any);
+      }
+    } catch (error) {
+      console.log('Update buy count error', error);
+      throw new ServiceUnavailableException('Error update buy count');
+    }
+  }
 }

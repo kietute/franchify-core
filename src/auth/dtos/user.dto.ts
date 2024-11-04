@@ -14,6 +14,9 @@ export class UserDto {
   username: string;
 
   @Expose()
+  savePoints: number;
+
+  @Expose()
   firstName: string;
 
   @Expose()

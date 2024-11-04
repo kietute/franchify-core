@@ -41,6 +41,9 @@ export class User {
   @Column()
   lastName: string;
 
+  @Column({ default: 10, nullable: true })
+  savePoints: number;
+
   @Column()
   email: string;
 

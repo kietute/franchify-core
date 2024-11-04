@@ -60,7 +60,7 @@ export class Product {
   @Column({ default: true })
   isAvailable: boolean;
 
-  @Column({ default: 0, nullable: true })
+  @Column({ default: 0, name: 'buy_count' })
   buyCount: number;
 
   @OneToMany(() => StoreProduct, (storeProduct) => storeProduct.product)
