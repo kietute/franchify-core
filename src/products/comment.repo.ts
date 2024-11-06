@@ -26,7 +26,6 @@ export class CommentRepo {
   findById(id: number) {
     return this.repo.findOne({
       where: { id },
-      relations: this.getRecursiveRelations('replies', 5), // Adjust the depth as needed
     });
   }
 
@@ -34,30 +33,29 @@ export class CommentRepo {
     const comments = await this.repo
       .createQueryBuilder('comment')
       .leftJoinAndSelect('comment.user', 'user')
-      // .leftJoinAndSelect('comment.replies', 'replies')
       .leftJoinAndSelect('comment.parentComment', 'parentComment')
-      // .leftJoinAndSelect('replies.user', 'replies.user')
-      // .leftJoinAndSelect('replies.replies', 'replies.replies')
-      // .leftJoinAndSelect('replies.parentComment', 'replies.parentComment')
       .where('comment.productId = :productId', { productId })
-      // .addSelect(this.getRecursiveRelations('replies', 5)) // Adjust the depth as needed
       .getMany();
 
-    // Filter out comments that are replies to other comments
-    return comments;
+    return this.nestCommentsTogether(comments)?.filter(
+      (comment) => !comment.parentComment,
+    );
   }
 
   async clearAll() {
     return this.repo?.clear();
   }
 
-  private getRecursiveRelations(relation: string, depth: number): string[] {
-    const relations = [];
-    for (let i = 1; i <= depth; i++) {
-      const prefix = Array(i).fill(relation).join('.');
-      relations.push(prefix);
-      relations.push(`${prefix}.user`);
-    }
-    return relations;
+  private nestCommentsTogether(comments: any[]): any[] {
+    let results = comments;
+
+    results?.map((comment) => {
+      comment.replies = comments.filter(
+        (reply) => reply.parentComment?.id === comment.id,
+      );
+      return comment;
+    });
+
+    return results;
   }
 }
