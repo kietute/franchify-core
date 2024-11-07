@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
-import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { SignInUserDto } from './dtos/sign-in-user.dto';
@@ -16,7 +15,6 @@ import { AuthGuard } from '../common/guards/auth.guard';
 import { User } from '../entities/user.entity';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { VerifyOtpDto } from './dtos/verify-otp.dto';
-import { makeLogger } from 'ts-loader/dist/logger';
 
 @Controller('auth')
 @Serialize(UserDto)

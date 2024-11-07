@@ -18,7 +18,6 @@ import { ISignInStaffPayload } from './dtos';
 import { User, UserRole } from '../entities/user.entity';
 import { TenantRepo } from './tenant.repo';
 import { Tenant } from 'src/entities/tenant.entity';
-import tinycolor from 'tinycolor2';
 
 const scrypt = promisify(_script);
 
