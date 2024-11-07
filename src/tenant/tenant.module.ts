@@ -4,6 +4,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { TenantService } from './tenant.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Tenant } from 'src/entities/tenant.entity';
+import { TenantRepo } from './tenant.repo';
 
 @Module({
   controllers: [TenantController],
@@ -18,7 +21,8 @@ import { ConfigService } from '@nestjs/config';
         };
       },
     }),
+    TypeOrmModule.forFeature([Tenant]),
   ],
-  providers: [TenantService],
+  providers: [TenantService, TenantRepo],
 })
 export class TenantModule {}

@@ -3,17 +3,19 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
   Put,
+  ServiceUnavailableException,
   Session,
   UseGuards,
 } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { AdminDto } from './dtos/tenant.dto';
-import { SignInStaffDto } from './dtos/signin-staff.dto';
+import { AdminDto, CreateTenantConfigDto } from './dtos';
+import { SignInStaffDto } from './dtos';
 import { User, UserRole } from 'src/entities/user.entity';
-import { CreateStaffDto } from './dtos/create-staff.dto';
+import { CreateStaffDto } from './dtos';
 import { TenantService } from './tenant.service';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { UserDto } from '../auth/dtos/user.dto';
@@ -47,114 +49,56 @@ export class TenantController {
     session.userId = null;
   }
 
-  @Get('/theme')
-  async getTheme() {
-    const screens = {
-      phone: '600px',
-      tablet: '768px',
-      laptop: '1024px',
-      desktop: '1270px',
-      television: '1600px',
-    };
-
-    const content = [
-      './src/pages/**/*.{js,ts,jsx,tsx}',
-      './src/app/**/*.{js,ts,jsx,tsx}',
-      './src/apps/(main)/**/*.{js,ts,jsx,tsx}',
-      './src/containers/**/*.{js,ts,jsx,tsx}',
-      './src/components/**/*.{js,ts,jsx,tsx}',
-      './src/components/atoms/**/*.{js,ts,jsx,tsx}',
-      './src/components/molecules/**/*.{js,ts,jsx,tsx}',
-      './src/components/organisms/**/*.{js,ts,jsx,tsx}',
-      './src/components/templates/**/*.{js,ts,jsx,tsx}',
-      './src/layouts/**/*.{js,ts,jsx,tsx}',
-      './src/designs/**/*.{js,ts,jsx,tsx}',
-    ];
-
-    const colors = {
-      primary: {
-        '50': '#FEF3E6',
-        '100': '#FEE4C8',
-        '200': '#FDC991',
-        '300': '#FBB05F',
-        '400': '#FA9528',
-        '500': '#E57905',
-        '600': '#B96104',
-        '700': '#8C4A03',
-        '800': '#5A2F02',
-        '900': '#2D1801',
-        '950': '#190D01',
-      },
-      secondary: {
-        '50': '#FFFFFF',
-        '100': '#FFFFFF',
-        '200': '#FFFFFF',
-        '300': '#FFFFFF',
-        '400': '#FFFFFF',
-        '500': '#FFFFFF',
-        '600': '#CCCCCC',
-        '700': '#999999',
-        '800': '#666666',
-        '900': '#333333',
-        '950': '#1A1A1A',
-      },
-      green: {
-        '50': '#E9FBF0',
-        '100': '#CFF7DE',
-        '200': '#9FEFBC',
-        '300': '#6FE69B',
-        '400': '#40DE7A',
-        '500': '#22C55E',
-        '600': '#1B9D4B',
-        '700': '#147538',
-        '800': '#0D4E25',
-        '900': '#072713',
-        '950': '#04160A',
-      },
-    };
-
-    return `
-/** @type {import('tailwindcss').Config} */
-
-const screens = ${JSON.stringify(screens, null, 2)};
-
-module.exports = {
-  content: ${JSON.stringify(content, null, 2)},
-  theme: {
-    extend: {
-      screens,
-      colors: ${JSON.stringify(colors, null, 2)},
-    },
-  },
-  plugins: [],
-};
-`;
-  }
-
   @Get('/users')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
   getAll(@CurrentUser() currentUser: User) {
-    return this.tenantService.findAll(currentUser); // Không cần tham số phân trang
+    return this.tenantService.getAll(currentUser); // Không cần tham số phân trang
+  }
+
+  @Get('/config')
+  async getConfig() {
+    try {
+      const tenantConfig = await this.tenantService.getTenant();
+      if (!tenantConfig) {
+        throw new NotFoundException('Tenant config not found');
+      } else {
+        return tenantConfig;
+      }
+    } catch (error) {
+      console.log('Get tenant config error', error);
+      throw new ServiceUnavailableException('Tenant config not found');
+    }
+  }
+
+  @Post('/config')
+  async createConfig(@Body() body: CreateTenantConfigDto) {
+    try {
+      const tenantConfig = await this.tenantService.createTenant(body);
+      return tenantConfig;
+    } catch (error) {
+      console.log('Create tenant config error', error);
+      throw new ServiceUnavailableException('Create tenant config error');
+    }
   }
 
   @Get(':id')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
   getUser(@Param('id') id: number, @CurrentUser() currentUser: User) {
-    return this.tenantService.findOne(id, currentUser);
+    return this.tenantService.getById(id, currentUser);
   }
 
   @Put(':id/lock')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
   async lockUser(@Param('id') id: number, @CurrentUser() currentUser: User) {
-    return this.tenantService.lock(id, currentUser);
+    return this.tenantService.lockById(id, currentUser);
   }
 
   @UseGuards(AdminGuard)
   @Delete(':id')
   async removeUser(@Param('id') id: number, @CurrentUser() currentUser: User) {
-    return this.tenantService.remove(id, currentUser);
+    return this.tenantService.deleteById(id, currentUser);
   }
 }

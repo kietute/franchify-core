@@ -1,16 +1,24 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ICreateStaffPayload } from './dtos/create-staff.dto';
+import {
+  CreateTenantConfigDto,
+  ICreateStaffPayload,
+  UpdateTenantConfigDto,
+} from './dtos';
 import { UsersService } from 'src/auth/users.service';
 import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
-import { ISignInStaffPayload } from './dtos/signin-staff.dto';
+import { ISignInStaffPayload } from './dtos';
 import { User, UserRole } from '../entities/user.entity';
+import { TenantRepo } from './tenant.repo';
+import { Tenant } from 'src/entities/tenant.entity';
+import tinycolor from 'tinycolor2';
 
 const scrypt = promisify(_script);
 
@@ -19,9 +27,9 @@ export class TenantService {
   constructor(
     private readonly userUservice: UsersService,
     private readonly jwtService: JwtService,
+    private readonly tenantRepo: TenantRepo,
   ) {}
 
-  //Create staff service, doesn't need to verify phone number
   async createStaff(payload: ICreateStaffPayload) {
     const { password, phoneNumber } = payload;
     const users = await this.userUservice.find(phoneNumber);
@@ -78,15 +86,16 @@ export class TenantService {
       }),
     };
   }
-  async findAll(currentUser: User) {
+
+  async getAll(currentUser: User) {
     if (currentUser.role === UserRole.STAFF) {
-      return this.userUservice.findAllByRole(UserRole.USER); // Staff chỉ xem User
+      return this.userUservice.findAllByRole(UserRole.USER);
     }
 
     return this.userUservice.findAll();
   }
 
-  async findOne(id: number, currentUser: User) {
+  async getById(id: number, currentUser: User) {
     if (!id) {
       throw new NotFoundException('User not found');
     }
@@ -97,7 +106,6 @@ export class TenantService {
       throw new NotFoundException('User not found');
     }
 
-    // Kiểm tra vai trò của currentUser
     if (
       currentUser.role === UserRole.STAFF &&
       (user.role === UserRole.ADMIN || user.role === UserRole.STAFF)
@@ -107,36 +115,32 @@ export class TenantService {
 
     return user;
   }
-  async remove(id: number, currentUser: User) {
+
+  async deleteById(id: number, currentUser: User) {
     const user = await this.userUservice.findOne(id);
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
-    // Kiểm tra nếu người dùng hiện tại đang tự xóa chính mình
     if (currentUser.id === user.id) {
       throw new BadRequestException('You cannot remove your own account.');
     }
 
-    // Xóa user nếu không phải là chính mình
     return this.userUservice.remove(id);
   }
-  async lock(id: number, currentUser: User) {
+
+  async lockById(id: number, currentUser: User) {
     const user = await this.userUservice.findOne(id);
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // Kiểm tra nếu người dùng hiện tại đang cố gắng khóa chính mình
     if (currentUser.id === user.id) {
       throw new BadRequestException('You cannot lock your own account.');
     }
 
-    // Kiểm tra quyền của người dùng hiện tại
     if (currentUser.role === UserRole.STAFF) {
-      // Staff không thể khóa Admin hoặc Staff
       if (user.role === UserRole.STAFF || user.role === UserRole.ADMIN) {
         throw new BadRequestException(
           'Staff cannot lock Admin or other Staff accounts.',
@@ -144,7 +148,35 @@ export class TenantService {
       }
     }
 
-    // Khóa tài khoản
     return this.userUservice.lock(id);
+  }
+
+  async createTenant(createTenantDto: CreateTenantConfigDto): Promise<Tenant> {
+    const existingTenant = await this.tenantRepo.findAll();
+    if (existingTenant?.length > 0) {
+      throw new ConflictException(
+        'A tenant config already exists, please try update',
+      );
+    }
+
+    return this.tenantRepo.create(createTenantDto);
+  }
+
+  async updateTenant(
+    id: number,
+    updateTenantDto: UpdateTenantConfigDto,
+  ): Promise<Tenant> {
+    const tenant = await this.tenantRepo.update(id, updateTenantDto);
+    return tenant;
+  }
+
+  async getTenant(): Promise<Tenant> {
+    const listTenant = await this.tenantRepo.findAll();
+
+    if (!listTenant) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    return listTenant[0];
   }
 }

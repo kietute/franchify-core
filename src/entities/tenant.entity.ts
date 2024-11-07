@@ -16,4 +16,13 @@ export class Tenant {
 
   @Column({ unique: true })
   companyLegalName: string;
+
+  @Column({ nullable: true })
+  logoUrl: string;
+
+  @Column({ nullable: true, type: 'jsonb' })
+  homePageSlideshow: string[];
+
+  @Column({ nullable: false, default: '#008000' })
+  primaryColorScheme: string;
 }
