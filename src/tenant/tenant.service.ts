@@ -161,11 +161,8 @@ export class TenantService {
     return this.tenantRepo.create(createTenantDto);
   }
 
-  async updateTenant(
-    id: number,
-    updateTenantDto: UpdateTenantConfigDto,
-  ): Promise<Tenant> {
-    const tenant = await this.tenantRepo.update(id, updateTenantDto);
+  async updateTenant(updateTenantDto: UpdateTenantConfigDto): Promise<Tenant> {
+    const tenant = await this.tenantRepo.update(updateTenantDto);
     return tenant;
   }
 

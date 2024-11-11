@@ -20,14 +20,15 @@ export class TenantRepo {
     return this.repo.findOne({ where: { id: id } });
   }
 
-  update(id: number, payload: UpdateTenantConfigDto): Promise<Tenant> {
-    const tenant = this.repo.findOne({ where: { id: id } });
+  async update(payload: UpdateTenantConfigDto): Promise<Tenant> {
+    const config = await this.repo.find();
 
-    if (!tenant) {
+    if (!config) {
       throw new NotFoundException('Tenant not found');
-    } else {
-      return this.repo.save({ ...tenant, ...payload });
     }
+
+    const updatedTenant = this.repo.merge(config?.[0], payload);
+    return this.repo.save(updatedTenant);
   }
 
   remove(id: number) {

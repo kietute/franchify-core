@@ -10,6 +10,7 @@ import {
 import { Category } from './category.entity';
 import { StoreProduct } from './store-product.entity';
 import { Comment } from './comment.entity';
+import { OrderDetail } from './order-detail.entity';
 
 export interface IProductPrice {
   price: number;
@@ -76,4 +77,7 @@ export class Product {
   @Column({ nullable: true })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product)
+  orderDetails: OrderDetail[];
 }

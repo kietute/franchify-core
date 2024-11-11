@@ -48,6 +48,18 @@ export class CreateTenantConfigDto {
   @IsEmail()
   email: string;
 
+  @IsOptional()
+  @IsString()
+  fullDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  logoUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  slogan?: string;
+
   @IsNotEmpty()
   @IsString()
   companyPhoneNumber: string;
@@ -69,6 +81,14 @@ export class UpdateTenantConfigDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @IsOptional()
+  @IsString()
+  fullDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  logoUrl?: string;
 
   @IsNotEmpty()
   @IsString()

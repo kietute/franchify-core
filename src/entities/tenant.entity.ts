@@ -1,4 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+export interface ITenantSettings {
+  carouselImages?: string[];
+}
 
 @Entity()
 export class Tenant {
@@ -7,6 +11,12 @@ export class Tenant {
 
   @Column({ unique: true })
   name: string;
+
+  @Column({ nullable: true, default: '' })
+  fullDescription: string;
+
+  @Column({ nullable: true })
+  slogan: string;
 
   @Column({ unique: true })
   email: string;
@@ -25,4 +35,7 @@ export class Tenant {
 
   @Column({ nullable: false, default: '#008000' })
   primaryColorScheme: string;
+
+  @Column({ nullable: true, type: 'jsonb' })
+  settings: ITenantSettings;
 }

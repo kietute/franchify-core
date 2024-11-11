@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, Injectable, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from 'src/entities/product.entity';
 import { ProductsContoller } from './products.controller';
@@ -43,5 +43,6 @@ import { CommentRepo } from './comment.repo';
     CommentService,
     CommentRepo,
   ],
+  exports: [ProductService, ProductRepo, StoreProductRepo, CategoryService],
 })
 export class ProductsModule {}

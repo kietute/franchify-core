@@ -53,7 +53,7 @@ export class TenantController {
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
   getAll(@CurrentUser() currentUser: User) {
-    return this.tenantService.getAll(currentUser); // Không cần tham số phân trang
+    return this.tenantService.getAll(currentUser);
   }
 
   @Get('/config')
@@ -79,6 +79,17 @@ export class TenantController {
     } catch (error) {
       console.log('Create tenant config error', error);
       throw new ServiceUnavailableException('Create tenant config error');
+    }
+  }
+
+  @Put('/config')
+  async updateConfig(@Body() body: CreateTenantConfigDto) {
+    try {
+      const tenantConfig = await this.tenantService.updateTenant(body);
+      return tenantConfig;
+    } catch (error) {
+      console.log('Update tenant config error', error);
+      throw new ServiceUnavailableException('Update tenant config error');
     }
   }
 
