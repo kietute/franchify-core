@@ -19,6 +19,13 @@ export interface IOrderAddress {
   shippingFee: number;
 }
 
+export interface IOrderUserInfo {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+}
+
 export enum OrderStatus {
   PENDING = 'pending',
   RECEIVED = 'received',
@@ -40,13 +47,16 @@ export class Order {
   @Column({ default: 'pending', type: 'enum', enum: OrderStatus })
   status: string;
 
+  @Column({ type: 'jsonb', nullable: true })
+  userInfo: IOrderUserInfo;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true, type: 'jsonb' })
+  @Column({ type: 'jsonb' })
   orderAddress: IOrderAddress;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {

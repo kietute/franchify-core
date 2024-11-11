@@ -105,4 +105,8 @@ export class OrderService {
   async getOrderByUser(user: User): Promise<Order[]> {
     return this.orderRepo.findByUser(user?.id);
   }
+
+  async deleteAllOrder(user: User): Promise<void> {
+    return this.orderRepo.deleteAll(user.id);
+  }
 }

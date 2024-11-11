@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from 'src/entities/order.entity';
+import { OrderDetail } from 'src/entities/order-detail.entity';
 
 @Injectable()
 export class OrderRepo {
   constructor(
     @InjectRepository(Order)
     private readonly repo: Repository<Order>,
+    @InjectRepository(OrderDetail)
+    private readonly orderDetailRepo: Repository<OrderDetail>,
   ) {}
 
   create(orderData: Partial<Order>): Order {
@@ -43,5 +46,13 @@ export class OrderRepo {
 
   async delete(id: number): Promise<void> {
     await this.repo.delete(id);
+  }
+
+  async deleteAll(userId: number): Promise<void> {
+    // Clear related entities first to avoid foreign key constraint violations
+    await this.orderDetailRepo.delete({});
+
+    // Now you can clear the main table safely
+    await this.repo.delete({ user: { id: userId } });
   }
 }

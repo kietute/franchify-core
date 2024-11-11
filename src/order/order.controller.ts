@@ -43,6 +43,11 @@ export class OrderController {
     return this.orderService.getOrderByUser(user);
   }
 
+  @Delete('/')
+  async deleteAllOrder(@CurrentUser() user: User) {
+    return this.orderService.deleteAllOrder(user);
+  }
+
   // @Patch(':orderId/status')
   // async updateOrderStatus(
   //   @Param('orderId') orderId: number,
