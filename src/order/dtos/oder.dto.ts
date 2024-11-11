@@ -1,8 +1,10 @@
 import {
   IsArray,
+  IsEmail,
   IsNumber,
   IsObject,
   IsOptional,
+  IsPhoneNumber,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -35,11 +37,32 @@ export class CreateOrderAddressDto {
   shippingFee: number;
 }
 
+export class CreateOrderUserInfoDto {
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  @IsPhoneNumber()
+  phoneNumber: string;
+
+  @IsString()
+  @IsEmail()
+  email: string;
+}
+
 export class CreateOrderDto {
   @IsObject()
   @ValidateNested({ each: true })
   @Type(() => CreateOrderAddressDto)
   orderAddress: CreateOrderAddressDto;
+
+  @IsObject()
+  @ValidateNested({ each: true })
+  @Type(() => CreateOrderAddressDto)
+  orderUserInfo: CreateOrderUserInfoDto;
 }
 
 export class UpdateOrderStatusDto {

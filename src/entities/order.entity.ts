@@ -47,9 +47,6 @@ export class Order {
   @Column({ default: 'pending', type: 'enum', enum: OrderStatus })
   status: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  userInfo: IOrderUserInfo;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -58,6 +55,9 @@ export class Order {
 
   @Column({ type: 'jsonb' })
   orderAddress: IOrderAddress;
+
+  @Column({ type: 'jsonb', nullable: true })
+  orderUserInfo: IOrderUserInfo;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {
     cascade: true,
