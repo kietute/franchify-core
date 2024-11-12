@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsEmail,
   IsNumber,
   IsObject,
@@ -45,7 +46,6 @@ export class CreateOrderUserInfoDto {
   lastName: string;
 
   @IsString()
-  @IsPhoneNumber()
   phoneNumber: string;
 
   @IsString()
@@ -61,8 +61,12 @@ export class CreateOrderDto {
 
   @IsObject()
   @ValidateNested({ each: true })
-  @Type(() => CreateOrderAddressDto)
+  @Type(() => CreateOrderUserInfoDto)
   orderUserInfo: CreateOrderUserInfoDto;
+
+  @IsBoolean()
+  @IsOptional()
+  isApplyUserSavePoints?: boolean;
 }
 
 export class UpdateOrderStatusDto {

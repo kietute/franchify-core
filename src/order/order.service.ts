@@ -4,7 +4,12 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
-import { IOrderAddress, Order, OrderStatus } from 'src/entities/order.entity';
+import {
+  IOrderAddress,
+  IOrderUserInfo,
+  Order,
+  OrderStatus,
+} from 'src/entities/order.entity';
 import { OrderDetail } from 'src/entities/order-detail.entity';
 import { CartService } from 'src/cart/cart.service';
 import { OrderRepo } from './order.repo';
@@ -28,7 +33,12 @@ export class OrderService {
     }
 
     try {
-      const order = await this.createOrder(user, orderInfo?.orderAddress);
+      const order = await this.createOrder(
+        user,
+        orderInfo?.orderAddress,
+        orderInfo?.orderUserInfo,
+        orderInfo?.isApplyUserSavePoints,
+      );
       const totalAmount = await this.createOrderDetails(
         order,
         cart.cartDetails,
@@ -49,12 +59,16 @@ export class OrderService {
   private async createOrder(
     user: User,
     address: IOrderAddress,
+    userInfo: IOrderUserInfo,
+    isApplyUserSavePoints: boolean,
   ): Promise<Order> {
     const order = this.orderRepo.create({
       user,
       status: 'pending',
       orderDetails: [],
       orderAddress: address,
+      orderUserInfo: userInfo,
+      isApplyUserSavePoints: isApplyUserSavePoints,
     });
 
     return order;
@@ -75,6 +89,14 @@ export class OrderService {
       totalAmount += orderDetail.quantity * orderDetail.price;
 
       order.orderDetails.push(orderDetail);
+    }
+
+    if (order?.orderAddress?.shippingFee > 0) {
+      totalAmount = totalAmount + order.orderAddress.shippingFee;
+    }
+
+    if (order?.isApplyUserSavePoints) {
+      totalAmount = totalAmount - order.user.savePoints * 1000;
     }
 
     return totalAmount;

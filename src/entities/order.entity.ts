@@ -64,6 +64,9 @@ export class Order {
   })
   orderDetails: OrderDetail[];
 
+  @Column({ type: 'boolean', default: false })
+  isApplyUserSavePoints: boolean;
+
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
   totalAmount: number;
 }
