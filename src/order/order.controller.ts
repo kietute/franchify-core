@@ -15,7 +15,7 @@ import { User } from '../entities/user.entity';
 import { IOrderAddress } from 'src/entities/order.entity';
 import { CreateOrderDto } from './dtos/oder.dto';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('orders')
 export class OrderController {
   constructor(private orderService: OrderService) {}
@@ -43,10 +43,10 @@ export class OrderController {
     return this.orderService.getOrderByUser(user);
   }
 
-  @Delete('/')
-  async deleteAllOrder(@CurrentUser() user: User) {
-    return this.orderService.deleteAllOrder(user);
-  }
+  // @Delete('/clear')
+  // async deleteAllOrder(@CurrentUser() user: User) {
+  //   return this.orderService.deleteAllOrder(user);
+  // }
 
   // @Patch(':orderId/status')
   // async updateOrderStatus(
