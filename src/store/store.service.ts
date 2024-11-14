@@ -69,7 +69,7 @@ export class StoreService {
     if (!store) {
       throw new NotFoundException('Store not found');
     }
-    Object.assign(store, payload);
+    Object.assign(store, { ...payload, staffs: [9] });
     return this.storeRepo.save(store);
   }
 

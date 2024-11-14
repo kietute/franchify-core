@@ -32,6 +32,9 @@ export class StoreRepo {
   ): Promise<{ results: Store[]; total: number }> {
     const queryBuilder = this.repo.createQueryBuilder('store');
 
+    // Join with the user table
+    queryBuilder.leftJoinAndSelect('store.staffs', 'user');
+
     // Thêm join với bảng address
     // queryBuilder.leftJoinAndSelect('store.address', 'address'); // Thêm quan hệ 'address'
 
@@ -69,6 +72,8 @@ export class StoreRepo {
       .skip(skip)
       .take(pageSize)
       .getManyAndCount();
+
+    console.log('results is: ', results);
 
     return { results, total };
   }

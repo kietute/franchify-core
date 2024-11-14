@@ -26,13 +26,13 @@ export class UsersService {
     return this.repo.findOneBy({ id: id });
   }
 
-
-
   async update(id: number, attrs: Partial<User>) {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');
     }
+
+    console.log('attrs', attrs);
     Object.assign(user, attrs);
     return this.repo.save(user);
   }
@@ -55,5 +55,4 @@ export class UsersService {
   async findAllByRole(role: UserRole) {
     return this.repo.find({ where: { role } });
   }
-
 }

@@ -57,6 +57,7 @@ export class User {
   @OneToOne(() => Cart, { cascade: true }) // Thêm giỏ hàng (Cart) nếu cần
   @JoinColumn()
   cart: Cart;
+
   @Column({ default: false })
   isVerified: boolean;
 

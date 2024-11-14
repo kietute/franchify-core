@@ -21,10 +21,14 @@ import { AdminGuard } from 'src/common/guards/admin.guard';
 import { UserDto } from '../auth/dtos/user.dto';
 import { StaffGuard } from '../common/guards/staff.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { UsersService } from 'src/auth/users.service';
 
 @Controller('tenant')
 export class TenantController {
-  constructor(private tenantService: TenantService) {}
+  constructor(
+    private tenantService: TenantService,
+    private userService: UsersService,
+  ) {}
 
   @UseGuards(AdminGuard)
   @Serialize(AdminDto)
@@ -100,11 +104,11 @@ export class TenantController {
     return this.tenantService.getById(id, currentUser);
   }
 
-  @Put(':id/lock')
+  @Put('/users/:id')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
-  async lockUser(@Param('id') id: number, @CurrentUser() currentUser: User) {
-    return this.tenantService.lockById(id, currentUser);
+  async updateUser(@Param('id') id: number, @Body() payload: Partial<User>) {
+    return this.userService.update(id, payload);
   }
 
   @UseGuards(AdminGuard)

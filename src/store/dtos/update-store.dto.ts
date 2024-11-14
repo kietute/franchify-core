@@ -5,7 +5,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
 
 export class UpdateStoreDto {
@@ -32,10 +31,16 @@ export class UpdateStoreDto {
   @IsNotEmpty()
   @IsNumber()
   storeCode: number;
+
   @IsNumber()
   @IsOptional()
   lng: number;
+
   @IsOptional()
   @IsNumber()
   lat: number;
+
+  @IsOptional()
+  @IsArray()
+  staffs: number[];
 }
