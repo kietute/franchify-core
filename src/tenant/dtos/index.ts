@@ -143,7 +143,7 @@ export interface ISignInStaffPayload {
   password: string;
 }
 
-export interface ICreateStaffPayload {
+export interface ICreateUserPayload {
   username: string;
   email: string;
   phoneNumber: string;

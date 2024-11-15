@@ -22,6 +22,7 @@ import { Order } from './order.entity';
 export enum UserRole {
   USER = 'user',
   STAFF = 'staff',
+  MANAGER = 'manager',
   ADMIN = 'admin',
 }
 

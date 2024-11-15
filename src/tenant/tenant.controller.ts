@@ -33,10 +33,21 @@ export class TenantController {
   @UseGuards(AdminGuard)
   @Serialize(AdminDto)
   @Post('/create-staff')
-  async createUser(@Body() body: CreateStaffDto) {
-    const user = await this.tenantService.createStaff({
+  async createStaff(@Body() body: CreateStaffDto) {
+    const user = await this.tenantService.createUser({
       ...body,
       role: UserRole.STAFF,
+    });
+    return user;
+  }
+
+  @UseGuards(AdminGuard)
+  @Serialize(AdminDto)
+  @Post('/create-manager')
+  async createManager(@Body() body: CreateStaffDto) {
+    const user = await this.tenantService.createUser({
+      ...body,
+      role: UserRole.MANAGER,
     });
     return user;
   }
@@ -58,6 +69,16 @@ export class TenantController {
   @UseGuards(StaffGuard)
   getAll(@CurrentUser() currentUser: User) {
     return this.tenantService.getAll(currentUser);
+  }
+
+  @Put('/users/:id')
+  @Serialize(UserDto)
+  @UseGuards(AdminGuard)
+  async updateUser(
+    @Param('id') id: number,
+    @Body() payload: Omit<User, 'password'>,
+  ) {
+    return this.userService.update(id, payload);
   }
 
   @Get('/config')
@@ -95,25 +116,5 @@ export class TenantController {
       console.log('Update tenant config error', error);
       throw new ServiceUnavailableException('Update tenant config error');
     }
-  }
-
-  @Get(':id')
-  @Serialize(UserDto)
-  @UseGuards(StaffGuard)
-  getUser(@Param('id') id: number, @CurrentUser() currentUser: User) {
-    return this.tenantService.getById(id, currentUser);
-  }
-
-  @Put('/users/:id')
-  @Serialize(UserDto)
-  @UseGuards(StaffGuard)
-  async updateUser(@Param('id') id: number, @Body() payload: Partial<User>) {
-    return this.userService.update(id, payload);
-  }
-
-  @UseGuards(AdminGuard)
-  @Delete(':id')
-  async removeUser(@Param('id') id: number, @CurrentUser() currentUser: User) {
-    return this.tenantService.deleteById(id, currentUser);
   }
 }

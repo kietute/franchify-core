@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import {
   CreateTenantConfigDto,
-  ICreateStaffPayload,
+  ICreateUserPayload,
   UpdateTenantConfigDto,
 } from './dtos';
 import { UsersService } from 'src/auth/users.service';
@@ -29,7 +29,7 @@ export class TenantService {
     private readonly tenantRepo: TenantRepo,
   ) {}
 
-  async createStaff(payload: ICreateStaffPayload) {
+  async createUser(payload: ICreateUserPayload) {
     const { password, phoneNumber } = payload;
     const users = await this.userUservice.find(phoneNumber);
 

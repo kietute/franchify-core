@@ -29,11 +29,13 @@ export class UsersService {
   async update(id: number, attrs: Partial<User>) {
     const user = await this.findOne(id);
     if (!user) {
-      throw new NotFoundException('user not found');
+      throw new NotFoundException('User not found');
     }
 
-    console.log('attrs', attrs);
-    Object.assign(user, attrs);
+    const { password, ...updateAttrs } = attrs;
+
+    Object.assign(user, updateAttrs);
+
     return this.repo.save(user);
   }
 
