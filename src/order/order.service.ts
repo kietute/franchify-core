@@ -13,7 +13,7 @@ import {
 import { OrderDetail } from 'src/entities/order-detail.entity';
 import { CartService } from 'src/cart/cart.service';
 import { OrderRepo } from './order.repo';
-import { CreateOrderDto } from './dtos/oder.dto';
+import { CreateOrderDto } from './dtos/index.dto';
 
 @Injectable()
 export class OrderService {
@@ -130,5 +130,16 @@ export class OrderService {
 
   async deleteAllOrder(user: User): Promise<void> {
     return this.orderRepo.deleteAll(user.id);
+  }
+
+  async updateOrderStatus(
+    orderId: number,
+    status: OrderStatus,
+  ): Promise<Order> {
+    const order = await this.getOrderbyId(orderId);
+
+    order.status = status;
+
+    return this.orderRepo.save(order);
   }
 }

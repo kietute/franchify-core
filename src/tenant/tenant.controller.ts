@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { AdminDto, CreateTenantConfigDto } from './dtos';
+import { TenantSignInReponseDto, CreateTenantConfigDto } from './dtos';
 import { SignInStaffDto } from './dtos';
 import { User, UserRole } from 'src/entities/user.entity';
 import { CreateStaffDto } from './dtos';
@@ -22,6 +22,7 @@ import { UserDto } from '../auth/dtos/user.dto';
 import { StaffGuard } from '../common/guards/staff.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from 'src/auth/users.service';
+import { classToPlain } from 'class-transformer';
 
 @Controller('tenant')
 export class TenantController {
@@ -31,29 +32,27 @@ export class TenantController {
   ) {}
 
   @UseGuards(AdminGuard)
-  @Serialize(AdminDto)
+  @Serialize(TenantSignInReponseDto)
   @Post('/create-staff')
   async createStaff(@Body() body: CreateStaffDto) {
     const user = await this.tenantService.createUser({
       ...body,
-      role: UserRole.STAFF,
     });
     return user;
   }
 
   @UseGuards(AdminGuard)
-  @Serialize(AdminDto)
+  @Serialize(TenantSignInReponseDto)
   @Post('/create-manager')
   async createManager(@Body() body: CreateStaffDto) {
     const user = await this.tenantService.createUser({
       ...body,
-      role: UserRole.MANAGER,
     });
     return user;
   }
 
   @Post('/signin')
-  @Serialize(AdminDto)
+  @Serialize(TenantSignInReponseDto)
   async signin(@Body() body: SignInStaffDto) {
     const user = await this.tenantService.signIn(body);
     return user;
@@ -64,11 +63,18 @@ export class TenantController {
     session.userId = null;
   }
 
-  @Get('/users')
+  @Get('/staffs/:storeId')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
-  getAll(@CurrentUser() currentUser: User) {
-    return this.tenantService.getAll(currentUser);
+  getStaffs(@Param('storeId') storeId) {
+    return this.tenantService.getAllStaff(storeId);
+  }
+
+  @Get('/users')
+  @Serialize(UserDto)
+  @UseGuards(AdminGuard)
+  getUsers() {
+    return this.tenantService.getAll();
   }
 
   @Put('/users/:id')

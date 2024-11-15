@@ -5,19 +5,10 @@ import {
   IsNumber,
   IsObject,
   IsOptional,
-  IsPhoneNumber,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-
-class OrderProductDto {
-  @IsNumber()
-  productId: number;
-
-  @IsNumber()
-  quantity: number;
-}
 
 export class CreateOrderAddressDto {
   @IsString()

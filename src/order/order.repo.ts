@@ -49,10 +49,7 @@ export class OrderRepo {
   }
 
   async deleteAll(userId: number): Promise<void> {
-    // Clear related entities first to avoid foreign key constraint violations
-    await this.orderDetailRepo.delete({});
-
-    // Now you can clear the main table safely
+    // await this.orderDetailRepo.delete({});
     await this.repo.delete({ user: { id: userId } });
   }
 }

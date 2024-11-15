@@ -2,18 +2,16 @@ import {
   Controller,
   Post,
   Body,
-  UseGuards,
   Get,
   Param,
-  Patch,
   Delete,
+  Patch,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../entities/user.entity';
-import { IOrderAddress } from 'src/entities/order.entity';
-import { CreateOrderDto } from './dtos/oder.dto';
+import { CreateOrderDto } from './dtos/index.dto';
+import { OrderStatus } from 'src/entities/order.entity';
 
 // @UseGuards(AuthGuard)
 @Controller('orders')
@@ -43,16 +41,11 @@ export class OrderController {
     return this.orderService.getOrderByUser(user);
   }
 
-  // @Delete('/clear')
-  // async deleteAllOrder(@CurrentUser() user: User) {
-  //   return this.orderService.deleteAllOrder(user);
-  // }
-
-  // @Patch(':orderId/status')
-  // async updateOrderStatus(
-  //   @Param('orderId') orderId: number,
-  //   @Body() updateOrderStatusDto: UpdateOrderStatusDto,
-  // ) {
-  //   return this.orderService.updateOrderStatus(orderId, updateOrderStatusDto);
-  // }
+  @Patch('/:orderId')
+  async updateOrderStatus(
+    @Body() body: { status: OrderStatus },
+    @Param('orderId') orderId: number,
+  ) {
+    return this.orderService.updateOrderStatus(orderId, body.status);
+  }
 }

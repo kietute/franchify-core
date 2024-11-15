@@ -7,7 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class AdminDto {
+export class TenantSignInReponseDto {
   @Expose()
   id: number;
 
@@ -28,6 +28,12 @@ export class AdminDto {
 
   @Expose()
   role: string;
+
+  @Expose()
+  store: {
+    id: number;
+    name: string;
+  };
 
   @Expose()
   addresses: Array<any>;
@@ -122,7 +128,7 @@ export class CreateStaffDto {
   @IsEmail({}, { message: 'Email not in the correct format' })
   email: string;
 
-  @IsPhoneNumber('VN', { message: 'Wrong format for phone number' })
+  @IsString()
   @IsNotEmpty({ message: 'Phone number cannot be empty' })
   phoneNumber: string;
 

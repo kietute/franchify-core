@@ -29,6 +29,12 @@ export class UserDto {
   role: string;
 
   @Expose()
+  store: {
+    id: number;
+    name: string;
+  };
+
+  @Expose()
   accessToken: string;
 
   @Expose()

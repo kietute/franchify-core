@@ -75,6 +75,7 @@ export class TenantService {
       username: user.username,
       phoneNumber: user.phoneNumber,
       role: user.role,
+      storeId: user?.store?.id,
     };
 
     return {
@@ -86,12 +87,12 @@ export class TenantService {
     };
   }
 
-  async getAll(currentUser: User) {
-    if (currentUser.role === UserRole.STAFF) {
-      return this.userUservice.findAllByRole(UserRole.USER);
-    }
-
+  async getAll() {
     return this.userUservice.findAll();
+  }
+
+  async getAllStaff(storeId: number) {
+    return this.userUservice.findStaffByStoreId(storeId);
   }
 
   async getById(id: number, currentUser: User) {
