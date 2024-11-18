@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Patch,
+  Put,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -41,7 +42,12 @@ export class OrderController {
     return this.orderService.getOrderByUser(user);
   }
 
-  @Patch('/:orderId')
+  @Get('/store/:storeId')
+  async getOrderByStore(@Param('storeId') storeId: number) {
+    return this.orderService.getOrderByStore(storeId);
+  }
+
+  @Put('/:orderId')
   async updateOrderStatus(
     @Body() body: { status: OrderStatus },
     @Param('orderId') orderId: number,

@@ -39,6 +39,13 @@ export class OrderRepo {
     });
   }
 
+  async findByStore(storeId: number): Promise<Order[]> {
+    return this.repo.find({
+      where: { store: { id: storeId } },
+      relations: ['orderDetails', 'user'],
+    });
+  }
+
   async update(id: number, updateData: Partial<Order>): Promise<Order> {
     await this.repo.update(id, updateData);
     return this.findOne(id);

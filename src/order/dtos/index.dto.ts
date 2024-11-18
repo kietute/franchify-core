@@ -58,6 +58,9 @@ export class CreateOrderDto {
   @IsBoolean()
   @IsOptional()
   isApplyUserSavePoints?: boolean;
+
+  @IsNumber()
+  storeId: number;
 }
 
 export class UpdateOrderStatusDto {

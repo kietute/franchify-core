@@ -1,4 +1,4 @@
-import { Expose, Exclude } from 'class-transformer';
+import { Expose, Exclude, Type } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -6,6 +6,10 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
+class StoreDto {
+  @Expose()
+  id: number;
+}
 
 export class TenantSignInReponseDto {
   @Expose()
@@ -30,10 +34,8 @@ export class TenantSignInReponseDto {
   role: string;
 
   @Expose()
-  store: {
-    id: number;
-    name: string;
-  };
+  @Type(() => StoreDto)
+  store: StoreDto;
 
   @Expose()
   addresses: Array<any>;

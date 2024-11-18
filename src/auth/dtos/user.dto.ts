@@ -1,4 +1,12 @@
-import { Expose, Exclude } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+
+class StoreDto {
+  @Expose()
+  id: number;
+
+  @Expose()
+  name: string;
+}
 
 export class UserDto {
   @Expose()
@@ -29,10 +37,8 @@ export class UserDto {
   role: string;
 
   @Expose()
-  store: {
-    id: number;
-    name: string;
-  };
+  @Type(() => StoreDto)
+  store: StoreDto;
 
   @Expose()
   accessToken: string;

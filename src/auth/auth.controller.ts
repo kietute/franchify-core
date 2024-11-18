@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Session,
   UseGuards,
 } from '@nestjs/common';
@@ -37,6 +38,15 @@ export class AuthController {
   async signin(@Body() body: SignInUserDto) {
     const user = await this.authService.signin(body);
     return user;
+  }
+
+  @Put('/profile')
+  @UseGuards(AuthGuard)
+  async updateProfile(
+    @CurrentUser() user: User,
+    @Body() body: { savePoints: number },
+  ) {
+    return this.authService.updateProfile(user.id, body);
   }
 
   @Post('/verify-otp')

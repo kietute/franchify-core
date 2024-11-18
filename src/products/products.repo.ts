@@ -82,6 +82,15 @@ export class ProductRepo {
     return this.repo.save(product);
   }
 
+  async updateBuyCount(id: number) {
+    const product = await this.findOne(id);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    product.buyCount += 1;
+    return this.repo.save(product);
+  }
+
   remove(id: number) {
     if (!this.repo.findOneBy({ id: id })) {
       throw new NotFoundException('Product not found');

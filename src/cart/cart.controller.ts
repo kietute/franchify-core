@@ -24,7 +24,7 @@ export class CartController {
     return this.cartService.createCart(user);
   }
 
-  @Get()
+  @Get('/')
   @UseGuards(AuthGuard)
   async getCart(@CurrentUser() user: User) {
     return this.cartService.getCart(user);

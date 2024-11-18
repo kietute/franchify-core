@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { OrderDetail } from './order-detail.entity';
+import { Store } from './store.entity';
 
 export interface IOrderAddress {
   address: string;
@@ -58,6 +59,9 @@ export class Order {
 
   @Column({ type: 'jsonb', nullable: true })
   orderUserInfo: IOrderUserInfo;
+
+  @ManyToOne(() => Store, (store) => store.orders)
+  store: Store;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order, {
     cascade: true,

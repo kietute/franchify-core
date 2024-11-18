@@ -30,10 +30,15 @@ export class CartService {
 
   async getCart(user: User) {
     try {
-      return await this.cartRepo.findOne({
+      const carts = await this.cartRepo.findOne({
         where: { user: { id: user.id } },
         relations: ['cartDetails', 'cartDetails.product'],
       });
+
+      if (carts) {
+        return carts;
+      } else {
+      }
     } catch (error) {
       throw new Error('Failed to get cart');
     }
@@ -41,8 +46,13 @@ export class CartService {
 
   async createCart(user: User) {
     try {
-      const cart = this.cartRepo.create({ user });
-      return await this.cartRepo.save(cart);
+      const cart = this.cartRepo.create({
+        user,
+      });
+      const savedCart = await this.cartRepo.save(cart);
+      if (savedCart) {
+        return savedCart;
+      }
     } catch (error) {
       throw new Error('Failed to create cart');
     }
@@ -54,7 +64,7 @@ export class CartService {
   ) {
     try {
       let cart = await this.cartRepo.findOneBy({
-        id: addProductToCartDto.cartId,
+        user: { id: currentUser.id },
       });
 
       if (!cart && currentUser) {
@@ -75,7 +85,11 @@ export class CartService {
         quantity: addProductToCartDto.quantity,
       });
 
-      return await this.cartDetailRepo.save(cartDetail);
+      const response = await this.cartDetailRepo.save(cartDetail);
+
+      if (response) {
+        return response;
+      }
     } catch (error) {
       throw new Error('Failed to add product to cart');
     }
