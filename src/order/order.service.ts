@@ -16,7 +16,7 @@ import { OrderRepo } from './order.repo';
 import { CreateOrderDto } from './dtos/index.dto';
 import { StoreRepo } from 'src/store/store.repo';
 import { ProductRepo } from 'src/products/products.repo';
-
+import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class OrderService {
   constructor(
@@ -24,6 +24,7 @@ export class OrderService {
     private readonly cartService: CartService,
     private readonly orderRepo: OrderRepo,
     private readonly storeRepo: StoreRepo,
+    private readonly mailerService: MailerService,
   ) {}
 
   async createOrderFromCart(
@@ -162,10 +163,20 @@ export class OrderService {
     orderId: number,
     status: OrderStatus,
   ): Promise<Order> {
-    const order = await this.getOrderbyId(orderId);
-
-    order.status = status;
-
-    return this.orderRepo.save(order);
+    try {
+      const order = await this.getOrderbyId(orderId);
+      await this.mailerService.sendMail({
+        to: 'tuankiet270802@gmail.com',
+        from: 'kietmakietna@gmail.com',
+        subject: 'Testing Nest MailerModule ✔',
+        text: 'welcome',
+        html: '<b>welcome</b>',
+      });
+      order.status = status;
+      return this.orderRepo.save(order);
+    } catch (error) {
+      console.log('Error updating order status:', error);
+      throw new InternalServerErrorException('Failed to update order status');
+    }
   }
 }

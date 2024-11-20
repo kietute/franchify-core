@@ -73,8 +73,6 @@ export class StoreRepo {
       .take(pageSize)
       .getManyAndCount();
 
-    console.log('results is: ', results);
-
     return { results, total };
   }
 }

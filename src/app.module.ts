@@ -30,6 +30,7 @@ import { StoreModule } from './store/store.module';
 import { Order } from './entities/order.entity';
 import { OrderDetail } from './entities/order-detail.entity';
 import { OrderModule } from './order/order.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -37,6 +38,26 @@ import { OrderModule } from './order/order.module';
       isGlobal: true,
       envFilePath:
         process.env.NODE_ENV !== 'production' ? `.env.development` : '.env',
+    }),
+    MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          auth: {
+            user: process.env.MAILDEV_INCOMING_USER,
+            pass: process.env.MAILDEV_INCOMING_PASSWORD,
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
+        },
+        defaults: {
+          from: process.env.MAILER_DEFAULT_FROM,
+        },
+      }),
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
