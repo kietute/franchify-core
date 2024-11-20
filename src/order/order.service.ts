@@ -17,10 +17,12 @@ import { CreateOrderDto } from './dtos/index.dto';
 import { StoreRepo } from 'src/store/store.repo';
 import { ProductRepo } from 'src/products/products.repo';
 import { MailerService } from '@nestjs-modules/mailer';
+import { StoreProductRepo } from 'src/products/store-product.repo';
 @Injectable()
 export class OrderService {
   constructor(
     private readonly productRepo: ProductRepo,
+    private readonly storeProductRepo: StoreProductRepo,
     private readonly cartService: CartService,
     private readonly orderRepo: OrderRepo,
     private readonly storeRepo: StoreRepo,
@@ -108,7 +110,6 @@ export class OrderService {
         if (order?.isApplyUserSavePoints) {
           totalAmount = totalAmount - order.user.savePoints * 1000;
         }
-
         return totalAmount;
       } catch (error) {
         console.error('Error creating order detail:', error);
@@ -166,14 +167,28 @@ export class OrderService {
     try {
       const order = await this.getOrderbyId(orderId);
       await this.mailerService.sendMail({
-        to: 'tuankiet270802@gmail.com',
+        to: order.orderUserInfo?.email,
         from: 'kietmakietna@gmail.com',
-        subject: 'Testing Nest MailerModule ✔',
-        text: 'welcome',
-        html: '<b>welcome</b>',
+        subject: `Thông báo đơn hàng ${order.id} đã được cập nhật`,
+        text: `Đơn hàng ${order.id} đã được cập nhật trạng thái thành ${status}`,
+        html: `<div><b>Đơn hàng ${order.id} đã được cập nhật trạng thái thành ${status}</b> <br /> Chi tiết tại: <a href="tea-market.vercel.app/orders">Đơn hàng của bạn</a> </div>`,
       });
       order.status = status;
-      return this.orderRepo.save(order);
+      const savedOrder = await this.orderRepo.save(order);
+
+      if (order.status == OrderStatus.DELIVERED) {
+        await Promise.all(
+          order.orderDetails.map(async (orderDetail) => {
+            await this.storeProductRepo.updateInventory({
+              storeId: order.store.id,
+              productId: orderDetail.product.id,
+              quantity: orderDetail.quantity,
+            });
+          }),
+        );
+      }
+
+      return savedOrder;
     } catch (error) {
       console.log('Error updating order status:', error);
       throw new InternalServerErrorException('Failed to update order status');

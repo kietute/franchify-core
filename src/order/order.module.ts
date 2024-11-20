@@ -11,15 +11,28 @@ import { StoreRepo } from 'src/store/store.repo';
 import { Store } from 'src/entities/store.entity';
 import { Product } from 'src/entities/product.entity';
 import { ProductRepo } from 'src/products/products.repo';
+import { StoreProduct } from 'src/entities/store-product.entity';
+import { StoreProductRepo } from 'src/products/store-product.repo';
 
 @Module({
   imports: [
     CartModule,
     StoreModule,
-
-    TypeOrmModule.forFeature([Order, OrderDetail, Store, Product]),
+    TypeOrmModule.forFeature([
+      Order,
+      OrderDetail,
+      Store,
+      Product,
+      StoreProduct,
+    ]),
   ],
-  providers: [OrderService, OrderRepo, StoreRepo, ProductRepo],
+  providers: [
+    OrderService,
+    OrderRepo,
+    StoreRepo,
+    ProductRepo,
+    StoreProductRepo,
+  ],
   controllers: [OrderController],
 })
 export class OrderModule {}

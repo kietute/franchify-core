@@ -143,6 +143,12 @@ export class CreateStaffDto {
   @IsNotEmpty({ message: 'Password cannot be empty' })
   @IsString({ message: 'Password must be a string' })
   password: string;
+
+  @IsString()
+  role: string;
+
+  @IsOptional()
+  store: number;
 }
 
 //interface

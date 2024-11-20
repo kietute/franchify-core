@@ -104,4 +104,24 @@ export class StoreProductRepo {
 
     return { results, total };
   }
+
+  async updateInventory({ storeId, upc, quantity }: any) {
+    const storeProduct = await this.repo.findOneBy({
+      product: {
+        upc: upc,
+      },
+      store: {
+        id: storeId,
+      },
+    });
+    if (!storeProduct) {
+      throw new NotFoundException('Store product not found');
+    }
+    storeProduct.inventory = storeProduct.inventory - quantity;
+    return this.repo.save(storeProduct);
+  }
+
+  async save(storeProduct: StoreProduct) {
+    return this.repo.save(storeProduct);
+  }
 }

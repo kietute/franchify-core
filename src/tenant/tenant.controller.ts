@@ -23,6 +23,7 @@ import { StaffGuard } from '../common/guards/staff.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from 'src/auth/users.service';
 import { classToPlain } from 'class-transformer';
+import { ManagerGuard } from 'src/common/guards/manager.guard';
 
 @Controller('tenant')
 export class TenantController {
@@ -31,11 +32,11 @@ export class TenantController {
     private userService: UsersService,
   ) {}
 
-  @UseGuards(AdminGuard)
+  @UseGuards(ManagerGuard)
   @Serialize(TenantSignInReponseDto)
   @Post('/create-staff')
   async createStaff(@Body() body: CreateStaffDto) {
-    const user = await this.tenantService.createUser({
+    const user = await this.userService.create({
       ...body,
     });
     return user;
@@ -45,7 +46,7 @@ export class TenantController {
   @Serialize(TenantSignInReponseDto)
   @Post('/create-manager')
   async createManager(@Body() body: CreateStaffDto) {
-    const user = await this.tenantService.createUser({
+    const user = await this.userService.create({
       ...body,
     });
     return user;
