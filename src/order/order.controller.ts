@@ -7,12 +7,14 @@ import {
   Delete,
   Patch,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../entities/user.entity';
 import { CreateOrderDto } from './dtos/index.dto';
 import { OrderStatus } from 'src/entities/order.entity';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 // @UseGuards(AuthGuard)
 @Controller('orders')
@@ -42,6 +44,7 @@ export class OrderController {
     return this.orderService.getOrderByUser(user);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Get('/store/:storeId')
   async getOrderByStore(@Param('storeId') storeId: number) {
     return this.orderService.getOrderByStore(storeId);

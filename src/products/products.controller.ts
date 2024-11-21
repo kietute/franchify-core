@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   CreateProductDto,
@@ -34,6 +35,7 @@ import {
 import { CommentService } from './comment.service';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('/products')
 export class ProductsContoller {
@@ -98,6 +100,7 @@ export class ProductsContoller {
     return storeProduct;
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Get('/by-store')
   async getProductsByStore(@Query() query: GetStoreProductDto) {
     const products = await this.productService.getStoreProducts(query);

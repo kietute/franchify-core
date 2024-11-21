@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './entities/user.entity';
 import { Comment } from './entities/comment.entity';
 
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
@@ -31,6 +31,12 @@ import { Order } from './entities/order.entity';
 import { OrderDetail } from './entities/order-detail.entity';
 import { OrderModule } from './order/order.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import {
+  CacheInterceptor,
+  CacheModule,
+  CacheStore,
+} from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
@@ -38,6 +44,21 @@ import { MailerModule } from '@nestjs-modules/mailer';
       isGlobal: true,
       envFilePath:
         process.env.NODE_ENV !== 'production' ? `.env.development` : '.env',
+    }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => {
+        const store = await redisStore({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        });
+        return {
+          store: store as unknown as CacheStore,
+          ttl: 3 * 60000,
+        };
+      },
     }),
     MailerModule.forRootAsync({
       inject: [ConfigService],
@@ -111,6 +132,10 @@ import { MailerModule } from '@nestjs-modules/mailer';
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({ whitelist: true }),
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
     },
   ],
 })
