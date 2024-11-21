@@ -52,7 +52,7 @@ export class OrderService {
         cart.cartDetails,
       );
 
-      order.totalAmount = totalAmount;
+      order.totalAmount = Number(totalAmount);
 
       const savedOrder = await this.orderRepo.save(order);
       await this.cartService.clearCart(cart.id);
@@ -100,11 +100,12 @@ export class OrderService {
 
         await this.productRepo.updateBuyCount(cartDetail.product.id);
 
-        totalAmount += orderDetail.quantity * orderDetail.price;
+        totalAmount += Number(orderDetail.quantity) * Number(orderDetail.price);
 
         order.orderDetails.push(orderDetail);
         if (order?.orderAddress?.shippingFee > 0) {
-          totalAmount = totalAmount + order.orderAddress.shippingFee;
+          totalAmount =
+            Number(totalAmount) + Number(order.orderAddress.shippingFee);
         }
 
         if (order?.isApplyUserSavePoints) {

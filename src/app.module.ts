@@ -47,15 +47,15 @@ import { MailerModule } from '@nestjs-modules/mailer';
           port: 587,
           secure: false,
           auth: {
-            user: process.env.MAILDEV_INCOMING_USER,
-            pass: process.env.MAILDEV_INCOMING_PASSWORD,
+            user: config.get('MAILDEV_INCOMING_USER'),
+            pass: config.get('MAILDEV_INCOMING_PASSWORD'),
           },
           tls: {
             rejectUnauthorized: false,
           },
         },
         defaults: {
-          from: process.env.MAILER_DEFAULT_FROM,
+          from: config.get('MAILER_DEFAULT_FROM'),
         },
       }),
     }),
@@ -67,7 +67,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
             rejectUnauthorized: false,
           },
           type: 'postgres',
-          database: process.env.PROJECT_DB_NAME,
+          database: config.get('PROJECT_DB_NAME'),
           username: process.env.PROJECT_DB_USER,
           password: process.env.PROJECT_DB_PASSWORD,
           host: `${process.env.PROJECT_DB_HOST}`,

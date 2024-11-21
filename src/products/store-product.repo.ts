@@ -83,6 +83,23 @@ export class StoreProductRepo {
       .getOne();
   }
 
+  async findById(payload: {
+    id: number;
+    storeId: number;
+  }): Promise<StoreProduct | undefined> {
+    const { id, storeId } = payload;
+    const queryBuilder = this.repo
+      .createQueryBuilder('store_product')
+      .leftJoinAndSelect('store_product.product', 'product')
+      .leftJoinAndSelect('store_product.store', 'store')
+      .leftJoinAndSelect('product.category', 'category'); // Join the category table
+
+    return queryBuilder
+      .andWhere('product.id = :id', { id })
+      .andWhere('store.id = :storeId', { storeId })
+      .getOne();
+  }
+
   async getAll(params: GetStoreProductDto) {
     const queryBuilder = this.repo
       .createQueryBuilder('store_product')
