@@ -122,10 +122,10 @@ export class StoreProductRepo {
     return { results, total };
   }
 
-  async updateInventory({ storeId, upc, quantity }: any) {
+  async updateInventory({ storeId, productId, quantity }: any) {
     const storeProduct = await this.repo.findOneBy({
       product: {
-        upc: upc,
+        id: productId,
       },
       store: {
         id: storeId,
