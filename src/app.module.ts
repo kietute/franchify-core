@@ -90,7 +90,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
             Order,
             OrderDetail,
           ],
-          synchronize: true,
+          synchronize: false,
           namingStrategy: new SnakeNamingStrategy(),
         };
       },
