@@ -111,7 +111,7 @@ import { redisStore } from 'cache-manager-redis-yet';
             Order,
             OrderDetail,
           ],
-          synchronize: true,
+          synchronize: false,
           namingStrategy: new SnakeNamingStrategy(),
         };
       },
