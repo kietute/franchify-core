@@ -64,26 +64,26 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    // if (user.isVerified == false) {
-    //   const response = await this.otpService.sendOtpCode({
-    //     phoneNumber: user.phoneNumber,
-    //   });
+    if (user.isVerified == false) {
+      const response = await this.otpService.sendOtpCode({
+        phoneNumber: user.phoneNumber,
+      });
 
-    //   if (response) {
-    //     throw new UnauthorizedException({
-    //       errorCode: 410,
-    //       message:
-    //         'We have sent an otp to your phone number, please verify to login to your account',
-    //     });
-    //   } else {
-    //     throw new ServiceUnavailableException(
-    //       'Cannot login right now, please try later',
-    //     );
-    //   }
-    // }
+      if (response) {
+        throw new UnauthorizedException({
+          errorCode: 410,
+          message:
+            'We have sent an otp to your phone number, please verify to login to your account',
+        });
+      } else {
+        throw new ServiceUnavailableException(
+          'Cannot login right now, please try later',
+        );
+      }
+    }
 
     const [salt, storedHash] = user.password.split('.');
-    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    const hash = (await scrypt(password, salt, 32)) as any;
 
     if (storedHash !== hash.toString('hex')) {
       throw new BadRequestException(
