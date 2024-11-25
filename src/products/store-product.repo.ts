@@ -58,7 +58,7 @@ export class StoreProductRepo {
       store: {
         id: storeId,
       },
-    });
+    } as any);
     if (!storeProduct) {
       throw new NotFoundException('Store product not found');
     }
