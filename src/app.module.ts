@@ -43,7 +43,9 @@ import { redisStore } from 'cache-manager-redis-yet';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath:
-        process.env.NODE_ENV !== 'production' ? `.env.development` : '.env',
+        process.env.NODE_ENV !== 'production'
+          ? `.env.development`
+          : '.env.production',
     }),
     CacheModule.registerAsync({
       isGlobal: true,
@@ -83,17 +85,45 @@ import { redisStore } from 'cache-manager-redis-yet';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
+        if (process.env.NODE_ENV !== 'production') {
+          return {
+            type: 'postgres',
+            database: config.get('PROJECT_DB_NAME'),
+            username: config.get('PROJECT_DB_USER'),
+            password: config.get('PROJECT_DB_PASSWORD'),
+            host: config.get('PROJECT_DB_HOST'),
+            port: config.get('PROJECT_DB_PORT'),
+            entities: [
+              User,
+              UserDevice,
+              Address,
+              Product,
+              Category,
+              Bid,
+              OtpCode,
+              Tenant,
+              Store,
+              StoreProduct,
+              Cart,
+              CartDetail,
+              Comment,
+              Order,
+              OrderDetail,
+            ],
+            synchronize: true,
+            namingStrategy: new SnakeNamingStrategy(),
+          };
+        }
         return {
           ssl: {
             rejectUnauthorized: false,
           },
           type: 'postgres',
           database: config.get('PROJECT_DB_NAME'),
-          username: process.env.PROJECT_DB_USER,
-          password: process.env.PROJECT_DB_PASSWORD,
-          host: `${process.env.PROJECT_DB_HOST}`,
-          url: process.env.PROJECT_DB_URL,
-          port: 5432,
+          username: config.get('PROJECT_DB_USER'),
+          password: config.get('PROJECT_DB_PASSWORD'),
+          host: config.get('PROJECT_DB_HOST'),
+          port: config.get('PROJECT_DB_PORT'),
           entities: [
             User,
             UserDevice,
