@@ -35,8 +35,6 @@ export class StoreRepo {
     // Join with the user table
     queryBuilder.leftJoinAndSelect('store.staffs', 'user');
 
-    // Thêm join với bảng address
-    // queryBuilder.leftJoinAndSelect('store.address', 'address'); // Thêm quan hệ 'address'
 
     // filter if have name
     if (params.name) {

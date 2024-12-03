@@ -13,7 +13,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
-import { Address } from './address.entity';
 import { Store } from './store.entity';
 import { Cart } from './cart.entity';
 import { Comment } from './comment.entity';
@@ -78,8 +77,6 @@ export class User {
   @OneToMany(() => UserDevice, (device) => device.user)
   devices: UserDevice[];
 
-  @OneToMany(() => Address, (address) => address.user)
-  addresses: Address[];
 
   @ManyToOne(() => Store, (store) => store.staffs)
   store: Store;

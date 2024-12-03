@@ -10,8 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UserDevice } from './entities/user-device.entity';
-import { AddressModule } from './addresses/addresses.module';
-import { Address } from './entities/address.entity';
 import { ProductsModule } from './products/products.module';
 import { Product } from './entities/product.entity';
 import { Category } from './entities/category.entity';
@@ -96,7 +94,6 @@ import { redisStore } from 'cache-manager-redis-yet';
             entities: [
               User,
               UserDevice,
-              Address,
               Product,
               Category,
               Bid,
@@ -127,7 +124,6 @@ import { redisStore } from 'cache-manager-redis-yet';
           entities: [
             User,
             UserDevice,
-            Address,
             Product,
             Category,
             Bid,
@@ -147,7 +143,6 @@ import { redisStore } from 'cache-manager-redis-yet';
       },
     }),
     AuthModule,
-    AddressModule,
     ProductsModule,
     AuthModule,
     NotificationModule,
