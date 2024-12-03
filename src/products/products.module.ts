@@ -18,17 +18,6 @@ import { CommentRepo } from './comment.repo';
 
 @Module({
   imports: [
-    // OpensearchModule.forRoot({
-    //   node: 'https://yzcn37o1j:i4bnt5gp18@marketfloor-2626016716.us-east-1.bonsaisearch.net:443',
-    //   maxRetries: 10,
-    //   requestTimeout: 60000,
-    //   pingTimeout: 60000,
-    //   sniffOnStart: true,
-    //   auth: {
-    //     username: 'sQLdDWuC43',
-    //     password: 'vZ6rCRuzKDLmH9cN',
-    //   },
-    // }),
     TypeOrmModule.forFeature([Product, StoreProduct, Category, Comment]),
     StoreModule,
   ],

@@ -44,7 +44,7 @@ export class OrderController {
     return this.orderService.getOrderByUser(user);
   }
 
-  @UseInterceptors(CacheInterceptor)
+  // @UseInterceptors(CacheInterceptor)
   @Get('/store/:storeId')
   async getOrderByStore(@Param('storeId') storeId: number) {
     return this.orderService.getOrderByStore(storeId);

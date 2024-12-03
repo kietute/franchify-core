@@ -100,7 +100,7 @@ export class ProductsContoller {
     return storeProduct;
   }
 
-  @UseInterceptors(CacheInterceptor)
+  // @UseInterceptors(CacheInterceptor)
   @Get('/by-store')
   async getProductsByStore(@Query() query: GetStoreProductDto) {
     const products = await this.productService.getStoreProducts(query);

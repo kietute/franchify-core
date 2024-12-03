@@ -27,6 +27,7 @@ export class TenantRepo {
       throw new NotFoundException('Tenant not found');
     }
 
+
     const updatedTenant = this.repo.merge(config?.[0], payload);
     return this.repo.save(updatedTenant);
   }
