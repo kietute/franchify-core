@@ -57,7 +57,7 @@ export class ProductRepo {
     this.applyFilters(queryBuilder, params);
 
     const page = params.page ?? 1;
-    const pageSize = params.pageSize ?? 10;
+    const pageSize = params.pageSize ?? 10000;
     const skip = (page - 1) * pageSize;
 
     const [results, total] = await queryBuilder

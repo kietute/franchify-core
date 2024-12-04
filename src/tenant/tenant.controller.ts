@@ -36,38 +36,35 @@ export class TenantController {
   @Serialize(TenantSignInReponseDto)
   @Post('/create-staff')
   async createStaff(@Body() body: CreateStaffDto) {
-    const user = await this.userService.create({
+   return await this.userService.create({
       ...body,
     });
-    return user;
   }
 
   @UseGuards(AdminGuard)
   @Serialize(TenantSignInReponseDto)
   @Post('/create-manager')
   async createManager(@Body() body: CreateStaffDto) {
-    const user = await this.userService.create({
+    return  await this.userService.create({
       ...body,
     });
-    return user;
   }
 
   @Post('/signin')
   @Serialize(TenantSignInReponseDto)
-  async signin(@Body() body: SignInStaffDto) {
-    const user = await this.tenantService.signIn(body);
-    return user;
+  async signIn(@Body() body: SignInStaffDto) {
+    return  await this.tenantService.signIn(body);
   }
 
   @Post('/signout')
-  signout(@Session() session: any) {
+  signOut(@Session() session: any) {
     session.userId = null;
   }
 
   @Get('/staffs/:storeId')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
-  getStaffs(@Param('storeId') storeId) {
+  getStaffs(@Param('storeId') storeId: number) {
     return this.tenantService.getAllStaff(storeId);
   }
 
@@ -106,8 +103,7 @@ export class TenantController {
   @Post('/config')
   async createConfig(@Body() body: CreateTenantConfigDto) {
     try {
-      const tenantConfig = await this.tenantService.createTenant(body);
-      return tenantConfig;
+      return await this.tenantService.createTenant(body);
     } catch (error) {
       console.log('Create tenant config error', error);
       throw new ServiceUnavailableException('Create tenant config error');

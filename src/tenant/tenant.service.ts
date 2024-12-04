@@ -158,7 +158,6 @@ export class TenantService {
         'A tenant config already exists, please try update',
       );
     }
-
     return this.tenantRepo.create(createTenantDto);
   }
 

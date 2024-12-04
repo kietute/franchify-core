@@ -35,6 +35,8 @@ import {
   CacheStore,
 } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { Settings } from './entities/setting.entity';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -136,6 +138,7 @@ import { redisStore } from 'cache-manager-redis-yet';
             Comment,
             Order,
             OrderDetail,
+            Settings
           ],
           synchronize: false,
           namingStrategy: new SnakeNamingStrategy(),
@@ -150,6 +153,7 @@ import { redisStore } from 'cache-manager-redis-yet';
     StoreModule,
     CartModule,
     OrderModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [
