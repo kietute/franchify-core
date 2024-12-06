@@ -3,6 +3,9 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 interface IHeaderConfig {}
 
+interface IFooterConfig {}
+
+
 @Entity()
 export class Settings{
 
@@ -16,5 +19,9 @@ export class Settings{
   homePageSlideshow: string[];
 
   @Column({ nullable: true, type: 'jsonb' })
-  headerConfigs:  IHeaderConfig;
+  headerConfigs: IHeaderConfig;
+
+  @Column({ nullable: true, type: 'jsonb' })
+  footerConfigs: IFooterConfig;
+
 }

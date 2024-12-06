@@ -18,4 +18,8 @@ export class SettingsRepo {
   update(payload: any){
     return this.repo.save(payload);
   }
+
+  get(){
+    return this.repo.find();
+  }
 }
