@@ -5,6 +5,9 @@ interface IHeaderConfig {}
 
 interface IFooterConfig {}
 
+interface IHomePageConfig{
+  slideshow: string[];
+}
 
 @Entity()
 export class Settings{
@@ -16,12 +19,11 @@ export class Settings{
   name: string;
 
   @Column({ nullable: true, type: 'jsonb' })
-  homePageSlideshow: string[];
+  homePage: IHomePageConfig;
 
   @Column({ nullable: true, type: 'jsonb' })
   headerConfigs: IHeaderConfig;
 
   @Column({ nullable: true, type: 'jsonb' })
   footerConfigs: IFooterConfig;
-
 }
