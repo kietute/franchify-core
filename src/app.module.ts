@@ -87,6 +87,9 @@ import { SettingsModule } from './settings/settings.module';
       useFactory: (config: ConfigService) => {
         if (process.env.NODE_ENV !== 'production') {
           return {
+            ssl: {
+              rejectUnauthorized: false,
+            },
             type: 'postgres',
             database: config.get('PROJECT_DB_NAME'),
             username: config.get('PROJECT_DB_USER'),
