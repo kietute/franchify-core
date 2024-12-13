@@ -50,11 +50,15 @@ export class CartController {
   async removeProductFromCart(@Param('cartDetailId') cartDetailId: number) {
     return this.cartService.removeProductFromCart(cartDetailId);
   }
+
+
   @Post('/change-quantity')
   @UseGuards(AuthGuard)
   async changeQuantity(@Body() body: ChangeQuantityDto) {
     return this.cartService.changeQuantity(body);
   }
+
+
   @Delete('/clear/:cartId')
   @UseGuards(AuthGuard)
   async clearCart(@Param('cartId') cartId: number) {

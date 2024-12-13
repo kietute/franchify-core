@@ -47,21 +47,21 @@ import { SettingsModule } from './settings/settings.module';
           ? `.env.development`
           : '.env.production',
     }),
-    // CacheModule.registerAsync({
-    //   isGlobal: true,
-    //   useFactory: async () => {
-    //     const store = await redisStore({
-    //       socket: {
-    //         host: 'localhost',
-    //         port: 6379,
-    //       },
-    //     });
-    //     return {
-    //       store: store as unknown as CacheStore,
-    //       ttl: 3 * 60000,
-    //     };
-    //   },
-    // }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => {
+        const store = await redisStore({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        });
+        return {
+          store: store as unknown as CacheStore,
+          ttl: 3 * 60000,
+        };
+      },
+    }),
     MailerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -165,10 +165,10 @@ import { SettingsModule } from './settings/settings.module';
       provide: APP_PIPE,
       useValue: new ValidationPipe({ whitelist: true }),
     },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: CacheInterceptor,
-    // },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
   ],
 })
 export class AppModule {

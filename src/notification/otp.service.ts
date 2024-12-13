@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { scrypt as _script } from 'crypto';
 import axios from 'axios';
-import { ISendOtpPayload } from './dtos/send-otp.dto';
+import { ISendOtpPayload } from '../dtos/send-otp.dto';
 import { NotificationService } from './notification.service';
-import { IVerifyOtpPayload } from './dtos/verify-otp.dto';
+import { IVerifyOtpPayload } from '../dtos/verify-otp.dto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
