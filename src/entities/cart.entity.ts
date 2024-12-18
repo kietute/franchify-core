@@ -10,7 +10,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { User } from './user.entity';
-import { CartDetail } from './cart-detail.entity';
+import { CartDetail } from './cartDetail.entity';
 
 @Entity()
 export class Cart {

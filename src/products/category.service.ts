@@ -4,8 +4,8 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { CategoryRepo } from './category.repo';
-import { GetCategoryDto } from './dtos/get-category.dto';
-import { UpdateCategoryDto } from './dtos/create-category.dto';
+import { GetCategoryDto } from '../dtos/get-category.dto';
+import { UpdateCategoryDto } from '../dtos/create-category.dto';
 
 @Injectable()
 export class CategoryService {

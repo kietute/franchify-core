@@ -1,5 +1,5 @@
 import { IsArray, IsNumber } from 'class-validator';
-
+import {} from 'class-transformer';
 export class LinkProductDto {
   @IsArray()
   @IsNumber(

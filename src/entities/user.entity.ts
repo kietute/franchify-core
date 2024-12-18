@@ -77,7 +77,6 @@ export class User {
   @OneToMany(() => UserDevice, (device) => device.user)
   devices: UserDevice[];
 
-
   @ManyToOne(() => Store, (store) => store.staffs)
   store: Store;
 

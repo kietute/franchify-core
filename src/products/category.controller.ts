@@ -10,9 +10,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AdminGuard } from 'src/common/guards/admin.guard';
-import { CreateCategoryDto } from './dtos/create-category.dto';
+import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { CategoryService } from './category.service';
-import { GetCategoryDto } from './dtos/get-category.dto';
+import { GetCategoryDto } from '../dtos/get-category.dto';
 import { StaffGuard } from 'src/common/guards/staff.guard';
 
 @Controller('/category')

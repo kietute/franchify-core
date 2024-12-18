@@ -3,12 +3,12 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { UpdateCategoryDto } from './dtos/create-category.dto';
+import { UpdateCategoryDto } from '../dtos/create-category.dto';
 import { CommentRepo } from './comment.repo';
 import {
   CreateProductCommentDto,
   GetProductCommentsDto,
-} from './dtos/comment-product-dto';
+} from '../dtos/comment-product.dto';
 
 @Injectable()
 export class CommentService {

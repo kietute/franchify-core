@@ -15,7 +15,7 @@ import { Product } from './entities/product.entity';
 import { Category } from './entities/category.entity';
 import { Bid } from './entities/bid.entity';
 import { Cart } from './entities/cart.entity';
-import { CartDetail } from './entities/cart-detail.entity';
+import { CartDetail } from './entities/cartDetail.entity';
 import { CartModule } from './cart/cart.module';
 
 import { NotificationModule } from './notification/notification.module';
@@ -141,7 +141,7 @@ import { SettingsModule } from './settings/settings.module';
             Comment,
             Order,
             OrderDetail,
-            Settings
+            Settings,
           ],
           synchronize: false,
           namingStrategy: new SnakeNamingStrategy(),

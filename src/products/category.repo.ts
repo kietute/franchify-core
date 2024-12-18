@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/category.entity';
-import { GetCategoryDto } from './dtos/get-category.dto';
+import { GetCategoryDto } from '../dtos/get-category.dto';
 
 @Injectable()
 export class CategoryRepo {

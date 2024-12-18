@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { UserDto } from './dtos/user.dto';
+import { UserDto } from '../dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { SignInUserDto } from './dtos/sign-in-user.dto';

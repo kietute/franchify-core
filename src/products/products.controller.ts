@@ -14,30 +14,28 @@ import {
   CreateProductDto,
   UpdateProductDto,
   UpdateStoreProductDto,
-} from './dtos/product.dto';
+} from '../dtos/product.dto';
 import { ProductService } from './products.service';
 import { StaffGuard } from 'src/common/guards/staff.guard';
-import { LinkProductDto } from './dtos/link-product.dto';
+import { LinkProductDto } from '../dtos/link-product.dto';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import {
   GetProductDetailDto,
   GetStoreProductDto,
   GetTenentProductDto,
   SearchProductDto,
-} from './dtos/get-product.dto';
+} from '../dtos/get-product.dto';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import {
   CommentSerializer,
   CreateProductCommentDto,
   GetProductCommentsDto,
   ProductCommentSerializer,
-} from './dtos/comment-product-dto';
+} from '../dtos/comment-product.dto';
 import { CommentService } from './comment.service';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
-
-
 
 @Controller('/products')
 @UseInterceptors(CacheInterceptor)

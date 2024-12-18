@@ -15,7 +15,7 @@ import { StaffGuard } from 'src/common/guards/staff.guard';
 import { GetStoreDto } from './dtos/get-store.dto';
 import { UpdateStoreDto } from './dtos/update-store.dto';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { UserDto } from '../auth/dtos/user.dto';
+import { UserDto } from '../dtos/user.dto';
 import { StoreDto } from './dtos/store.dto';
 import { AdminGuard } from '../common/guards/admin.guard'; // Import the Update DTO
 

@@ -18,7 +18,7 @@ import { User, UserRole } from 'src/entities/user.entity';
 import { CreateStaffDto } from './dtos';
 import { TenantService } from './tenant.service';
 import { AdminGuard } from 'src/common/guards/admin.guard';
-import { UserDto } from '../auth/dtos/user.dto';
+import { UserDto } from '../dtos/user.dto';
 import { StaffGuard } from '../common/guards/staff.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from 'src/auth/users.service';
@@ -36,7 +36,7 @@ export class TenantController {
   @Serialize(TenantSignInReponseDto)
   @Post('/create-staff')
   async createStaff(@Body() body: CreateStaffDto) {
-   return await this.userService.create({
+    return await this.userService.create({
       ...body,
     });
   }
@@ -45,7 +45,7 @@ export class TenantController {
   @Serialize(TenantSignInReponseDto)
   @Post('/create-manager')
   async createManager(@Body() body: CreateStaffDto) {
-    return  await this.userService.create({
+    return await this.userService.create({
       ...body,
     });
   }
@@ -53,7 +53,7 @@ export class TenantController {
   @Post('/signin')
   @Serialize(TenantSignInReponseDto)
   async signIn(@Body() body: SignInStaffDto) {
-    return  await this.tenantService.signIn(body);
+    return await this.tenantService.signIn(body);
   }
 
   @Post('/signout')
