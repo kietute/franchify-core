@@ -1,0 +1,10 @@
+{
+  "rootFilePath": "src",
+  "destFilePath": "src/types",
+  "entitySourceFolder": "entities",
+  "dtoSourceFolder": "dtos",
+  "hooksSourceFolder": "hooks",
+  "entityDestFileName": "models.d.ts",
+  "dtoDestFileName": "dtos.d.ts",
+  "hooksDestFileName": "hooks.d.ts"
+}
