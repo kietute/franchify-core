@@ -38,7 +38,7 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('/products')
-@UseInterceptors(CacheInterceptor)
+// @UseInterceptors(CacheInterceptor)
 export class ProductsContoller {
   constructor(
     private productService: ProductService,

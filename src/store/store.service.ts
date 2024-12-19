@@ -6,11 +6,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { StoreRepo } from './store.repo';
-import { CreateStoreDto } from './dtos/create-store.dto';
+import { CreateStoreDto } from '../dtos/create-store.dto';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { Store } from '../entities/store.entity';
-import { GetStoreDto } from './dtos/get-store.dto';
-import { UpdateStoreDto } from './dtos/update-store.dto';
+import { GetStoreDto } from '../dtos/get-store.dto';
+import { UpdateStoreDto } from '../dtos/update-store.dto';
 import { DeleteResult } from 'typeorm';
 
 @UseGuards(AdminGuard)

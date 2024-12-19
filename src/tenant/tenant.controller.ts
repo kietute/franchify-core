@@ -12,10 +12,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { TenantSignInReponseDto, CreateTenantConfigDto } from './dtos';
-import { SignInStaffDto } from './dtos';
+import { TenantSignInReponseDto, CreateTenantConfigDto } from '../entities/tenant.dto';
+import { SignInStaffDto } from '../entities/tenant.dto';
 import { User, UserRole } from 'src/entities/user.entity';
-import { CreateStaffDto } from './dtos';
+import { CreateStaffDto } from '../entities/tenant.dto';
 import { TenantService } from './tenant.service';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { UserDto } from '../dtos/user.dto';

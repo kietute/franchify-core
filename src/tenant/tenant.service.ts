@@ -9,12 +9,12 @@ import {
   CreateTenantConfigDto,
   ICreateUserPayload,
   UpdateTenantConfigDto,
-} from './dtos';
+} from '../entities/tenant.dto';
 import { UsersService } from 'src/auth/users.service';
 import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
-import { ISignInStaffPayload } from './dtos';
+import { ISignInStaffPayload } from '../entities/tenant.dto';
 import { User, UserRole } from '../entities/user.entity';
 import { TenantRepo } from './tenant.repo';
 import { Tenant } from 'src/entities/tenant.entity';

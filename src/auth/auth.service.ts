@@ -8,11 +8,11 @@ import {
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script, verify } from 'crypto';
 import { promisify } from 'util';
-import { ICreateUserPayload } from './dtos/create-user.dto';
-import { ISignInUserPayload } from './dtos/sign-in-user.dto';
-import { IForgotPasswordPayload } from './dtos/forgot-password.dto';
+import { ICreateUserPayload } from '../dtos/create-user.dto';
+import { ISignInUserPayload } from '../dtos/sign-in-user.dto';
+import { IForgotPasswordPayload } from '../dtos/forgot-password.dto';
 import { OtpService } from '../notification/otp.service';
-import { IVerifyOtpPayload } from './dtos/verify-otp.dto';
+import { IVerifyOtpPayload } from '../dtos/verify-otp.dto';
 import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_script);
