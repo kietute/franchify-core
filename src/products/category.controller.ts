@@ -9,11 +9,10 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
-import { AdminGuard } from 'src/common/guards/admin.guard';
-import { CreateCategoryDto } from '../dtos/create-category.dto';
+import { AdminGuard } from '@/common/guards/admin.guard';
+import { CreateCategoryDto } from '@/dtos/create-category.dto';
 import { CategoryService } from './category.service';
-import { GetCategoryDto } from '../dtos/get-category.dto';
-import { StaffGuard } from 'src/common/guards/staff.guard';
+import { GetCategoryDto } from '@/dtos/get-category.dto';
 
 @Controller('/category')
 export class CategoryController {
@@ -22,8 +21,7 @@ export class CategoryController {
   @UseGuards(AdminGuard)
   @Post('/')
   async createCategory(@Body() body: CreateCategoryDto) {
-    const category = await this.categoryService.createCategory(body);
-    return category;
+    return await this.categoryService.createCategory(body);
   }
 
   @UseGuards(AdminGuard)
@@ -32,23 +30,17 @@ export class CategoryController {
     @Param('id') id: string,
     @Body() body: CreateCategoryDto,
   ) {
-    const category = await this.categoryService.updateCategory(
-      Number(id),
-      body,
-    );
-    return category;
+    return await this.categoryService.updateCategory(Number(id), body);
   }
 
   @UseGuards(AdminGuard)
   @Delete('/:id')
   async deleteCategory(@Param('id') id: string) {
-    const category = await this.categoryService.deleteCategory(Number(id));
-    return category;
+    return await this.categoryService.deleteCategory(Number(id));
   }
 
   @Get('/')
   async getCategories(@Query() query: GetCategoryDto) {
-    const categories = await this.categoryService.getCategories(query);
-    return categories;
+    return await this.categoryService.getCategories(query);
   }
 }

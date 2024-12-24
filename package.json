@@ -20,11 +20,11 @@
     "update-db-win": "cd scripts && ./back-up.bat",
     "sync-db-win": "cd scripts && ./sync.bat",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "jest --config ./jest-config.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest  --detectOpenHandles --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.15.0",

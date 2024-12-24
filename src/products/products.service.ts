@@ -11,7 +11,7 @@ import {
 } from '@/dtos/product.dto';
 import { LinkProductDto } from '@/dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
-import { StoreRepo } from 'src/store/store.repo';
+import { StoreRepo } from "@/store/store.repo";
 import {
   GetProductDetailDto,
   GetStoreProductDto,

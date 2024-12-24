@@ -1,35 +1,26 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
   UseGuards,
 } from '@nestjs/common';
 import { StoreRepo } from './store.repo';
-import { CreateStoreDto } from '../dtos/create-store.dto';
-import { AdminGuard } from 'src/common/guards/admin.guard';
-import { Store } from '../entities/store.entity';
-import { GetStoreDto } from '../dtos/get-store.dto';
-import { UpdateStoreDto } from '../dtos/update-store.dto';
+import { CreateStoreDto } from '@/dtos/create-store.dto';
+import { AdminGuard } from '@/common/guards/admin.guard';
+import { Store } from '@/entities/store.entity';
+import { GetStoreDto } from '@/dtos/get-store.dto';
+import { UpdateStoreDto } from '@/dtos/update-store.dto';
 import { DeleteResult } from 'typeorm';
 
 @UseGuards(AdminGuard)
 @Injectable()
 export class StoreService {
-  constructor(
-    private readonly storeRepo: StoreRepo,
-  ) {}
+  constructor(private readonly storeRepo: StoreRepo) {}
 
   async createStore(payload: CreateStoreDto) {
     try {
-      let savedAddress = null;
-
-
-      // Tạo store mới mà không bao gồm address
-      const {  ...storeData } = payload; // Tách địa chỉ ra khỏi payload
-      const store = this.storeRepo.create(storeData); // Tạo store với dữ liệu còn lại
-
-      // Lưu store vào repo
+      const { ...storeData } = payload;
+      const store = this.storeRepo.create(storeData);
       return await this.storeRepo.save(await store);
     } catch (error) {
       console.error('create store error', error);

@@ -16,16 +16,16 @@ import {
   UpdateStoreProductDto,
 } from '@/dtos/product.dto';
 import { ProductService } from './products.service';
-import { StaffGuard } from 'src/common/guards/staff.guard';
+import { StaffGuard } from '@/common/guards/staff.guard';
 import { LinkProductDto } from '@/dtos/link-product.dto';
-import { AdminGuard } from 'src/common/guards/admin.guard';
+import { AdminGuard } from '@/common/guards/admin.guard';
 import {
   GetProductDetailDto,
   GetStoreProductDto,
   GetTenentProductDto,
   SearchProductDto,
 } from '@/dtos/get-product.dto';
-import { Serialize } from 'src/common/interceptors/serialize.interceptor';
+import { Serialize } from '@/common/interceptors/serialize.interceptor';
 import {
   CommentSerializer,
   CreateProductCommentDto,
@@ -33,8 +33,8 @@ import {
   ProductCommentSerializer,
 } from '@/dtos/comment-product.dto';
 import { CommentService } from './comment.service';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import { AuthGuard } from 'src/common/guards/auth.guard';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import { AuthGuard } from '@/common/guards/auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('/products')
@@ -55,7 +55,6 @@ export class ProductsController {
   @Put('/:id')
   async updateProduct(@Param('id') id: string, @Body() body: UpdateProductDto) {
     return await this.productService.updateProduct(Number(id), body);
-
   }
 
   @UseGuards(StaffGuard)
@@ -65,11 +64,7 @@ export class ProductsController {
     @Param('storeId') storeId: number,
     @Body() body: UpdateStoreProductDto,
   ) {
-    return await this.productService.updateStoreProduct(
-      upc,
-      storeId,
-      body,
-    );
+    return await this.productService.updateStoreProduct(upc, storeId, body);
   }
 
   @UseGuards(AdminGuard)
@@ -108,7 +103,7 @@ export class ProductsController {
 
   @Get('/detail')
   async getProductsByStoreId(@Query() query: GetProductDetailDto) {
-    return  await this.productService.getStoreProductById(query);
+    return await this.productService.getStoreProductById(query);
   }
 
   @Serialize(ProductCommentSerializer)

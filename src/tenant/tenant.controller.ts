@@ -11,19 +11,20 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { TenantSignInReponseDto, CreateTenantConfigDto } from '../entities/tenant.dto';
-import { SignInStaffDto } from '../entities/tenant.dto';
-import { User, UserRole } from 'src/entities/user.entity';
-import { CreateStaffDto } from '../entities/tenant.dto';
+import { Serialize } from '@/common/interceptors/serialize.interceptor';
+import {
+  TenantSignInReponseDto,
+  CreateTenantConfigDto,
+} from '@/entities/tenant.dto';
+import { SignInStaffDto } from '@/entities/tenant.dto';
+import { User } from '@/entities/user.entity';
+import { CreateStaffDto } from '@/entities/tenant.dto';
 import { TenantService } from './tenant.service';
-import { AdminGuard } from 'src/common/guards/admin.guard';
-import { UserDto } from '../dtos/user.dto';
-import { StaffGuard } from '../common/guards/staff.guard';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { UsersService } from 'src/auth/users.service';
-import { classToPlain } from 'class-transformer';
-import { ManagerGuard } from 'src/common/guards/manager.guard';
+import { AdminGuard } from '@/common/guards/admin.guard';
+import { UserDto } from '@/dtos/user.dto';
+import { StaffGuard } from '@/common/guards/staff.guard';
+import { UsersService } from '@/auth/users.service';
+import { ManagerGuard } from '@/common/guards/manager.guard';
 
 @Controller('tenant')
 export class TenantController {

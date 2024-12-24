@@ -11,7 +11,7 @@ import { OrderService } from './order.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../entities/user.entity';
 import { CreateOrderDto } from '../dtos/order.dto';
-import { OrderStatus } from 'src/entities/order.entity';
+import { OrderStatus } from '@/entities/order.entity';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 // @UseGuards(AuthGuard)

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StoreProduct } from 'src/entities/store-product.entity';
-import { GetStoreProductDto } from '../dtos/get-product.dto';
+import { StoreProduct } from '@/entities/store-product.entity';
+import { GetStoreProductDto } from '@/dtos/get-product.dto';
 
 @Injectable()
 export class StoreProductRepo {
