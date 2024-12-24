@@ -8,11 +8,11 @@ import {
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script, verify } from 'crypto';
 import { promisify } from 'util';
-import { ICreateUserPayload } from '../dtos/create-user.dto';
-import { ISignInUserPayload } from '../dtos/sign-in-user.dto';
-import { IForgotPasswordPayload } from '../dtos/forgot-password.dto';
-import { OtpService } from '../notification/otp.service';
-import { IVerifyOtpPayload } from '../dtos/verify-otp.dto';
+import { ICreateUserPayload } from '@/dtos/create-user.dto';
+import { ISignInUserPayload } from '@/dtos/sign-in-user.dto';
+import { IForgotPasswordPayload } from '@/dtos/forgot-password.dto';
+import { OtpService } from '@/notification/otp.service';
+import { IVerifyOtpPayload } from '@/dtos/verify-otp.dto';
 import { JwtService } from '@nestjs/jwt';
 
 const scrypt = promisify(_script);
@@ -39,16 +39,17 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     const result = salt + '.' + hash.toString('hex');
 
-    // const notifyResponse = await this.otpService.sendOtpCode({
-    //   phoneNumber: payload.phoneNumber,
-    // });
-    const notifyResponse = true;
+    const notifyResponse = await this.otpService.sendOtpCode({
+      phoneNumber: payload.phoneNumber,
+    });
+
+    // const notifyResponse = true;
+
     if (!!notifyResponse) {
-      const user = await this.userUservice.create({
+      return await this.userUservice.create({
         ...payload,
         password: result,
       });
-      return user;
     } else {
       throw new ServiceUnavailableException(
         'Service unavailble, please try later',
@@ -112,7 +113,7 @@ export class AuthService {
     const [user] = await this.userUservice.find(phoneNumber);
 
     if (!user) {
-      throw new BadRequestException('Email is in use, try another');
+      throw new BadRequestException('Phone number is in use, try another');
     }
 
     const isVerify = await this.otpService.verifyOtpCode(payload);
@@ -137,11 +138,10 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    const notifyResponse = await this.otpService.sendOtpCode({
+    return await this.otpService.sendOtpCode({
       phoneNumber: payload.phoneNumber,
     });
 
-    return notifyResponse;
   }
 
   async updateProfile(id: number, payload: { savePoints: number }) {
@@ -152,10 +152,10 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    const updatedUser = await this.userUservice.update(user.id, {
+    return await this.userUservice.update(user.id, {
       ...payload,
+      savePoints: user.savePoints + savePoints,
     });
 
-    return updatedUser;
   }
 }

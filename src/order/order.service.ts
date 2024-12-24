@@ -71,18 +71,16 @@ export class OrderService {
     isApplyUserSavePoints: boolean,
     storeId: number,
   ): Promise<Order> {
-    const findedStore = await this.storeRepo.findById(storeId);
-    const order = this.orderRepo.create({
+    const store = await this.storeRepo.findById(storeId);
+    return this.orderRepo.create({
       user,
       status: 'pending',
       orderDetails: [],
       orderAddress: address,
       orderUserInfo: userInfo,
       isApplyUserSavePoints: isApplyUserSavePoints,
-      store: findedStore,
+      store: store,
     });
-
-    return order;
   }
 
   private async createOrderDetails(

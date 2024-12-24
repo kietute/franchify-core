@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { User } from './entities/user.entity';
 import { Comment } from './entities/comment.entity';
 
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
@@ -47,7 +47,7 @@ import { SettingsModule } from './settings/settings.module';
           ? `.env.development`
           : '.env.production',
     }),
-    // CacheModule.registerAsync({
+    // CacheModule.registerAsync({ta
     //   isGlobal: false,
     //   useFactory: async () => {
     //     const store = await redisStore({
@@ -85,37 +85,6 @@ import { SettingsModule } from './settings/settings.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        if (process.env.NODE_ENV !== 'production') {
-          return {
-            ssl: {
-              rejectUnauthorized: false,
-            },
-            type: 'postgres',
-            database: config.get('PROJECT_DB_NAME'),
-            username: config.get('PROJECT_DB_USER'),
-            password: config.get('PROJECT_DB_PASSWORD'),
-            host: config.get('PROJECT_DB_HOST'),
-            port: config.get('PROJECT_DB_PORT'),
-            entities: [
-              User,
-              UserDevice,
-              Product,
-              Category,
-              Bid,
-              OtpCode,
-              Tenant,
-              Store,
-              StoreProduct,
-              Cart,
-              CartDetail,
-              Comment,
-              Order,
-              OrderDetail,
-            ],
-            synchronize: true,
-            namingStrategy: new SnakeNamingStrategy(),
-          };
-        }
         return {
           ssl: {
             rejectUnauthorized: false,
@@ -141,9 +110,8 @@ import { SettingsModule } from './settings/settings.module';
             Comment,
             Order,
             OrderDetail,
-            Settings,
           ],
-          synchronize: false,
+          synchronize: config.get('NODE_ENV') !== 'production',
           namingStrategy: new SnakeNamingStrategy(),
         };
       },

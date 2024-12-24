@@ -8,11 +8,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { AddProductToCartDto } from '../dtos/add-product-to-cart.dto';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '../entities/user.entity';
-import { AuthGuard } from '../common/guards/auth.guard';
-import { ChangeQuantityDto } from '../dtos/change-quantity.dto';
+import { AddProductToCartDto } from '@/dtos/add-product-to-cart.dto';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
+import { User } from '@/entities/user.entity';
+import { AuthGuard } from '@/common/guards/auth.guard';
+import { ChangeQuantityDto } from '@/dtos/change-quantity.dto';
 
 @Controller('cart')
 export class CartController {

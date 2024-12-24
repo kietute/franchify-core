@@ -6,9 +6,9 @@ import {
   CreateProductDto,
   UpdateProductDto,
   UpdateStoreProductDto,
-} from '../dtos/product.dto';
+} from '@/dtos/product.dto';
 import { In } from 'typeorm';
-import { GetTenentProductDto } from '../dtos/get-product.dto';
+import { GetTenentProductDto } from '@/dtos/get-product.dto';
 
 @Injectable()
 export class ProductRepo {

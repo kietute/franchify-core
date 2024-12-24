@@ -5,9 +5,7 @@ import {
   Get,
   Param,
   Delete,
-  Patch,
   Put,
-  UseInterceptors,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';

@@ -7,15 +7,15 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { UserDto } from '../dtos/user.dto';
+import { Serialize } from '@/common/interceptors/serialize.interceptor';
+import { UserDto } from '@/dtos/user.dto';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../dtos/create-user.dto';
-import { SignInUserDto } from '../dtos/sign-in-user.dto';
-import { AuthGuard } from '../common/guards/auth.guard';
-import { User } from '../entities/user.entity';
+import { CreateUserDto } from '@/dtos/create-user.dto';
+import { SignInUserDto } from '@/dtos/sign-in-user.dto';
+import { AuthGuard } from '@/common/guards/auth.guard';
+import { User } from '@/entities/user.entity';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { VerifyOtpDto } from '../dtos/verify-otp.dto';
+import { VerifyOtpDto } from '@/dtos/verify-otp.dto';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -30,14 +30,12 @@ export class AuthController {
 
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto) {
-    const user = await this.authService.signup(body);
-    return user;
+    return await this.authService.signup(body);
   }
 
   @Post('/signin')
   async signin(@Body() body: SignInUserDto) {
-    const user = await this.authService.signin(body);
-    return user;
+    return await this.authService.signin(body);
   }
 
   @Put('/profile')
@@ -51,12 +49,10 @@ export class AuthController {
 
   @Post('/verify-otp')
   async verifyOtp(@Body() body: VerifyOtpDto) {
-    const verifiedUser = await this.authService.verifyOtp({
+    return  await this.authService.verifyOtp({
       phoneNumber: body.phoneNumber,
       otpCode: body.otpCode,
     });
-
-    return verifiedUser;
   }
 
   @Post('forgot-password')

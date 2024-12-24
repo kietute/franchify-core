@@ -5,15 +5,13 @@ import { CartController } from './cart.controller';
 import { Cart } from 'src/entities/cart.entity';
 import { CartDetail } from 'src/entities/cartDetail.entity';
 import { ProductsModule } from 'src/products/products.module';
-import { ProductRepo } from 'src/products/products.repo';
-import { Product } from 'src/entities/product.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Cart, CartDetail, Product]),
+    TypeOrmModule.forFeature([Cart, CartDetail]),
     ProductsModule,
   ],
-  providers: [CartService, ProductRepo],
+  providers: [CartService],
   controllers: [CartController],
   exports: [CartService],
 })

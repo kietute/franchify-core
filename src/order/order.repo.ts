@@ -58,7 +58,6 @@ export class OrderRepo {
   }
 
   async deleteAll(userId: number): Promise<void> {
-    // await this.orderDetailRepo.delete({});
     await this.repo.delete({ user: { id: userId } });
   }
 }

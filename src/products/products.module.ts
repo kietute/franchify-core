@@ -1,7 +1,7 @@
-import { Inject, Injectable, Module } from '@nestjs/common';
+import {  Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from 'src/entities/product.entity';
-import { ProductsContoller } from './products.controller';
+import { ProductsController } from './products.controller';
 import { ProductService } from './products.service';
 import { ProductRepo } from './products.repo';
 import { StoreProductRepo } from './store-product.repo';
@@ -21,7 +21,7 @@ import { CommentRepo } from './comment.repo';
     TypeOrmModule.forFeature([Product, StoreProduct, Category, Comment]),
     StoreModule,
   ],
-  controllers: [ProductsContoller, CategoryController],
+  controllers: [ProductsController, CategoryController],
   providers: [
     ProductService,
     ProductRepo,

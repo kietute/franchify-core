@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { scrypt as _script } from 'crypto';
 import axios from 'axios';
-import { ISendOtpPayload } from '../dtos/send-otp.dto';
+import { ISendOtpPayload } from '@/dtos/send-otp.dto';
 import { NotificationService } from './notification.service';
-import { IVerifyOtpPayload } from '../dtos/verify-otp.dto';
+import { IVerifyOtpPayload } from '@/dtos/verify-otp.dto';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -17,9 +16,9 @@ export class OtpService {
   async sendOtpCode(payload: ISendOtpPayload): Promise<boolean> {
     const { phoneNumber } = payload;
 
-    const [findedOtp] = await this.notificationService.find(phoneNumber);
-    if (!!findedOtp) {
-      const createdDate = new Date(findedOtp.created_at);
+    const [code] = await this.notificationService.find(phoneNumber);
+    if (!!code) {
+      const createdDate = new Date(code.created_at);
       const distance = Date.now() - createdDate.getTime();
       if (distance < 600000) {
         return true;
@@ -53,10 +52,10 @@ export class OtpService {
 
   async verifyOtpCode(payload: IVerifyOtpPayload): Promise<boolean> {
     const { phoneNumber, otpCode } = payload;
-    const [findedOtp] = await this.notificationService.find(phoneNumber);
+    const [code] = await this.notificationService.find(phoneNumber);
 
-    if (!findedOtp) {
-      throw new NotFoundException('Số điện thoại này chưa được gửi mã OTP nào');
+    if (!code) {
+      throw new NotFoundException('This phone number has not been sent OTP');
     }
     try {
       const response = await axios.post(
@@ -74,7 +73,7 @@ export class OtpService {
       );
 
       if (response?.data?.valid) {
-        await this.notificationService.remove(findedOtp.id);
+        await this.notificationService.remove(code.id);
         return true;
       } else {
         return false;

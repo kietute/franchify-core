@@ -10,7 +10,7 @@ export class ElasticService {
   async getHealth() {
     try {
       const healthResponse = await axios.get(
-        `https://sQLdDWuC43:vZ6rCRuzKDLmH9cN@marketfloor-2626016716.us-east-1.bonsaisearch.net:443/_cat/health`,
+        `${this.configService.get('ELASTIC_END_POINT')}/_cat/health`,
         {
           auth: {
             username: 'sQLdDWuC43',
@@ -40,7 +40,7 @@ export class ElasticService {
           .join('\n') + '\n';
 
       const bulkResponse = await axios.post(
-        `https://sQLdDWuC43:vZ6rCRuzKDLmH9cN@marketfloor-2626016716.us-east-1.bonsaisearch.net:443/_bulk`,
+        `${this.configService.get('ELASTIC_END_POINT')}/_bulk`,
         bulkData,
         {
           headers: {
@@ -67,7 +67,7 @@ export class ElasticService {
   async search(keyword: string) {
     try {
       const elasticSearchResponse = await axios.post(
-        `https://sQLdDWuC43:vZ6rCRuzKDLmH9cN@marketfloor-2626016716.us-east-1.bonsaisearch.net:443/products/_search`,
+        `${this.configService.get('ELASTIC_END_POINT')}/products/_search`,
         {
           query: {
             match: {
@@ -88,7 +88,7 @@ export class ElasticService {
       const hits = elasticSearchResponse?.data?.hits?.hits || [];
       return {
         ...elasticSearchResponse.data,
-        data: hits.map((item) => item._source),
+        data: hits.map((item: any) => item._source),
       };
     } catch (error) {
       console.error('Search error:', error);

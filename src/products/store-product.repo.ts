@@ -21,7 +21,6 @@ export class StoreProductRepo {
       storeId: storeId,
     });
 
-    // queryBuilder.leftJoinAndSelect('store_product.product', 'product');
 
     if (name) {
       queryBuilder.andWhere('name LIKE :name', {
@@ -75,7 +74,7 @@ export class StoreProductRepo {
       .createQueryBuilder('store_product')
       .leftJoinAndSelect('store_product.product', 'product')
       .leftJoinAndSelect('store_product.store', 'store')
-      .leftJoinAndSelect('product.category', 'category'); // Join the category table
+      .leftJoinAndSelect('product.category', 'category');
 
     return queryBuilder
       .andWhere('product.upc = :upc', { upc })
@@ -92,7 +91,7 @@ export class StoreProductRepo {
       .createQueryBuilder('store_product')
       .leftJoinAndSelect('store_product.product', 'product')
       .leftJoinAndSelect('store_product.store', 'store')
-      .leftJoinAndSelect('product.category', 'category'); // Join the category table
+      .leftJoinAndSelect('product.category', 'category');
 
     return queryBuilder
       .andWhere('product.id = :id', { id })
