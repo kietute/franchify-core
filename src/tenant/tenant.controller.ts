@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   NotFoundException,
   Param,
@@ -114,8 +113,7 @@ export class TenantController {
   @Put('/config')
   async updateConfig(@Body() body: CreateTenantConfigDto) {
     try {
-      const tenantConfig = await this.tenantService.updateTenant(body);
-      return tenantConfig;
+      return await this.tenantService.updateTenant(body);
     } catch (error) {
       console.log('Update tenant config error', error);
       throw new ServiceUnavailableException('Update tenant config error');
