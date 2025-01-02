@@ -55,10 +55,6 @@ export class CreateOrderDto {
   @Type(() => CreateOrderUserInfoDto)
   orderUserInfo: CreateOrderUserInfoDto;
 
-  @IsBoolean()
-  @IsOptional()
-  isApplyUserSavePoints?: boolean;
-
   @IsNumber()
   storeId: number;
 }

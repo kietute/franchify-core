@@ -33,6 +33,7 @@ export class OrderService {
     user: User,
     orderInfo: CreateOrderDto,
   ): Promise<Order> {
+    const { orderAddress, orderUserInfo, storeId } = orderInfo;
     const cart = await this.cartService.getCart(user);
 
     if (!cart || !cart.cartDetails.length) {
@@ -44,7 +45,6 @@ export class OrderService {
         user,
         orderInfo?.orderAddress,
         orderInfo?.orderUserInfo,
-        orderInfo?.isApplyUserSavePoints,
         orderInfo?.storeId,
       );
       const totalAmount = await this.createOrderDetails(
@@ -68,7 +68,6 @@ export class OrderService {
     user: User,
     address: IOrderAddress,
     userInfo: IOrderUserInfo,
-    isApplyUserSavePoints: boolean,
     storeId: number,
   ): Promise<Order> {
     const store = await this.storeRepo.findById(storeId);
@@ -78,7 +77,6 @@ export class OrderService {
       orderDetails: [],
       orderAddress: address,
       orderUserInfo: userInfo,
-      isApplyUserSavePoints: isApplyUserSavePoints,
       store: store,
     });
   }
@@ -104,10 +102,6 @@ export class OrderService {
         if (order?.orderAddress?.shippingFee > 0) {
           totalAmount =
             Number(totalAmount) + Number(order.orderAddress.shippingFee);
-        }
-
-        if (order?.isApplyUserSavePoints) {
-          totalAmount = totalAmount - order.user.savePoints * 1000;
         }
         return totalAmount;
       } catch (error) {
