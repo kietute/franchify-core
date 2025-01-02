@@ -10,6 +10,12 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+export enum PaymentMethod {
+  COD = 'COD',
+  MOMO = 'MOMO',
+  VNPAY = 'VNPAY',
+}
+
 export class CreateOrderAddressDto {
   @IsString()
   address: string;
@@ -54,6 +60,9 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => CreateOrderUserInfoDto)
   orderUserInfo: CreateOrderUserInfoDto;
+
+  @IsString()
+  paymentMethod: PaymentMethod;
 
   @IsNumber()
   storeId: number;
