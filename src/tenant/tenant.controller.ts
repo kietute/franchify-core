@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   NotFoundException,
   Param,
@@ -11,19 +10,20 @@ import {
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { TenantSignInReponseDto, CreateTenantConfigDto } from './dtos';
-import { SignInStaffDto } from './dtos';
-import { User, UserRole } from 'src/entities/user.entity';
-import { CreateStaffDto } from './dtos';
+import { Serialize } from '@/common/interceptors/serialize.interceptor';
+import {
+  TenantSignInReponseDto,
+  CreateTenantConfigDto,
+} from '@/entities/tenant.dto';
+import { SignInStaffDto } from '@/entities/tenant.dto';
+import { User } from '@/entities/user.entity';
+import { CreateStaffDto } from '@/entities/tenant.dto';
 import { TenantService } from './tenant.service';
-import { AdminGuard } from 'src/common/guards/admin.guard';
-import { UserDto } from '../auth/dtos/user.dto';
-import { StaffGuard } from '../common/guards/staff.guard';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { UsersService } from 'src/auth/users.service';
-import { classToPlain } from 'class-transformer';
-import { ManagerGuard } from 'src/common/guards/manager.guard';
+import { AdminGuard } from '@/common/guards/admin.guard';
+import { UserDto } from '@/dtos/user.dto';
+import { StaffGuard } from '@/common/guards/staff.guard';
+import { UsersService } from '@/auth/users.service';
+import { ManagerGuard } from '@/common/guards/manager.guard';
 
 @Controller('tenant')
 export class TenantController {
@@ -36,38 +36,35 @@ export class TenantController {
   @Serialize(TenantSignInReponseDto)
   @Post('/create-staff')
   async createStaff(@Body() body: CreateStaffDto) {
-    const user = await this.userService.create({
+    return await this.userService.create({
       ...body,
     });
-    return user;
   }
 
   @UseGuards(AdminGuard)
   @Serialize(TenantSignInReponseDto)
   @Post('/create-manager')
   async createManager(@Body() body: CreateStaffDto) {
-    const user = await this.userService.create({
+    return await this.userService.create({
       ...body,
     });
-    return user;
   }
 
   @Post('/signin')
   @Serialize(TenantSignInReponseDto)
-  async signin(@Body() body: SignInStaffDto) {
-    const user = await this.tenantService.signIn(body);
-    return user;
+  async signIn(@Body() body: SignInStaffDto) {
+    return await this.tenantService.signIn(body);
   }
 
   @Post('/signout')
-  signout(@Session() session: any) {
+  signOut(@Session() session: any) {
     session.userId = null;
   }
 
   @Get('/staffs/:storeId')
   @Serialize(UserDto)
   @UseGuards(StaffGuard)
-  getStaffs(@Param('storeId') storeId) {
+  getStaffs(@Param('storeId') storeId: number) {
     return this.tenantService.getAllStaff(storeId);
   }
 
@@ -106,8 +103,7 @@ export class TenantController {
   @Post('/config')
   async createConfig(@Body() body: CreateTenantConfigDto) {
     try {
-      const tenantConfig = await this.tenantService.createTenant(body);
-      return tenantConfig;
+      return await this.tenantService.createTenant(body);
     } catch (error) {
       console.log('Create tenant config error', error);
       throw new ServiceUnavailableException('Create tenant config error');
@@ -117,8 +113,7 @@ export class TenantController {
   @Put('/config')
   async updateConfig(@Body() body: CreateTenantConfigDto) {
     try {
-      const tenantConfig = await this.tenantService.updateTenant(body);
-      return tenantConfig;
+      return await this.tenantService.updateTenant(body);
     } catch (error) {
       console.log('Update tenant config error', error);
       throw new ServiceUnavailableException('Update tenant config error');

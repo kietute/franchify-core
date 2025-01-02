@@ -8,7 +8,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CreateAddressDto } from '../../addresses/dtos/create-address.dto';
 
 export class CreateStoreDto {
   @IsNotEmpty()
@@ -34,14 +33,17 @@ export class CreateStoreDto {
   @IsNotEmpty()
   @IsNumber()
   storeCode: number;
+
+
   @IsOptional()
   @IsNumber()
   lng: number;
+
+
   @IsOptional()
   @IsNumber()
   lat: number;
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateAddressDto)
-  address?: CreateAddressDto; // Address DTO is optional
+
+
+
 }

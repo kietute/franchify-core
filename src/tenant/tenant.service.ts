@@ -9,15 +9,15 @@ import {
   CreateTenantConfigDto,
   ICreateUserPayload,
   UpdateTenantConfigDto,
-} from './dtos';
-import { UsersService } from 'src/auth/users.service';
+} from '@/entities/tenant.dto';
+import { UsersService } from '@/auth/users.service';
 import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
-import { ISignInStaffPayload } from './dtos';
-import { User, UserRole } from '../entities/user.entity';
+import { ISignInStaffPayload } from '@/entities/tenant.dto';
+import { User, UserRole } from '@/entities/user.entity';
 import { TenantRepo } from './tenant.repo';
-import { Tenant } from 'src/entities/tenant.entity';
+import { Tenant } from '@/entities/tenant.entity';
 
 const scrypt = promisify(_script);
 
@@ -158,7 +158,6 @@ export class TenantService {
         'A tenant config already exists, please try update',
       );
     }
-
     return this.tenantRepo.create(createTenantDto);
   }
 

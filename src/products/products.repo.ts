@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/entities/product.entity';
+import { Product } from '@/entities/product.entity';
 import {
   CreateProductDto,
   UpdateProductDto,
   UpdateStoreProductDto,
-} from './dtos/product.dto';
+} from '@/dtos/product.dto';
 import { In } from 'typeorm';
-import { GetTenentProductDto } from './dtos/get-product.dto';
+import { GetTenentProductDto } from '@/dtos/get-product.dto';
 
 @Injectable()
 export class ProductRepo {
@@ -57,7 +57,7 @@ export class ProductRepo {
     this.applyFilters(queryBuilder, params);
 
     const page = params.page ?? 1;
-    const pageSize = params.pageSize ?? 10;
+    const pageSize = params.pageSize ?? 10000;
     const skip = (page - 1) * pageSize;
 
     const [results, total] = await queryBuilder

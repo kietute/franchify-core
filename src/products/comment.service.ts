@@ -3,12 +3,12 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { UpdateCategoryDto } from './dtos/create-category.dto';
+import { UpdateCategoryDto } from '@/dtos/create-category.dto';
 import { CommentRepo } from './comment.repo';
 import {
   CreateProductCommentDto,
   GetProductCommentsDto,
-} from './dtos/comment-product-dto';
+} from '@/dtos/comment-product.dto';
 
 @Injectable()
 export class CommentService {
@@ -16,8 +16,7 @@ export class CommentService {
 
   async createComment(payload: CreateProductCommentDto, userId: number) {
     try {
-      const comment = await this.commentRepo.create(payload, userId);
-      return comment;
+      return await this.commentRepo.create(payload, userId);
     } catch (error) {
       console.log('error', error);
       throw new ServiceUnavailableException(
@@ -52,10 +51,9 @@ export class CommentService {
 
   async getByProductId(params: GetProductCommentsDto) {
     try {
-      const comments = await this.commentRepo.findByProductId(
+      return await this.commentRepo.findByProductId(
         params?.productId,
       );
-      return comments;
     } catch (error) {
       console.log('get comments by product error', error);
     }

@@ -5,10 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { NotificationToken } from './notification-token.entity';
+import { NotificationToken } from './notificationToken.entity';
 
 @Entity({ name: 'notifications' })
-export class Notifications {
+export class Notification {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,38 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Order } from 'src/entities/order.entity';
-import { OrderDetail } from 'src/entities/order-detail.entity';
+import { Order } from '@/entities/order.entity';
+import { OrderDetail } from '@/entities/order-detail.entity';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
 import { OrderRepo } from './order.repo';
-import { CartModule } from 'src/cart/cart.module';
-import { StoreModule } from 'src/store/store.module';
-import { StoreRepo } from 'src/store/store.repo';
-import { Store } from 'src/entities/store.entity';
-import { Product } from 'src/entities/product.entity';
-import { ProductRepo } from 'src/products/products.repo';
-import { StoreProduct } from 'src/entities/store-product.entity';
-import { StoreProductRepo } from 'src/products/store-product.repo';
+import { CartModule } from '@/cart/cart.module';
+import { StoreModule } from '@/store/store.module';
+import { ProductsModule } from '@/products/products.module';
 
 @Module({
   imports: [
     CartModule,
     StoreModule,
-    TypeOrmModule.forFeature([
-      Order,
-      OrderDetail,
-      Store,
-      Product,
-      StoreProduct,
-    ]),
+    ProductsModule,
+    TypeOrmModule.forFeature([Order, OrderDetail]),
   ],
-  providers: [
-    OrderService,
-    OrderRepo,
-    StoreRepo,
-    ProductRepo,
-    StoreProductRepo,
-  ],
+  providers: [OrderService, OrderRepo],
   controllers: [OrderController],
 })
 export class OrderModule {}

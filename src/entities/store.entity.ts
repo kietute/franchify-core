@@ -6,7 +6,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Address } from './address.entity';
 import { StoreProduct } from './store-product.entity';
 import { User } from './user.entity';
 import { Order } from './order.entity';
@@ -35,12 +34,6 @@ export class Store {
   closeTime: number;
   @Column({ nullable: true, type: 'float' })
   lng: number;
-
-  @Column({ nullable: true, type: 'float' })
-  lat: number;
-  @OneToOne(() => Address)
-  // @JoinColumn()
-  address: Address;
 
   @OneToMany(() => StoreProduct, (storeProduct) => storeProduct.store)
   storeProducts: StoreProduct[];

@@ -30,12 +30,7 @@ export class Tenant {
   @Column({ nullable: true })
   logoUrl: string;
 
-  @Column({ nullable: true, type: 'jsonb' })
-  homePageSlideshow: string[];
-
   @Column({ nullable: false, default: '#008000' })
   primaryColorScheme: string;
 
-  @Column({ nullable: true, type: 'jsonb' })
-  settings: ITenantSettings;
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from 'src/entities/order.entity';
-import { OrderDetail } from 'src/entities/order-detail.entity';
+import { Order } from '@/entities/order.entity';
+import { OrderDetail } from '@/entities/order-detail.entity';
 
 @Injectable()
 export class OrderRepo {
@@ -58,7 +58,6 @@ export class OrderRepo {
   }
 
   async deleteAll(userId: number): Promise<void> {
-    // await this.orderDetailRepo.delete({});
     await this.repo.delete({ user: { id: userId } });
   }
 }

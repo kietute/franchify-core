@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
@@ -9,16 +8,16 @@ import {
   CreateProductDto,
   UpdateProductDto,
   UpdateStoreProductDto,
-} from './dtos/product.dto';
-import { LinkProductDto } from './dtos/link-product.dto';
+} from '@/dtos/product.dto';
+import { LinkProductDto } from '@/dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
-import { StoreRepo } from 'src/store/store.repo';
+import { StoreRepo } from "@/store/store.repo";
 import {
   GetProductDetailDto,
   GetStoreProductDto,
   GetTenentProductDto,
   SearchProductDto,
-} from './dtos/get-product.dto';
+} from '@/dtos/get-product.dto';
 import { ElasticService } from './elastic.service';
 
 @Injectable()

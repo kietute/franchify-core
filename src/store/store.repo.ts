@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Store } from 'src/entities/store.entity';
-import { CreateStoreDto } from './dtos/create-store.dto';
-import { GetStoreDto } from './dtos/get-store.dto';
+import { Store } from "@/entities/store.entity";
+import { CreateStoreDto } from '@/dtos/create-store.dto';
+import { GetStoreDto } from '@/dtos/get-store.dto';
 
 @Injectable()
 export class StoreRepo {
@@ -32,20 +32,14 @@ export class StoreRepo {
   ): Promise<{ results: Store[]; total: number }> {
     const queryBuilder = this.repo.createQueryBuilder('store');
 
-    // Join with the user table
     queryBuilder.leftJoinAndSelect('store.staffs', 'user');
 
-    // Thêm join với bảng address
-    // queryBuilder.leftJoinAndSelect('store.address', 'address'); // Thêm quan hệ 'address'
-
-    // filter if have name
     if (params.name) {
       queryBuilder.andWhere('store.name LIKE :name', {
         name: `%${params.name}%`,
       });
     }
 
-    // Tính khoảng cách nếu có currentLng và currentLat
     if (params.currentLng && params.currentLat) {
       const currentLng = params.currentLng;
       const currentLat = params.currentLat;
@@ -63,7 +57,6 @@ export class StoreRepo {
       queryBuilder.orderBy('distance', 'ASC');
     }
 
-    // Pagination
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 10;
     const skip = (page - 1) * pageSize;

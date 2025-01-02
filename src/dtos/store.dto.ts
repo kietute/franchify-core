@@ -1,5 +1,4 @@
 import { Expose } from 'class-transformer';
-import { CreateAddressDto } from '../../addresses/dtos/create-address.dto';
 
 export class StoreDto {
   @Expose()
@@ -28,7 +27,4 @@ export class StoreDto {
 
   @Expose()
   lat: number | null; // Cho phép null
-
-  @Expose()
-  address: CreateAddressDto;
 }

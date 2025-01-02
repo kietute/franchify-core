@@ -1,8 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tenant } from 'src/entities/tenant.entity';
+import { Tenant } from '@/entities/tenant.entity';
 import { Repository } from 'typeorm';
-import { CreateTenantConfigDto, UpdateTenantConfigDto } from './dtos';
+import {
+  CreateTenantConfigDto,
+  UpdateTenantConfigDto,
+} from '@/entities/tenant.dto';
 
 export class TenantRepo {
   constructor(@InjectRepository(Tenant) private repo: Repository<Tenant>) {}

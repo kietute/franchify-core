@@ -3,21 +3,21 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { User } from 'src/entities/user.entity';
+import { User } from '@/entities/user.entity';
 import {
   IOrderAddress,
   IOrderUserInfo,
   Order,
   OrderStatus,
-} from 'src/entities/order.entity';
-import { OrderDetail } from 'src/entities/order-detail.entity';
-import { CartService } from 'src/cart/cart.service';
+} from '@/entities/order.entity';
+import { OrderDetail } from '@/entities/order-detail.entity';
+import { CartService } from '@/cart/cart.service';
 import { OrderRepo } from './order.repo';
-import { CreateOrderDto } from './dtos/index.dto';
-import { StoreRepo } from 'src/store/store.repo';
-import { ProductRepo } from 'src/products/products.repo';
+import { CreateOrderDto } from '@/dtos/order.dto';
+import { StoreRepo } from '@/store/store.repo';
+import { ProductRepo } from '@/products/products.repo';
 import { MailerService } from '@nestjs-modules/mailer';
-import { StoreProductRepo } from 'src/products/store-product.repo';
+import { StoreProductRepo } from '@/products/store-product.repo';
 @Injectable()
 export class OrderService {
   constructor(
@@ -71,18 +71,16 @@ export class OrderService {
     isApplyUserSavePoints: boolean,
     storeId: number,
   ): Promise<Order> {
-    const findedStore = await this.storeRepo.findById(storeId);
-    const order = this.orderRepo.create({
+    const store = await this.storeRepo.findById(storeId);
+    return this.orderRepo.create({
       user,
       status: 'pending',
       orderDetails: [],
       orderAddress: address,
       orderUserInfo: userInfo,
       isApplyUserSavePoints: isApplyUserSavePoints,
-      store: findedStore,
+      store: store,
     });
-
-    return order;
   }
 
   private async createOrderDetails(
