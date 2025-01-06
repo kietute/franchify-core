@@ -1,4 +1,78 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Query, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
+import * as moment from 'moment';
+import * as querystring from 'qs';
+import * as crypto from 'crypto';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('payment')
-export class PaymentController {}
+export class PaymentController {
+  constructor(private configService: ConfigService) {}
+
+  @Get('/create-url')
+  createPayment(
+    @Query() query: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    process.env.TZ = 'Asia/Ho_Chi_Minh';
+
+    let date = new Date();
+    let createDate = moment(date).format('YYYYMMDDHHmmss');
+
+    let ipAddr =
+      req.headers['x-forwarded-for'] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.connection.remoteAddress;
+
+    let tmnCode = this.configService.get('vnp_TmnCode');
+    let secretKey = this.configService.get('vnp_HashSecret');
+    let vnpUrl = this.configService.get('vnp_Url');
+    let returnUrl = this.configService.get('vnp_ReturnUrl');
+    let orderId = moment(date).format('DDHHmmss');
+    let amount = query.amount;
+    let bankCode = query.bankCode;
+
+    let locale = query.language;
+    if (locale === null || locale === '') {
+      locale = 'vn';
+    }
+    let currCode = 'VND';
+    let vnp_Params: any = {};
+    vnp_Params['vnp_Version'] = '2.1.0';
+    vnp_Params['vnp_Command'] = 'pay';
+    vnp_Params['vnp_TmnCode'] = tmnCode;
+    vnp_Params['vnp_Locale'] = locale;
+    vnp_Params['vnp_CurrCode'] = currCode;
+    vnp_Params['vnp_TxnRef'] = orderId;
+    vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
+    vnp_Params['vnp_OrderType'] = 'other';
+    vnp_Params['vnp_Amount'] = amount * 100;
+    vnp_Params['vnp_ReturnUrl'] = returnUrl;
+    vnp_Params['vnp_IpAddr'] = ipAddr;
+    vnp_Params['vnp_CreateDate'] = createDate;
+    if (bankCode !== null && bankCode !== '') {
+      vnp_Params['vnp_BankCode'] = bankCode;
+    }
+
+    vnp_Params = sortObject(vnp_Params);
+
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    let hmac = crypto.createHmac('sha512', secretKey);
+    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
+    vnp_Params['vnp_SecureHash'] = signed;
+    vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+    res.redirect(vnpUrl);
+  }
+}
+
+function sortObject(obj: any) {
+  let sorted: any = {};
+  let keys = Object.keys(obj).sort();
+  for (let key of keys) {
+    sorted[key] = obj[key];
+  }
+  return sorted;
+}
