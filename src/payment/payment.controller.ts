@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as moment from 'moment';
 import * as querystring from 'qs';
@@ -9,12 +9,8 @@ import { ConfigService } from '@nestjs/config';
 export class PaymentController {
   constructor(private configService: ConfigService) {}
 
-  @Get('/create-url')
-  createPayment(
-    @Query() query: any,
-    @Req() req: Request,
-    @Res() res: Response,
-  ) {
+  @Post('/create-url')
+  createPayment(@Body() body: any, @Req() req: Request, @Res() res: Response) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
 
     let date = new Date();
@@ -31,10 +27,10 @@ export class PaymentController {
     let vnpUrl = this.configService.get('vnp_Url');
     let returnUrl = this.configService.get('vnp_ReturnUrl');
     let orderId = moment(date).format('DDHHmmss');
-    let amount = query.amount;
-    let bankCode = query.bankCode;
+    let amount = body.amount;
+    let bankCode = body.bankCode;
 
-    let locale = query.language;
+    let locale = body.language;
     if (locale === null || locale === '') {
       locale = 'vn';
     }
@@ -64,7 +60,7 @@ export class PaymentController {
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
-    res.redirect(vnpUrl);
+    return vnpUrl;
   }
 }
 
