@@ -37,6 +37,7 @@ import {
 import { redisStore } from 'cache-manager-redis-yet';
 import { Settings } from './entities/setting.entity';
 import { SettingsModule } from './settings/settings.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -123,6 +124,7 @@ import { SettingsModule } from './settings/settings.module';
     TenantModule,
     StoreModule,
     CartModule,
+    PaymentModule,
     OrderModule,
     SettingsModule,
   ],
