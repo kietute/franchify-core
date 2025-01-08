@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PaymentController } from './payment.controller';
-import { AuthModule } from '@/auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Tenant } from '@/entities/tenant.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { VnpayModule, VnpayService } from 'nestjs-vnpay';
+import { VnpayModule } from 'nestjs-vnpay';
 import { ignoreLogger } from 'vnpay';
 import { PaymentService } from './payment.service';
 
@@ -22,5 +19,6 @@ import { PaymentService } from './payment.service';
   ],
   controllers: [PaymentController],
   providers: [ConfigService, PaymentService],
+  exports: [PaymentService],
 })
 export class PaymentModule {}

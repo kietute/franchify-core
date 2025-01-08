@@ -7,10 +7,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user.entity';
 import { OrderDetail } from './order-detail.entity';
 import { Store } from './store.entity';
+import { PaymentMethod } from '@/dtos/order.dto';
 
 export interface IOrderAddress {
   address: string;
@@ -36,6 +38,11 @@ export enum OrderStatus {
   CANCELLED = 'cancelled',
 }
 
+export enum PaidStatus {
+  PAID = 'paid',
+  UNPAID = 'unpaid',
+}
+
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
@@ -47,6 +54,12 @@ export class Order {
 
   @Column({ default: 'pending', type: 'enum', enum: OrderStatus })
   status: string;
+
+  @Column({ type: 'enum', enum: PaymentMethod, default: PaymentMethod.COD })
+  paymentMethod: PaymentMethod;
+
+  @Column({ type: 'enum', enum: PaidStatus, default: PaidStatus.UNPAID })
+  paidStatus: PaidStatus;
 
   @CreateDateColumn()
   createdAt: Date;

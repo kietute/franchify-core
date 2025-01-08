@@ -13,11 +13,12 @@ import {
 import { OrderDetail } from '@/entities/order-detail.entity';
 import { CartService } from '@/cart/cart.service';
 import { OrderRepo } from './order.repo';
-import { CreateOrderDto } from '@/dtos/order.dto';
+import { CreateOrderDto, PaymentMethod } from '@/dtos/order.dto';
 import { StoreRepo } from '@/store/store.repo';
 import { ProductRepo } from '@/products/products.repo';
 import { MailerService } from '@nestjs-modules/mailer';
 import { StoreProductRepo } from '@/products/store-product.repo';
+import { PaymentService } from '@/payment/payment.service';
 @Injectable()
 export class OrderService {
   constructor(
@@ -27,40 +28,62 @@ export class OrderService {
     private readonly orderRepo: OrderRepo,
     private readonly storeRepo: StoreRepo,
     private readonly mailerService: MailerService,
+    private readonly paymentService: PaymentService,
   ) {}
 
   async createOrderFromCart(
     user: User,
     orderInfo: CreateOrderDto,
-  ): Promise<Order> {
-    const { orderAddress, orderUserInfo, storeId } = orderInfo;
+  ): Promise<{ order: Order; paymentUrl?: string }> {
+    const { orderAddress, orderUserInfo, storeId } = orderInfo || {};
     const cart = await this.cartService.getCart(user);
-
     if (!cart || !cart.cartDetails.length) {
       throw new BadRequestException('Cart is empty');
     }
-
     try {
       const order = await this.createOrder(
         user,
-        orderInfo?.orderAddress,
-        orderInfo?.orderUserInfo,
-        orderInfo?.storeId,
+        orderAddress,
+        orderUserInfo,
+        storeId,
       );
       const totalAmount = await this.createOrderDetails(
         order,
         cart.cartDetails,
       );
-
       order.totalAmount = Number(totalAmount);
-
       const savedOrder = await this.orderRepo.save(order);
       await this.cartService.clearCart(cart.id);
+      if (
+        order?.paymentMethod === PaymentMethod.VNPAY ||
+        order?.paymentMethod === PaymentMethod.MOMO
+      ) {
+        await this.createPaymentUrlForOrder(savedOrder);
+        const paymentUrl = await this.createPaymentUrlForOrder(savedOrder);
 
-      return savedOrder;
+        return {
+          order: savedOrder,
+          paymentUrl: paymentUrl,
+        };
+      } else {
+        return { order: savedOrder };
+      }
     } catch (error) {
       console.error('Error creating order:', error);
       throw new InternalServerErrorException('Failed to create order');
+    }
+  }
+
+  private async createPaymentUrlForOrder(order: Order): Promise<string> {
+    try {
+      const paymentUrl = await this.paymentService.createPaymentUrl({
+        orderId: order.id,
+        amount: order.totalAmount,
+      });
+      return paymentUrl;
+    } catch (error) {
+      console.error('Error creating payment for order:', error);
+      throw new InternalServerErrorException('Failed to create payment');
     }
   }
 

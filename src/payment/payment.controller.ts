@@ -11,11 +11,8 @@ export class PaymentController {
   ) {}
 
   @Post('/create-url')
-  createPaymentUrl(@Body() body: CreateVNPayUrlDto, @Req() request: Request) {
-    const ipAddress =
-      request.headers['x-forwarded-for'] ||
-      (request as any).connection.remoteAddress;
-    return this.paymentService.createPaymentUrl(body, ipAddress);
+  createPaymentUrl(@Body() body: CreateVNPayUrlDto) {
+    return this.paymentService.createPaymentUrl(body);
   }
 
   @Get('/vnpay-bank-list')

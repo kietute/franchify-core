@@ -8,12 +8,14 @@ import { OrderRepo } from './order.repo';
 import { CartModule } from '@/cart/cart.module';
 import { StoreModule } from '@/store/store.module';
 import { ProductsModule } from '@/products/products.module';
+import { PaymentModule } from '@/payment/payment.module';
 
 @Module({
   imports: [
     CartModule,
     StoreModule,
     ProductsModule,
+    PaymentModule,
     TypeOrmModule.forFeature([Order, OrderDetail]),
   ],
   providers: [OrderService, OrderRepo],
