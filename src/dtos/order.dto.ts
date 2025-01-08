@@ -62,6 +62,7 @@ export class CreateOrderDto {
   orderUserInfo: CreateOrderUserInfoDto;
 
   @IsString()
+  @IsOptional()
   paymentMethod: PaymentMethod;
 
   @IsNumber()

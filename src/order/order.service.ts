@@ -55,8 +55,8 @@ export class OrderService {
       const savedOrder = await this.orderRepo.save(order);
       await this.cartService.clearCart(cart.id);
       if (
-        order?.paymentMethod === PaymentMethod.VNPAY ||
-        order?.paymentMethod === PaymentMethod.MOMO
+        orderInfo?.paymentMethod === PaymentMethod.VNPAY ||
+        orderInfo?.paymentMethod === PaymentMethod.MOMO
       ) {
         await this.createPaymentUrlForOrder(savedOrder);
         const paymentUrl = await this.createPaymentUrlForOrder(savedOrder);
@@ -109,6 +109,8 @@ export class OrderService {
     cartDetails: any[],
   ): Promise<number> {
     let totalAmount = 0;
+
+    console.log('cartDetails', cartDetails);
 
     for (const cartDetail of cartDetails) {
       try {
