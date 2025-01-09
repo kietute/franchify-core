@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Request,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PaymentService } from './payment.service';
 import { CreateVNPayUrlDto } from '@/dtos/payment.dto';
@@ -18,5 +26,10 @@ export class PaymentController {
   @Get('/vnpay-bank-list')
   async getVNPayBankList() {
     return await this.paymentService.geVNPaytBankList();
+  }
+
+  @Get('/vnpay/callback')
+  async vnpayCallback(@Req() req: Request, @Query() query: any) {
+    return this.paymentService.verfiyVnPayPaymentCallback(query);
   }
 }

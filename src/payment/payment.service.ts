@@ -27,8 +27,6 @@ export class PaymentService {
       this.request.socket.remoteAddress ||
       (this.request.connection as any).socket.remoteAddress;
 
-    console.log('Custom Ip Address', ipAddress);
-
     try {
       const paymentUrl = this.vnpayService.buildPaymentUrl({
         vnp_Amount: amount,
@@ -37,7 +35,7 @@ export class PaymentService {
         vnp_TxnRef: orderId?.toString(),
         vnp_OrderInfo: `Thanh toan don hang ${orderId}`,
         vnp_OrderType: ProductCode.Other,
-        vnp_ReturnUrl: 'http://localhost:3000/vnpay-return',
+        vnp_ReturnUrl: 'http://localhost:3000/payment/result',
         vnp_Locale: VnpLocale.VN,
         vnp_CreateDate: dateFormat(new Date()),
         vnp_ExpireDate: dateFormat(tomorrow),
@@ -46,5 +44,10 @@ export class PaymentService {
     } catch (error) {
       console.log('error when try to create payment url', error);
     }
+  }
+
+  async verfiyVnPayPaymentCallback(payload: any) {
+    console.log('vnpay callback', payload);
+    window.close();
   }
 }
