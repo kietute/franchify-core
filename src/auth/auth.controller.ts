@@ -49,7 +49,7 @@ export class AuthController {
 
   @Post('/verify-otp')
   async verifyOtp(@Body() body: VerifyOtpDto) {
-    return  await this.authService.verifyOtp({
+    return await this.authService.verifyOtp({
       phoneNumber: body.phoneNumber,
       otpCode: body.otpCode,
     });
