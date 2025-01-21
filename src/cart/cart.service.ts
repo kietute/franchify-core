@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cart } from '@/entities/cart.entity';
@@ -62,36 +67,35 @@ export class CartService {
     addProductToCartDto: AddProductToCartDto,
     currentUser?: User,
   ) {
+    //Check if user is authorized
+    if (!currentUser) {
+      throw new UnauthorizedException('User is not authorized');
+    }
+
+    //Check if product exists
+    const product = await this.productRepo.findOne(
+      addProductToCartDto.productId,
+    );
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    let cart = await this.cartRepo.findOneBy({ user: { id: currentUser.id } });
+
+    if (!cart) {
+      cart = await this.createCart(currentUser);
+    }
+
+    const cartDetail = this.cartDetailRepo.create({
+      cart,
+      product,
+      quantity: addProductToCartDto.quantity,
+    });
+
     try {
-      let cart = await this.cartRepo.findOneBy({
-        user: { id: currentUser.id },
-      });
-
-      if (!cart && currentUser) {
-        cart = await this.createCart(currentUser);
-      }
-
-      const product = await this.productRepo.findOne(
-        addProductToCartDto.productId,
-      );
-
-      if (!cart || !product) {
-        throw new Error('Cart or Product not found');
-      }
-
-      const cartDetail = this.cartDetailRepo.create({
-        cart,
-        product,
-        quantity: addProductToCartDto.quantity,
-      });
-
-      const response = await this.cartDetailRepo.save(cartDetail);
-
-      if (response) {
-        return response;
-      }
+      return await this.cartDetailRepo.save(cartDetail);
     } catch (error) {
-      throw new Error('Failed to add product to cart');
+      throw new InternalServerErrorException('Server encountered an error');
     }
   }
 
@@ -103,7 +107,7 @@ export class CartService {
       });
 
       if (!cartDetail) {
-        throw new Error('CartDetail not found');
+        throw new NotFoundException('Product item not found');
       }
 
       cartDetail.quantity = changeQuantityDto.quantity;

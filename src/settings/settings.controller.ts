@@ -3,12 +3,10 @@ import { SettingsService } from './settings.service';
 
 @Controller('settings')
 export class SettingsController {
-
-  constructor(private readonly  settingService: SettingsService) {
-  }
+  constructor(private readonly settingService: SettingsService) {}
 
   @Get('/')
-  getAllSettings(){
-      return this.settingService
+  getAllSettings() {
+    return this.settingService;
   }
 }
