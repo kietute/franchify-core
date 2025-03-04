@@ -4,7 +4,9 @@ import { CustomResponseInterceptor } from './common/interceptors/custom-response
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.enableCors({ origin: '*' });
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://coop-mart-sandbox.vercel.app'],
+  });
   app.useGlobalInterceptors(new CustomResponseInterceptor());
   const port = process.env.PORT || 4000;
   await app.listen(port);
