@@ -159,4 +159,25 @@ export class CartService {
       throw new Error('Failed to clear cart');
     }
   }
+
+  async clearAllUserCarts(user: User) {
+    try {
+      const carts = await this.cartRepo.find({
+        where: { user: { id: user.id } },
+        relations: ['cartDetails'],
+      });
+
+      if (!carts) {
+        throw new Error('Carts not found');
+      }
+
+      for (const cart of carts) {
+        await this.cartDetailRepo.remove(cart.cartDetails);
+      }
+
+      return { message: 'All carts cleared' };
+    } catch (error) {
+      throw new Error('Failed to clear all user carts');
+    }
+  }
 }

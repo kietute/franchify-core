@@ -11,7 +11,7 @@ import {
 } from '@/dtos/product.dto';
 import { LinkProductDto } from '@/dtos/link-product.dto';
 import { StoreProductRepo } from './store-product.repo';
-import { StoreRepo } from "@/store/store.repo";
+import { StoreRepo } from '@/store/store.repo';
 import {
   GetProductDetailDto,
   GetStoreProductDto,
@@ -125,11 +125,27 @@ export class ProductService {
     }
   }
 
+  // TODO: Reimplement Elastic Search
+  // async searchProduct(params: SearchProductDto) {
+  //   try {
+  //     const searchResults = await this.elasticService.search(params.keyword);
+  //     if (searchResults?.data) {
+  //       return searchResults?.data;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (error) {
+  //     throw new ServiceUnavailableException(
+  //       'Cannot perform search at the moment',
+  //     );
+  //   }
+  // }
+
   async searchProduct(params: SearchProductDto) {
     try {
-      const searchResults = await this.elasticService.search(params.keyword);
-      if (searchResults?.data) {
-        return searchResults?.data;
+      const searchResults = await this.productRepo.search(params.keyword);
+      if (searchResults) {
+        return searchResults;
       } else {
         return [];
       }

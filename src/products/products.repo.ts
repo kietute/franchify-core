@@ -73,6 +73,16 @@ export class ProductRepo {
     return { results, total, totalPage, categories };
   }
 
+  async search(keyword: string) {
+    const keywordArr = keyword.toLowerCase().split(' ');
+
+    const allProducts = await this.repo.find();
+    return allProducts.filter((product) => {
+      const productNameArr = product.name.toLowerCase().split(' ');
+      return keywordArr.some((kw) => productNameArr.includes(kw));
+    });
+  }
+
   async update(id: number, attrs: UpdateProductDto) {
     const product = await this.findOne(id);
     if (!product) {
