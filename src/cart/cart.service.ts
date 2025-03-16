@@ -65,34 +65,49 @@ export class CartService {
 
   async addProductToCart(
     addProductToCartDto: AddProductToCartDto,
-    currentUser?: User,
+    currentUser: User,
   ) {
-    //Check if user is authorized
-    if (!currentUser) {
-      throw new UnauthorizedException('User is not authorized');
-    }
-
-    //Check if product exists
-    const product = await this.productRepo.findOne(
-      addProductToCartDto.productId,
-    );
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
-
-    let cart = await this.cartRepo.findOneBy({ user: { id: currentUser.id } });
-
-    if (!cart) {
-      cart = await this.createCart(currentUser);
-    }
-
-    const cartDetail = this.cartDetailRepo.create({
-      cart,
-      product,
-      quantity: addProductToCartDto.quantity,
-    });
-
     try {
+      //Check if user is authorized
+      if (!currentUser) {
+        throw new UnauthorizedException('User is not authorized');
+      }
+
+      //Check if product exists
+      const product = await this.productRepo.findOne(
+        addProductToCartDto.productId,
+      );
+      if (!product) {
+        throw new NotFoundException('Product not found');
+      }
+
+      let cart = await this.cartRepo.findOne({
+        where: { user: { id: currentUser.id } },
+        relations: ['cartDetails', 'cartDetails.product'],
+      });
+
+      if (!cart) {
+        cart = await this.createCart(currentUser);
+      }
+
+      let existedProductIndex = cart?.cartDetails?.findIndex((cartItem) => {
+        if (cartItem.product.id === product.id) {
+          return true;
+        }
+      });
+
+      if (existedProductIndex !== -1) {
+        cart.cartDetails[existedProductIndex].quantity +=
+          addProductToCartDto.quantity;
+        return this.cartDetailRepo.save(cart.cartDetails[existedProductIndex]);
+      }
+
+      const cartDetail = this.cartDetailRepo.create({
+        cart,
+        product,
+        quantity: addProductToCartDto.quantity,
+      });
+
       return await this.cartDetailRepo.save(cartDetail);
     } catch (error) {
       throw new InternalServerErrorException('Server encountered an error');

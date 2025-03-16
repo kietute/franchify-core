@@ -60,7 +60,6 @@ export class OrderService {
       ) {
         await this.createPaymentUrlForOrder(savedOrder);
         const paymentUrl = await this.createPaymentUrlForOrder(savedOrder);
-
         return {
           order: savedOrder,
           paymentUrl: paymentUrl,
