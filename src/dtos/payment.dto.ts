@@ -1,6 +1,6 @@
 import { IsNumber } from 'class-validator';
 
-export class CreateVNPayUrlDto {
+export class CreatePaymentUrlDto {
   @IsNumber({}, { message: 'Amount must be a number' })
   amount: number;
 

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PaymentService } from './payment.service';
-import { CreateVNPayUrlDto } from '@/dtos/payment.dto';
+import { CreatePaymentUrlDto } from '@/dtos/payment.dto';
 
 @Controller('payment')
 export class PaymentController {
@@ -19,7 +19,7 @@ export class PaymentController {
   ) {}
 
   @Post('/create-url')
-  createPaymentUrl(@Body() body: CreateVNPayUrlDto) {
+  createPaymentUrl(@Body() body: CreatePaymentUrlDto) {
     return this.paymentService.createPaymentUrl(body);
   }
 
@@ -28,8 +28,8 @@ export class PaymentController {
     return await this.paymentService.geVNPaytBankList();
   }
 
-  @Get('/vnpay/callback')
-  async vnpayCallback(@Req() req: Request, @Query() query: any) {
-    return this.paymentService.verfiyVnPayPaymentCallback(query);
+  @Post('/callback')
+  async vnpayCallback(@Req() req: Request, @Body() payload) {
+    return this.paymentService.verifyPayment(payload);
   }
 }

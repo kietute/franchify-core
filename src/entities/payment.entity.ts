@@ -10,8 +10,17 @@ export class Payment {
   @Column({ type: 'enum', enum: PaymentMethod, default: PaymentMethod.COD })
   paymentMethod: PaymentMethod;
 
+  @Column({ type: 'date' })
+  paidDate: Date;
+
+  @Column({ type: 'boolean' })
+  isSuccess: boolean;
+
   @Column({ nullable: false, type: 'string' })
   paymentUrl: string;
+
+  @Column({ type: 'jsonb' })
+  otherInfo: any;
 
   @OneToOne(() => Order, { cascade: true })
   order: Order;

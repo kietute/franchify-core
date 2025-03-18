@@ -109,8 +109,6 @@ export class OrderService {
   ): Promise<number> {
     let totalAmount = 0;
 
-    console.log('cartDetails', cartDetails);
-
     for (const cartDetail of cartDetails) {
       try {
         const orderDetail = new OrderDetail();
