@@ -7,21 +7,27 @@ export class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: PaymentMethod, default: PaymentMethod.COD })
-  paymentMethod: PaymentMethod;
-
-  @Column({ type: 'date' })
-  paidDate: Date;
-
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   isSuccess: boolean;
 
-  @Column({ nullable: false, type: 'string' })
-  paymentUrl: string;
-
   @Column({ type: 'jsonb' })
-  otherInfo: any;
+  paymentInfo: IVnpayResponse;
 
-  @OneToOne(() => Order, { cascade: true })
-  order: Order;
+  @Column({ type: 'number' })
+  orderId: number;
+}
+
+interface IVnpayResponse {
+  amount: string;
+  bankCode: string;
+  bankTranNo: string;
+  cardType: string;
+  orderInfo: string;
+  payDate: string;
+  responseCode: string;
+  tmnCode: string;
+  transactionNo: string;
+  transactionStatus: string;
+  txnRef: string;
+  secureHash: string;
 }

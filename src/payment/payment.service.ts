@@ -1,4 +1,8 @@
-import { CreatePaymentUrlDto } from '@/dtos/payment.dto';
+import { PaymentMethod } from '@/dtos/order.dto';
+import {
+  CreatePaymentRecordDto,
+  CreatePaymentUrlDto,
+} from '@/dtos/payment.dto';
 import { Payment } from '@/entities/payment.entity';
 import {
   Injectable,
@@ -35,6 +39,8 @@ export class PaymentService {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    console.log('hello world', this.configService.get('CLIENT_HOST_URL'));
+
     const ipAddress =
       this.request.headers['x-forwarded-for'] ||
       this.request.connection.remoteAddress ||
@@ -61,8 +67,13 @@ export class PaymentService {
 
   async verifyPayment(payload: any) {
     try {
-      const result = await this.vnpayService.queryDr(payload);
-      if (result?.isSuccess) {
+      const { orderId } = payload || {};
+      const paymentRecord = await this.paymentRepo.findOne({
+        where: {
+          orderId: orderId,
+        },
+      });
+      if (paymentRecord?.id && paymentRecord.isSuccess) {
         return true;
       } else {
         return false;
@@ -74,14 +85,18 @@ export class PaymentService {
     }
   }
 
-  async logPaymentRecord(payload: any) {
+  async createPaymentRecord(payload: CreatePaymentRecordDto) {
     try {
       const newPaymentRecord = await this.paymentRepo.create({
-        isSuccess: payload.isSuccess,
+        orderId: Number(payload.txnRef),
+        isSuccess: payload.transactionStatus == '00',
+        paymentInfo: {
+          ...payload,
+        },
       });
-      await this.paymentRepo.save(payload);
+      return await this.paymentRepo.save(newPaymentRecord);
     } catch (error) {
-      console.log('Server cannot save user order payment info');
+      console.log('Server cannot save user order payment info', error);
     }
   }
 }
