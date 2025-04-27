@@ -5,7 +5,7 @@ import { CustomResponseInterceptor } from './common/interceptors/custom-response
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableCors({
-    origin: '*',
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
   });
   app.useGlobalInterceptors(new CustomResponseInterceptor());
   const port = process.env.PORT || 4000;

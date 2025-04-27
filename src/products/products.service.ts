@@ -32,17 +32,19 @@ export class ProductService {
   async createProduct(payload: CreateProductDto) {
     try {
       const product = await this.productRepo.create(payload);
+
+      console.log('product', product);
       if (!product) {
         throw new ServiceUnavailableException(
           'Cannot create product at the moment',
         );
       } else {
-        const bulkResponse = await this.elasticService.bulk('products', [
-          product as any,
-        ]);
-        if (!!bulkResponse?.data?.errors) {
-          console.log('Error indexing product', bulkResponse.data);
-        }
+        // const bulkResponse = await this.elasticService.bulk('products', [
+        //   product as any,
+        // ]);
+        // if (!!bulkResponse?.data?.errors) {
+        //   console.log('Error indexing product', bulkResponse.data);
+        // }
 
         return product;
       }
@@ -60,12 +62,12 @@ export class ProductService {
           'Cannot update product at the moment',
         );
       } else {
-        const bulkResponse = await this.elasticService.bulk('products', [
-          updatedProduct as any,
-        ]);
-        if (!!bulkResponse?.data?.errors) {
-          console.log('Error indexing product', bulkResponse.data);
-        }
+        // const bulkResponse = await this.elasticService.bulk('products', [
+        //   updatedProduct as any,
+        // ]);
+        // if (!!bulkResponse?.data?.errors) {
+        //   console.log('Error indexing product', bulkResponse.data);
+        // }
       }
       return updatedProduct;
     } catch (error) {
@@ -113,6 +115,7 @@ export class ProductService {
   }
 
   async getTenantProducts(params: GetTenentProductDto) {
+    console.log('params', params);
     try {
       const tenantProducts = await this.productRepo.findAll(params);
       if (!tenantProducts) {
@@ -142,6 +145,7 @@ export class ProductService {
   // }
 
   async searchProduct(params: SearchProductDto) {
+    console.log('params', params);
     try {
       const searchResults = await this.productRepo.search(params.keyword);
       if (searchResults) {

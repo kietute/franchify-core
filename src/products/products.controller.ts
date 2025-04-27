@@ -73,10 +73,14 @@ export class ProductsController {
     return await this.productService.deleteProduct(Number(id));
   }
 
-  @UseGuards(StaffGuard)
+  @Post('/filter')
+  async getAllProduct(@Body() params: any) {
+    return await this.productService.getTenantProducts(params);
+  }
+
   @Get('/')
-  async getAllProduct(@Query() queryParam: GetTenentProductDto) {
-    return await this.productService.getTenantProducts(queryParam);
+  async getTenantProducts(@Query() query: GetTenentProductDto) {
+    return await this.productService.getTenantProducts(query);
   }
 
   @Post('/search')

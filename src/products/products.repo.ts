@@ -49,26 +49,86 @@ export class ProductRepo {
     return this.repo.delete(id);
   };
 
-  async findAll(params: GetTenentProductDto) {
+  async findAll(params: any) {
+    console.log('find all params', params);
+
     const queryBuilder = this.repo
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.category', 'category');
 
+    // Apply filters
+    if (params.categories && params.categories.length > 0) {
+      queryBuilder.andWhere('category.id IN (:...categoryIds)', {
+        categoryIds: params.categories,
+      });
+    }
+
+    if (params.onSale == true) {
+      queryBuilder.andWhere('product.isOnSale = :onSale', { onSale: true });
+    }
+
+    if (params?.keyword) {
+      queryBuilder.andWhere('LOWER(product.name) LIKE LOWER(:keyword)', {
+        keyword: `%${params.keyword}%`,
+      });
+    }
+
     this.applyFilters(queryBuilder, params);
 
-    const page = params.page ?? 1;
-    const pageSize = params.pageSize ?? 10000;
-    const skip = (page - 1) * pageSize;
+    // Decide when to count based on filtered results
+    const shouldUseFilteredProducts = params.onSale === true || params.keyword;
 
-    const [results, total] = await queryBuilder
-      .skip(skip)
-      .take(pageSize)
-      .getManyAndCount();
+    const categoryMap = new Map();
+
+    let productsForCategoryCount: any[];
+
+    if (shouldUseFilteredProducts) {
+      // Count categories based on filtered results
+      productsForCategoryCount = await queryBuilder.getMany();
+    } else {
+      // Count categories based on all products
+      const allProductsQuery = this.repo
+        .createQueryBuilder('product')
+        .leftJoinAndSelect('product.category', 'category');
+      productsForCategoryCount = await allProductsQuery.getMany();
+    }
+
+    // First collect all unique categories
+    productsForCategoryCount.forEach((product) => {
+      if (product.category) {
+        const category = product.category;
+        if (!categoryMap.has(category.id)) {
+          categoryMap.set(category.id, {
+            ...category,
+            count: 0,
+          });
+        }
+      }
+    });
+
+    // Then count occurrences
+    productsForCategoryCount.forEach((product) => {
+      if (product.category) {
+        const category = product.category;
+        const existing = categoryMap.get(category.id);
+        if (existing) {
+          existing.count++;
+        }
+      }
+    });
+
+    const categories = Array.from(categoryMap.values());
+
+    // Keep your original pagination logic
+    const page = params.page ?? 1;
+    const pageSize = params.pageSize ?? 20;
+    const take = page * pageSize;
+
+    queryBuilder.take(take);
+
+    const [results, total] = await queryBuilder.getManyAndCount();
 
     const totalPage = Math.ceil(total / pageSize);
-
-    // Chỉ trả về category
-    const categories = results.map((product) => product.category);
 
     return { results, total, totalPage, categories };
   }
