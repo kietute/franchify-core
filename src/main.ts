@@ -5,7 +5,11 @@ import { CustomResponseInterceptor } from './common/interceptors/custom-response
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://tymex-interview-frontend-huynh-ngoc-tuan-kiet.vercel.app/',
+    ],
   });
   app.useGlobalInterceptors(new CustomResponseInterceptor());
   const port = process.env.PORT || 4000;
