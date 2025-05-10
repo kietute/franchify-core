@@ -9,6 +9,7 @@ async function bootstrap() {
       'http://localhost:3000',
       'http://localhost:3001',
       'https://tymex-interview-frontend-huynh-ngoc-tuan-kiet.vercel.app',
+      'https://coop-mart-sandbox.vercel.app',
     ],
   });
   app.useGlobalInterceptors(new CustomResponseInterceptor());
