@@ -1,27 +1,15 @@
 import {
-  AfterInsert,
-  AfterRemove,
-  AfterUpdate,
   Entity,
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
 import { UserDevice } from './user-device.entity';
-import { Store } from './store.entity';
-import { Cart } from './cart.entity';
-import { Comment } from './comment.entity';
-import { Order } from './order.entity';
 
 export enum UserRole {
   USER = 'user',
-  STAFF = 'staff',
-  MANAGER = 'manager',
   ADMIN = 'admin',
 }
 
@@ -54,10 +42,6 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToOne(() => Cart, { cascade: true }) // Thêm giỏ hàng (Cart) nếu cần
-  @JoinColumn()
-  cart: Cart;
-
   @Column({ default: false })
   isVerified: boolean;
 
@@ -76,13 +60,4 @@ export class User {
 
   @OneToMany(() => UserDevice, (device) => device.user)
   devices: UserDevice[];
-
-  @ManyToOne(() => Store, (store) => store.staffs)
-  store: Store;
-
-  @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
-
-  @OneToMany(() => Order, (order) => order.user, { cascade: true })
-  orders: Order[];
 }

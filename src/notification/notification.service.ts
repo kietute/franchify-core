@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OtpCode } from '@/entities/otp-code.dto';
+import { OtpCode } from '@/dtos/otp-code.dto';
 
 @Injectable()
 export class NotificationService {

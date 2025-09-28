@@ -1,6 +1,4 @@
-import { PaymentMethod } from '@/dtos/order.dto';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from './order.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Payment {
@@ -12,9 +10,6 @@ export class Payment {
 
   @Column({ type: 'jsonb' })
   paymentInfo: IVnpayResponse;
-
-  @Column({ type: 'number' })
-  orderId: number;
 }
 
 interface IVnpayResponse {

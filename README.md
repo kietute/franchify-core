@@ -1,73 +1,112 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Budman Core **Budman** is a personal finance and budgeting platform built with a modern, modular architecture. It supports multi-platform clients (web + mobile), seamless integrations with banks and e-wallets, AI-assisted financial planning, and real-time transaction processing. --- ## 🚀 Architecture Overview We recommend a **monorepo** setup (Nx / Turborepo) with three workspaces: - **`backend/`** — [NestJS](https://nestjs.com/) + [TypeORM](https://typeorm.io/) (Postgres) - **`web/`** — [Next.js](https://nextjs.org/) (React) - **`mobile/`** — [React Native](https://reactnative.dev/) ### Core Infrastructure - **Backend Framework**: NestJS (REST/GraphQL APIs) - **Database**: Postgres (managed: RDS / Cloud SQL) - **Queue System**: Redis + BullMQ (background jobs: sync, OCR, notify, normalize) - **Storage**: S3-compatible (attachments, CSV imports, backups) - **Secrets**: Vault / AWS Secrets Manager - **Observability**: - Errors: Sentry - Metrics: Prometheus + Grafana - Logs: ELK / Datadog - **CI/CD**: GitHub Actions → build/test → deploy (Kubernetes / ECS / DigitalOcean) - **Infrastructure**: Kubernetes (EKS/GKE) or ECS; Postgres on RDS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📦 Core Modules (NestJS)
 
-## Description
+### 1. Auth Module
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- JWT access + refresh tokens
+- Password hashing (argon2/bcrypt)
+- Optional OAuth (SSO providers)
+- Endpoints:
+  - `POST /auth/register`
+  - `POST /auth/login`
+  - `POST /auth/refresh`
+  - `POST /auth/logout`
+  - `GET /auth/me`
+- Security: rate limiting, account lockout policy
 
-## Installation
+### 2. Users Module
+
+- Profile management
+- KYC status tracking
+- Preferences (currency, timezone, notification settings)
+
+### 3. Accounts Module
+
+- Manage linked external accounts
+- Table: `external_accounts`
+  - provider, provider_account_id, masked_id, last_synced_at, status
+- CRUD APIs for linking/unlinking accounts
+
+### 4. Transactions Module
+
+- Core `transactions` table
+- Normalization pipeline
+- Endpoints:
+  - `GET /transactions`
+  - `POST /transactions` (manual)
+  - `POST /transactions/import` (CSV/OCR)
+- Duplicate detection: `(provider, provider_txn_id)` unique index or hash signature
+
+### 5. Categories & Rules Module
+
+- User-defined categories
+- Rules engine: regex-based or ML model
+- Rules auto-apply during import
+
+### 6. Budgets & Goals Module
+
+- CRUD for budgets
+- Track `used_amount`, rollover logic
+- Fetch progress & projections
+
+### 7. Integrations Module
+
+- Adapter pattern with base class `BaseProviderAdapter`
+- Example adapters:
+  - `MomoAdapter`
+  - `VietcombankAdapter`
+  - `AggregatorAdapter` (SaltEdge / Brankas)
+- Responsibilities:
+  - Consent/auth flow
+  - Token management
+  - Fetch transactions
+  - Webhook handling
+
+### 8. AI Planner Module
+
+- Builds **personalized financial plans** using OpenAI
+- Input: salary, expected raises, balances, budget preferences
+- Stores & versions plan outputs
+- Caching to avoid repeated API calls
+
+### 9. Notifications Module
+
+- Email, push, and in-app notifications
+- Alerts for budget thresholds, reminders
+- Providers:
+  - Push → FCM / APNs
+  - Email → SendGrid / SES
+
+### 10. Workers / Jobs
+
+- Background tasks:
+  - Provider sync jobs
+  - OCR processing
+  - Rule-based recategorization
+  - Sending notifications
+  - Reforecasting projections
+
+---
+
+## ⚙️ Development Setup
+
+### Prerequisites
+
+- Node.js 18+
+- Postgres 14+
+- Redis
+- S3-compatible storage (e.g., MinIO for local dev)
+- Docker & Docker Compose (recommended)
+
+### Running locally
 
 ```bash
-$ yarn install
+# Install dependencies
+pnpm install
+
+# Start all services
+pnpm dev
 ```
-
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

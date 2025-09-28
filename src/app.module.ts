@@ -3,41 +3,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './entities/user.entity';
-import { Comment } from './entities/comment.entity';
 
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { UserDevice } from './entities/user-device.entity';
-import { ProductsModule } from './products/products.module';
-import { Product } from './entities/product.entity';
-import { Category } from './entities/category.entity';
-import { Bid } from './entities/bid.entity';
-import { Cart } from './entities/cart.entity';
-import { CartDetail } from './entities/cartDetail.entity';
-import { CartModule } from './cart/cart.module';
 
 import { NotificationModule } from './notification/notification.module';
-import { OtpCode } from './entities/otp-code.dto';
-import { Tenant } from './entities/tenant.entity';
-import { TenantModule } from './tenant/tenant.module';
-import { Store } from './entities/store.entity';
-import { StoreProduct } from './entities/store-product.entity';
-import { StoreModule } from './store/store.module';
-import { Order } from './entities/order.entity';
-import { OrderDetail } from './entities/order-detail.entity';
-import { OrderModule } from './order/order.module';
+import { OtpCode } from './dtos/otp-code.dto';
 import { MailerModule } from '@nestjs-modules/mailer';
 import {
   CacheInterceptor,
   CacheModule,
   CacheStore,
 } from '@nestjs/cache-manager';
-import { redisStore } from 'cache-manager-redis-yet';
-import { Settings } from './entities/setting.entity';
-import { SettingsModule } from './settings/settings.module';
 import { PaymentModule } from './payment/payment.module';
+import { UserDevice } from './entities/user-device.entity';
+import { Payment } from './entities/payment.entity';
+import { Notification } from './entities/notification.entity';
+import { NotificationToken } from './entities/notificationToken.entity';
 
 @Module({
   imports: [
@@ -48,7 +32,7 @@ import { PaymentModule } from './payment/payment.module';
           ? `.env.development`
           : '.env.production',
     }),
-    // CacheModule.registerAsync({ta
+    // CacheModule.registerAsync({
     //   isGlobal: false,
     //   useFactory: async () => {
     //     const store = await redisStore({
@@ -87,9 +71,7 @@ import { PaymentModule } from './payment/payment.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
-          ssl: {
-            rejectUnauthorized: false,
-          },
+          ssl: false,
           type: 'postgres',
           database: config.get('PROJECT_DB_NAME'),
           username: config.get('PROJECT_DB_USER'),
@@ -98,19 +80,11 @@ import { PaymentModule } from './payment/payment.module';
           port: config.get('PROJECT_DB_PORT'),
           entities: [
             User,
-            UserDevice,
-            Product,
-            Category,
-            Bid,
             OtpCode,
-            Tenant,
-            Store,
-            StoreProduct,
-            Cart,
-            CartDetail,
-            Comment,
-            Order,
-            OrderDetail,
+            UserDevice,
+            Payment,
+            Notification,
+            NotificationToken,
           ],
           synchronize: config.get('NODE_ENV') !== 'production',
           namingStrategy: new SnakeNamingStrategy(),
@@ -118,15 +92,8 @@ import { PaymentModule } from './payment/payment.module';
       },
     }),
     AuthModule,
-    ProductsModule,
-    AuthModule,
     NotificationModule,
-    TenantModule,
-    StoreModule,
-    CartModule,
     PaymentModule,
-    OrderModule,
-    SettingsModule,
   ],
   controllers: [AppController],
   providers: [

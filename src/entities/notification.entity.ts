@@ -19,7 +19,7 @@ export class Notification {
   @Column()
   title: string;
 
-  @Column({ type: 'longtext', nullable: true })
+  @Column({ type: 'text', nullable: true })
   body: any;
 
   @Column()

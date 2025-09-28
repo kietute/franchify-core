@@ -24,18 +24,6 @@ export class UsersService {
     return this.repo.find({ relations: ['store'] });
   }
 
-  findStaffByStoreId(storeId: number) {
-    return this.repo.find({
-      where: { store: { id: storeId }, role: UserRole.STAFF },
-    });
-  }
-
-  findUsersByStoreId(storeId: number) {
-    return this.repo.find({
-      where: { store: { id: storeId } },
-    });
-  }
-
   findOne(id: number) {
     if (!id) {
       return null;

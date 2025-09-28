@@ -1,4 +1,3 @@
-import { PaymentMethod } from '@/dtos/order.dto';
 import {
   CreatePaymentRecordDto,
   CreatePaymentUrlDto,
@@ -52,7 +51,7 @@ export class PaymentService {
         vnp_Amount: amount,
         vnp_IpAddr: ipAddress || '13.160.92.202',
         vnp_TxnRef: orderId?.toString(),
-        vnp_OrderInfo: `Thanh toan don hang ${orderId}`,
+        vnp_OrderInfo: `Payment for ${orderId}`,
         vnp_OrderType: ProductCode.Other,
         vnp_ReturnUrl: this.configService.get('CLIENT_HOST_URL'),
         vnp_Locale: VnpLocale.VN,
@@ -61,18 +60,14 @@ export class PaymentService {
       });
       return paymentUrl;
     } catch (error) {
-      console.log('error when try to create payment url', error);
+      console.log('Encounter error when try to create payment url', error);
     }
   }
 
   async verifyPayment(payload: any) {
     try {
       const { orderId } = payload || {};
-      const paymentRecord = await this.paymentRepo.findOne({
-        where: {
-          orderId: orderId,
-        },
-      });
+      const paymentRecord = await this.paymentRepo.findOne({});
       if (paymentRecord?.id && paymentRecord.isSuccess) {
         return true;
       } else {
@@ -88,7 +83,6 @@ export class PaymentService {
   async createPaymentRecord(payload: CreatePaymentRecordDto) {
     try {
       const newPaymentRecord = await this.paymentRepo.create({
-        orderId: Number(payload.txnRef),
         isSuccess: payload.transactionStatus == '00',
         paymentInfo: {
           ...payload,

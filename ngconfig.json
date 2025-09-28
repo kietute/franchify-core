@@ -1,6 +1,6 @@
 {
-  "rootFilePath": "../franchify-core/src",
-  "destFilePath": "../franchify-core/src/types",
+  "rootFilePath": "../budman-core/src",
+  "destFilePath": "../budman-core/src/types",
   "entitySourceFolder": "entities",
   "dtoSourceFolder": "dtos",
   "hooksSourceFolder": "hooks",
